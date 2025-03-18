@@ -2,7 +2,8 @@ import sys
 
 # Library GUI
 from PyQt5.QtWidgets import QApplication,QMainWindow
-from test_1 import Ui_MainWindow 
+from FILE_QT.QT_main import Ui_MainWindow 
+# build QT - pyuic5 QT_main.ui -o QT_main.py
 
 class MainApp(QMainWindow,Ui_MainWindow):
     def __init__(self):
@@ -19,8 +20,6 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.bt_thoat.clicked.connect(self.close) 
         self.bt_thu_phong.clicked.connect(self.toggleFullScreen)
         self.bt_thu_nho.clicked.connect(self.showMinimized)
-
-
 
     # Funtion Page
     
@@ -43,6 +42,8 @@ class MainApp(QMainWindow,Ui_MainWindow):
         else:
             self.showFullScreen()  # Bật toàn màn hình
 
+    #Ros2
+    
     
     
 if __name__ == "__main__":
