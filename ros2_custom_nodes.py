@@ -316,8 +316,7 @@ class GoalPosePublisher(QThread):
         goal_msg.pose.pose.position.y = float(y)
         goal_msg.pose.pose.orientation.z = qz
         goal_msg.pose.pose.orientation.w = qw
-        # goal_msg.pose.pose.orientation.z = float(w)
-        # goal_msg.pose.pose.orientation.w = float(w)
+       
 
         # Send goal
         self._send_goal_future = self.action_client.send_goal_async(
