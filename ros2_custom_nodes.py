@@ -16,7 +16,7 @@ import subprocess
 
 import RobotConfig as RobConf
 import Utilities as Uti
-
+import SQL as sql
 
 class MapSubcriber(QThread):
     # progress_status = pyqtSignal(str, str)  # status_type, message
@@ -28,7 +28,8 @@ class MapSubcriber(QThread):
         self.is_running = False  # Flag to control thread execution
         self.task_queue = Queue()  # Queue for managing tasks
         self.map_folder = RobConf.MAP_FOLDER
-        self.default_map_name = Uti.load_ros_config_sql()['default_map_name'] # load default map name from sql
+     
+        self.default_map_name= sql.doc_du_lieu_robot_ros('default_map_name')
         self.map_pixmap = None  # Map image in pixmap type, use to display to screen
         self.viewing_map = False  # Status of updating map to GUI
         self.map_width, self.map_height = None, None
@@ -122,7 +123,7 @@ class MapSubcriber(QThread):
             subprocess.run(command, check=True)
             if map_name != None and is_set_to_default:
                 self.default_map_name = map_name
-                Uti.update_ros_config_sql({'default_map_name': map_name})
+                sql.update_du_lieu_robot_ros({'default_map_name': map_name})
             self.progress_status.emit("success", "Map saved successfully.")
         except subprocess.CalledProcessError as e:
             self.progress_status.emit("error", str(e))
@@ -238,6 +239,57 @@ class AmclPoseListener(QThread):
         self.sub = self.node.create_subscription(
             PoseWithCovarianceStamped,
             '/amcl_pose',
+      
+            self.pose_callback,
+            10
+        )
+        self.node.get_logger().info("Started!")
+
+    def run(self, ):
+        self.is_running = True  # Set the flag to True to start running
+
+    def pose_callback(self, msg):
+        if msg:
+            # Extract the position
+            x = msg.pose.pose.position.x
+            y = msg.pose.pose.position.y
+
+            # Extract the orientation quaternion
+            q = msg.pose.pose.orientation
+
+            # siny_cosp = 2 * (q.w * q.z + q.x * q.y)
+            # cosy_cosp = 1 - 2 * (q.y * q.y + q.z * q.z)
+            # theta = float(np.atan2(siny_cosp, cosy_cosp))  # Yaw angle in radians
+            (roll, pitch, yaw) = euler_from_quaternion((q.x, q.y, q.z, q.w))
+            self.data_odom = [x, y, 0.0, yaw]
+            # self.node.get_logger().info(f"AMCL Position - x: {x}, y: {y}, theta: {yaw}")
+        else:
+            self.node.get_logger().warn("No odom data received")
+
+    def stop(self):
+        # Stop the thread by setting the flag to False
+        self.is_running = False
+
+        # Wait for the thread to exit gracefully
+        self.quit()  # Stops the thread loop
+        self.wait()  # Waits for the thread to finish completely
+
+        # Destroy the ROS 2 node and shutdown ROS 2
+        if self.node is not None:
+            self.node.destroy_node()
+class PoseListener(QThread):
+    # progress_status = pyqtSignal(str, str)  # status_type, message
+    def __init__(self, progress_status):
+        super().__init__()
+        self.progress_status = progress_status
+        self.is_running = False  # Flag to control thread execution
+        self.data_odom = [0.0, 0.0, 0.0, 0.0]
+        self.node = rclpy.create_node('pose_listener')
+        # Subscribe to the amcl_pose topic
+        self.sub = self.node.create_subscription(
+            PoseWithCovarianceStamped,
+            #'/amcl_pose',
+            '/pose',
             self.pose_callback,
             10
         )
@@ -289,7 +341,7 @@ class GoalPosePublisher(QThread):
         self.action_client = ActionClient(self.node, NavigateToPose, 'navigate_to_pose')
         self.node.get_logger().info("Started!")
         self.send_goal_result = None
-        self.delay_time = Uti.load_ros_config_sql()['delay_time']
+        self.delay_time = sql.doc_du_lieu_robot_ros('delay_time')
 
     def run(self, ):
         self.is_running = True
@@ -355,7 +407,7 @@ class GoalPosePublisher(QThread):
 
     def _perform_set_goal_from_sql(self, id):
         try:
-            x_sql, y_sql, z_sql, w_sql, idout = Uti.nhandulieu_mysql(idban=id)
+            x_sql, y_sql, z_sql, w_sql, idout = sql.doc_du_lieu_toado_robot(id=id)
             self.node.get_logger().info(f'Sending goal from sql by id {id}')
             self._perform_send_goal(x_sql, y_sql, z_sql, w_sql)
         except Exception as e:

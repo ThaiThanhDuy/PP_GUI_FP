@@ -11,7 +11,8 @@ import subprocess
 
 from rclpy.executors import MultiThreadedExecutor
 
-from ros2_custom_nodes import CmdVelPublisher, MapSubcriber, GoalPosePublisher, AmclPoseListener
+from ros2_custom_nodes import CmdVelPublisher, MapSubcriber, GoalPosePublisher, AmclPoseListener, PoseListener
+
 import RobotConfig as RobConf
 
 class LaunchFileManager(QThread):
@@ -117,8 +118,10 @@ class ROS2Handle(QThread):
         self.cmd_vel_publisher = CmdVelPublisher(self.progress_status)
         self.map_viewer_subcriber = MapSubcriber(self.progress_status)
         self.odom_listener = AmclPoseListener(self.progress_status)
+        self.pose_listener = PoseListener(self.progress_status)
         self.goal_publisher = GoalPosePublisher(self.progress_status)
-        self.workers = [self.cmd_vel_publisher, self.map_viewer_subcriber, self.odom_listener, self.goal_publisher]
+
+        self.workers = [self.cmd_vel_publisher, self.map_viewer_subcriber, self.odom_listener, self.goal_publisher,self.pose_listener]
         for worker in self.workers:
             worker.start()
 

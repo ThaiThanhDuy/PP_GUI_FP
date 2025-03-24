@@ -1,6 +1,6 @@
 import sys
 import mysql.connector
-import Utilities as Uti
+import SQL as sql
 
 file_path_thongso_headcam = 'txt/thongso_cam.txt'
 file_path_pose_data = 'txt/odom_data.txt'
@@ -10,10 +10,6 @@ file_path_trangthaiPin = 'txt/data_ard.txt'
 chargeCamera = "/dev/video0"
 full_vol = 10.2
 path_run_vaodocsac = 'python3 charging.py'
-
-#SQL
-db = mysql.connector.connect(user="robot", password='12345678', host='127.0.0.1',
-                             database='sql_rsr')  # Thiết lập kết nối đến cơ sở dữ liệu
 
 # MEDIA PATH
 IMAGE_FOLDER = "images"
@@ -33,22 +29,24 @@ Path_yaml = MAP_FOLDER + '/my_map.yaml'
 
 # ======================= CAC BIEN THEM MOI 20240923 ================================
 # THONG SO CHO DIEU KHIEN MANUAL
-VX_MANUAL_MAX = Uti.doc_du_lieu_sql('manual_vt_thang')#0.5 #0.4
-VW_MANUAL_MAX = Uti.doc_du_lieu_sql('manual_vt_xoay')#1.5 #1.5
-# CAU HINH THONG SO ROBOT KHI DEN CAC DIEM
-DUNG_SAI_DIEM_DEN_VITRI = Uti.doc_du_lieu_sql('sai_so_kc')#0.5 #m
-DUNG_SAI_DIEM_DEN_GOC = Uti.doc_du_lieu_sql('sai_so_goc')#9 #do
-USERNAME = Uti.doc_du_lieu_sql('username')
-PASSWORD = Uti.doc_du_lieu_sql('password') #caidatrobot
-chieu_cao_led = Uti.doc_du_lieu_sql('chieu_cao_led') #caidatrobot
-VX_AUTO_MAX = Uti.doc_du_lieu_sql('auto_vt_thang')#0.5 #0.4
-VW_AUTO_MAX = Uti.doc_du_lieu_sql('auto_vt_xoay')#0.5 #0.4
-MUC_DIEN_AP_SAC = Uti.doc_du_lieu_sql('volt_sac_auto')
+VX_MANUAL_MAX = sql.doc_du_lieu_param_robot('manual_vt_thang')
+VW_MANUAL_MAX = sql.doc_du_lieu_param_robot('manual_vt_xoay')
+VX_AUTO_MAX = sql.doc_du_lieu_param_robot('auto_vt_thang')
+VW_AUTO_MAX = sql.doc_du_lieu_param_robot('auto_vt_xoay')
 
-faceCame1 = Uti.doc_du_lieu_sql('front_R')
-headCamera = Uti.doc_du_lieu_sql('headC')
-chargCame = Uti.doc_du_lieu_sql('backC')
-faceCam2 = Uti.doc_du_lieu_sql('front_L')
+DUNG_SAI_DIEM_DEN_VITRI = sql.doc_du_lieu_param_robot('sai_so_kc')#0.5 #m
+DUNG_SAI_DIEM_DEN_GOC = sql.doc_du_lieu_param_robot('sai_so_goc')#9 #do
+
+chieu_cao_led = sql.doc_du_lieu_param_robot('chieu_cao_led') #caidatrobot
+MUC_DIEN_AP_SAC = sql.doc_du_lieu_param_robot('volt_sac_auto')
+
+faceCame1 = sql.doc_du_lieu_param_robot('front_R')
+headCamera = sql.doc_du_lieu_param_robot('headC')
+chargCame = sql.doc_du_lieu_param_robot('backC')
+faceCam2 = sql.doc_du_lieu_param_robot('front_L')
+DELAY_TIME = sql.doc_du_lieu_robot_ros('delay_time')
+USERNAME = sql.doc_du_lieu_param_robot('username')
+PASSWORD = sql.doc_du_lieu_param_robot('password') #caidatrobot
 
 #THONG SO ROBOT DO KY SU TINH TOAN =================
 AUTO_VX_MAX = 3
@@ -84,3 +82,15 @@ admin = 'admin'
 pw = '1'
 
 #========= 
+#ID DAC BIET CUA HE THONG
+HOME_ID = 200
+TruocDockSacID = 123
+DockSacID = 100
+KHOANG_CACH_VE_TRUOC_DOCKSAC = 0.5
+
+
+# CAC CHE DO VAN TOC
+LockedVelMode = 2
+UnLockedVelMode = 5
+ManualVelMode = 1
+AutoVelMode = 0

@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form_them</class>
+ <widget class="QWidget" name="Form_them">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>550</width>
+    <height>450</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
+  <widget class="QFrame" name="frames">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>550</width>
+     <height>450</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(230, 230, 230);
+border-radius: 35px;</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <widget class="QListWidget" name="listWidget_themvao">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>90</y>
+      <width>400</width>
+      <height>200</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>400</width>
+      <height>200</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>400</width>
+      <height>200</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);
+  border-radius: 14px;</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Button_huythem">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>320</y>
+      <width>180</width>
+      <height>100</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>180</width>
+      <height>100</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>180</width>
+      <height>100</height>
+     </size>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton#Button_huythem{
+    border-radius: 20px;
+	font: 75 14pt &quot;MS Shell Dlg 2&quot;;
+	border: 1px solid rgb(230, 230, 230);
+
+	background-color: rgb(255, 255, 255);
+
+}
+QPushButton#Button_huythem:hover{
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));
+
+}
+QPushButton#Button_huythem:pressed{
+padding-left :2px;
+padding-top :2px;
+
+	background-color: rgb(58, 192, 240);
+}
+QPushButton#Button_huythem:checked {
+background-color: rgb(58, 192, 255);
+
+}
+</string>
+    </property>
+    <property name="text">
+     <string>HỦY</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Button_them">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>320</y>
+      <width>180</width>
+      <height>100</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>180</width>
+      <height>100</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>180</width>
+      <height>100</height>
+     </size>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton#Button_them{
+    border-radius: 20px;
+	font: 75 14pt &quot;MS Shell Dlg 2&quot;;
+	border: 1px solid rgb(230, 230, 230);
+
+	background-color: rgb(255, 255, 255);
+
+}
+QPushButton#Button_them:hover{
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));
+
+}
+QPushButton#Button_them:pressed{
+padding-left :2px;
+padding-top :2px;
+
+	background-color: rgb(58, 192, 240);
+}
+QPushButton#Button_them:checked {
+background-color: rgb(58, 192, 255);
+
+}
+</string>
+    </property>
+    <property name="text">
+     <string>THÊM</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_themvao">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>40</y>
+      <width>500</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>500</width>
+      <height>30</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>5000</width>
+      <height>30</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <family>MS Shell Dlg 2</family>
+      <pointsize>14</pointsize>
+      <weight>50</weight>
+      <italic>false</italic>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 14pt &quot;MS Shell Dlg 2&quot;;</string>
+    </property>
+    <property name="text">
+     <string>DANH SÁCH CÁC PHÒNG ĐÃ XÓA TRƯỚC ĐÓ</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

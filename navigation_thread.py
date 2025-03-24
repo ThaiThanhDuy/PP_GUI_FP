@@ -842,5 +842,3 @@ class NavigationThread(QThread):
             self.move_robot_trai(1.5)
             self.daxoaytrai = False
     
-    # CAC HAM XU LY MAPPING TREN GIOA DIEN
-    
