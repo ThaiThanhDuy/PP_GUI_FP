@@ -30,27 +30,22 @@ class ReadArduinoPin(QThread):
             print('Kết nối Arduino thành công')
             self.is_running = True
         except Exception as ex:
-            # print(f'Kết nối Arduino Nano 1 thất bại: {ex}')
-            # Uti.RobotSpeakWithPath(pathFile = 'voice_hmi_new/ket_noi_nano_doc_pin_that_bai.mp3')
             self.is_running = False
 
     def read_data_from_arduino(self):
         try:
-            # print("dang doc du lieu arduino")
             return self.ser.readline().decode('utf-8').strip()
         
         except Exception as ex:
-            #print(f'Đọc dữ liệu từ Arduino thất bại 2: {ex}')
-            # Uti.RobotSpeakWithPath(pathFile = 'voice_hmi_new/doc_du_lieu_nano_that_bai.mp3')
             return ""
 
     def send_reset_2_arduino(self):
         try:
-            # print("dang doc du lieu arduino")
+     
             return self.ser.write(RobConf.RESET_NANO_CODE.encode())
 
         except Exception as ex:
-            #print(f'Đọc dữ liệu từ Arduino thất bại: {ex}')
+        
             return ""
 
     def run(self):
@@ -60,26 +55,20 @@ class ReadArduinoPin(QThread):
             while self.is_running:
                 self.voltage = self.read_data_from_arduino()
                 self.doc_pin.emit(self.voltage)
-                # print("voltage = ", self.voltage)
                 if self.voltage:
-                    # print(f'---Voltage Battery---: {self.voltage}')
                     try:
-                        if float(self.voltage) < self.full_vol:
-                            # print('--------------Het pin-------------')
-                            self.auto_charing_lientuc.emit(True)
-                            
+                        if float(self.voltage) < self.full_vol: 
+                            self.auto_charing_lientuc.emit(True)    
                         else:
-                            # print('--------------Du pin-------------')
+                     
                             self.auto_charing_lientuc.emit(False)
                     except ValueError:
                         pass
-                        # print(f'Giá trị không hợp lệ: {self.voltage}')
-                # self.is_running = False  # Dừng sau khi đọc xong một lần để kiểm tra
-            # print('Ngắt kết nối Arduino')
-            # self.ser.close()
-            # self.is_running = False  
+    def stop(self):
+        self.is_running = False
+        print("dung doc dien ap")
             
-
+# CLASS CONTROLL CHARING
 class arduino(QThread):
     auto_charing = pyqtSignal(bool)
     def __init__(self):

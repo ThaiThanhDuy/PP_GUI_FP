@@ -397,10 +397,10 @@ class GoalPosePublisher(QThread):
         try:
             if self.send_goal_result:
                 self.node.get_logger().info('Goal reached!')
-                # self.reached_goal.emit(True)
+                self.reached_goal.emit(True)
             else:
                 self.node.get_logger().info('Goal was aborted.')
-                # self.reached_goal.emit(False)
+                self.reached_goal.emit(False)
         except:
             self.send_goal_result = None
             self.node.get_logger().warn('Can get result from future result')

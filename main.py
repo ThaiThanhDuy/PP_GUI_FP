@@ -25,14 +25,17 @@ import ros2_handle as ros2_handle
 import SQL as sql
 
 # Library GUI
-from PyQt5.QtCore import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QApplication,QMainWindow,QTableWidgetItem, QCheckBox, QMessageBox,QLineEdit, QVBoxLayout,QWidget
-from PyQt5.QtCore import QEvent
-from PyQt5.QtCore import Qt
+
+from PyQt5.QtCore import *
+from PyQt5.QtCore import QEvent, Qt, QThread, pyqtSignal
+
+from PyQt5.QtGui import *
 from PyQt5.QtGui import QIcon
+
+from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import QApplication,QMainWindow,QTableWidgetItem, QCheckBox, QMessageBox,QLineEdit, QVBoxLayout,QWidget
+
 
 # build QT - pyuic5 QT_main.ui -o QT_main.py
 
@@ -47,11 +50,12 @@ def xuly_cham_ngoai(): # ham xu ly khi cham ra ngoai ban phim se tat
 class MainApp(QMainWindow,Ui_MainWindow):
     def __init__(self):
         super().__init__()
+        self.navigation_thread = NavigationThread()
         self.setupUi(self) 
         self.ros2_handle = ROS2Handle()
         self.status_popup = StatusPopup()
         self.initialize_ros2_manager()
-        self.navigation_thread = NavigationThread()
+        
         
         self.css_ham = """
                                border-radius: 20px;
@@ -96,17 +100,34 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.y = ''
         self.z = ''
         self.w = ''
-       # self.show_dia_diem()
+        self.id_voice = 0
         self.hien_thi_nut_theo_id()
         self.item_states = {i: False for i in range(1, 201)}
-        self.currentPositionID = 200
-       
+        # Navigate thread 
+        
         self.dinhvi_dauhanhtrinh = False
-        self.data_sql = [None] * 10
-        self.stt1 = ''
-        self.stt2 = ''
-        self.stt3 = ''
-    # Button event 
+        self.goal_ids = []
+        self.btn_xac_nhan.setEnabled(False)
+        # PIN
+        self.on_off_sac_tu_dong=False
+        self.read_arduino = ReadArduinoPin()
+        self.read_arduino.doc_pin.connect(self.trangthai_pin)
+
+        self.sac_pin_tu_dong =False
+        self.arduino = arduino()
+    
+        
+        # Kiemtra robot co dang du chuyen ko 
+        if(self.navigation_thread.robot_dang_di_chuyen==True):
+            self.bt_mode_auto.setEnabled(False)
+        else:
+            self.bt_mode_auto.setEnabled(True)
+
+        self.btn_batdau_danduong.setEnabled(False)
+        self.btn_xac_nhan.pressed.connect(self.button_xn_pressed)
+        self.btn_xn_enable = self.btn_xac_nhan.isEnabled()
+    
+################### Button event ##################
     def setupSingal(self):
        # self.ros2_handle = ROS2Handle()  # Create an instance
         
@@ -121,8 +142,8 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.bt_back_dan_duong.clicked.connect(self.back_setup)
 
         ## diem danh button
-        self.bt_diem_danh.clicked.connect(self.show_diem_danh)
-        self.bt_back_diem_danh.clicked.connect(self.back_diem_danh)
+        
+       
 
         #Setup button
         self.bt_setup.clicked.connect(self.show_page_setup)
@@ -131,16 +152,20 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.btn_save_sql.clicked.connect(self.fcn_save_data_sql)
         self.btn_load_sql.clicked.connect(self.show_thong_so_robot)
         self.btn_resetall_sql.clicked.connect(self.fcn_resetall_sql)
+        self.btn_sac_auto.clicked.connect(self.che_do_sac)
         #Ros button
-     
-        self.bt_dan_duong.clicked.connect(self.show_dan_duong)
-        #ROBOT AUTO RUN AUTO
+        self.bt_back_mode.clicked.connect(self.back_setup)
+        self.bt_dan_duong.clicked.connect(self.show_page_mode)
+        self.bt_mode_manual.clicked.connect(self.show_dichuyen_robot)
+        self.bt_mode_auto.clicked.connect(self.show_dan_duong)
+        #ROBOT RUN AUTO
         self.btn_batdau_danduong.clicked.connect(self.show_robot_dichuyen)
+        self.btn_xac_nhan.clicked.connect(self.man_hinh_dan_duong)
         #ROBOT RUN MANUAL
         self.listWidget_dsban.itemClicked.connect(self.item_xoa_clicked)
        
 
-    #Slice 
+        #Slice 
 
         self.Slider_vantoc.setMaximum(1000)
         self.Slider_vantoc.setMinimum(0)
@@ -177,19 +202,18 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.btn_tram_sac.clicked.connect(lambda: self.toggle_item(100))
         self.btn_khu_vuc_cho.clicked.connect(lambda: self.toggle_item(200))
         self.checkBox_kvc.stateChanged.connect(lambda: self.toggle_item(200))
+
         if (sql.kiem_tra_id_ton_tai(200)==True):
             self.checkBox_kvc.setEnabled(True)
         else:
              self.checkBox_kvc.setEnabled(False)
-  
-
-        self.btn_ban_do.clicked.connect(self.show_map)
-        self.btn_batdau_danduong.clicked.connect(self.dan_duong)
-        self.btn_xac_nhan.clicked.connect(self.bat_dau_dan_duong)
-    # Funtion Page
 
     
-    # Page Setup
+        self.btn_ban_do.clicked.connect(self.show_map)
+        self.btn_batdau_danduong.clicked.connect(self.dan_duong)
+
+    # Funtion Page
+################### Page Setup ##################
 
     def back_setup(self):
         self.stackedWidget.setCurrentWidget(self.page_main)
@@ -198,20 +222,23 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.stackedWidget.setCurrentWidget(self.page_setup_ts_robot)
     def show_dichuyen_robot(self):
         self.stackedWidget.setCurrentWidget(self.page_dichuyen_robot)
+        
     #Page ros
+    def show_page_mode(self):
+        self.stackedWidget.setCurrentWidget(self.page_mode)
     def show_dan_duong(self):
         self.stackedWidget.setCurrentWidget(self.page_dan_duong)
+        
+        
+
     def show_page_setup(self):
         self.stackedWidget.setCurrentWidget(self.page_setup)
         self.show_thong_so_robot()
     def show_robot_dichuyen(self):
         self.stackedWidget.setCurrentWidget(self.page_robot_dichuyen)
-    # Page diem danh
-    def show_diem_danh(self):
-        self.stackedWidget.setCurrentWidget(self.page_diem_danh)
-    def back_diem_danh(self):
-        self.stackedWidget.setCurrentWidget(self.page_main)
-
+    def dan_duong(self):
+        self.stackedWidget.setCurrentWidget(self.page_robot_dichuyen)
+        self.man_hinh_dan_duong()
     # Funtion event 
     def toggleFullScreen(self):
         """ Bật hoặc tắt chế độ toàn màn hình """
@@ -251,8 +278,8 @@ class MainApp(QMainWindow,Ui_MainWindow):
          """)
         msg.resize(650, 450)
         msg.exec_()
-  
-    #Setup 
+################## Setup ##################
+################## CAI DAT THONG SO ROBOT ##################
     def show_thong_so_robot(self):
        
         self.textbox_vtt.setPlainText(str(RobConf.VX_AUTO_MAX))
@@ -378,8 +405,8 @@ class MainApp(QMainWindow,Ui_MainWindow):
 
             # Hiển thị thông báo thành công
             self.display_thanhcong("Dữ Liệu Đã Được Reset")
-    
-############### ROS
+################## ROS ##################
+################## MANUAL ##################
     def thaydoivantoc(self):
         slider_value = self.Slider_vantoc.value()
         # lấy giá trị thanh Slider
@@ -391,7 +418,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
     def initialize_ros2_manager(self, ):
         self.ros2_handle.start()
         self.ros2_handle.progress_status.connect(self.status_popup.update_status)
-        #self.ros2_handle.goal_publisher.reached_goal.connect(self.reached_goal)
+        self.ros2_handle.goal_publisher.reached_goal.connect(self.reached_goal)
     def mapping(self, ):
         self.mapping_button.setEnabled(False)
         self.ros2_handle.stop_navigation()
@@ -439,7 +466,6 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.ros2_handle.map_viewer_subcriber.mapping_status.connect(self.update_map)
     def show_map(self):
         self.manhinh_map()
-  
     def control_robot(self):
         self.bt_UP.pressed.connect(self.ros2_handle.cmd_vel_publisher.forward)
         self.bt_UP.released.connect(self.ros2_handle.cmd_vel_publisher.stop_movement)
@@ -486,13 +512,11 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.uic3.Button_ban.setStyleSheet(self.css_unham)
         self.uic3.Button_kvchow.setStyleSheet(self.css_unham)
         self.uic3.Button_khacc.setStyleSheet(self.css_unham)
-
     def ham_tg(self):
        # print("ham_tg")
         self.uic3.lineEdit_nhaptenban.setText("Vị trí trung gian")
         self.uic3.lineEdit_nhaptenban.setEnabled(False)
         self.trangthai_kv = 4
-
     def ham_kvcho(self):
         #print("ham_kvchow")
         self.uic3.lineEdit_nhaptenban.setText("Khu vực chờ")
@@ -503,7 +527,6 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.uic3.Button_ban.setStyleSheet(self.css_unham)
         self.uic3.Button_docksac.setStyleSheet(self.css_unham)
         self.uic3.Button_khacc.setStyleSheet(self.css_unham)
-
     def ham_toado(self):
         #print("ham_ban")
         self.uic3.lineEdit_nhaptenban.setEnabled(True)
@@ -514,10 +537,8 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.uic3.Button_docksac.setStyleSheet(self.css_unham)
         self.uic3.Button_kvchow.setStyleSheet(self.css_unham)
         self.uic3.Button_khacc.setStyleSheet(self.css_unham)
-
     def ham_khacc(self):
         print("ham_khacc")
-
     def xu_ly_nhap_banphim(self, event):
         print("da nhap")
         try:
@@ -530,7 +551,6 @@ class MainApp(QMainWindow,Ui_MainWindow):
                 keyyyyy.Registe.virtual_keyboard.hide()
         except:
             print("failed to open virtual keyboard ,already exist ")
-    
     def tatmanhinh_capnhat(self):
         self.from_nhap.close()
     def close_manhinh_nhapban(self):
@@ -741,8 +761,6 @@ class MainApp(QMainWindow,Ui_MainWindow):
                # button_name = f"Button_{i}_2"
                # button = getattr(self.sub_win1.uic, button_name)
                 #button.hide()
-    
-
     def custom_sort_key(item):
             if item == "Trạm sạc" or item == "Khu vực chờ":
                 return (1, item)
@@ -780,17 +798,13 @@ class MainApp(QMainWindow,Ui_MainWindow):
 
         # --------------------- phat am thanh -------------------------
         Uti.RobotSpeakWithPath('voice_hmi_new/them.wav')
-        
-    
     def tat_Form_them(self):
         self.from_them.close()
-
     def kiem_tra_listWidget_themvao(self):  # ======== Kiểm tra để set nút Thêm
         if self.uic4.listWidget_themvao.count() > 0:
             self.uic4.Button_them.setEnabled(True)
         else:
             self.uic4.Button_them.setEnabled(False)
-
     def close_manhinh_them(self):
         db = mysql.connector.connect(
       
@@ -799,7 +813,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
             host="127.0.0.1",
             database="sql_rsr"
             )
-        # ============= Phần này của 10 nút bàn
+        # Phần này của 10 nút 
         if self.selected_them is not None:
             # Xóa phần tử đã chọn từ listWidget_dsban
             self.uic4.listWidget_themvao.takeItem(self.uic4.listWidget_themvao.row(self.selected_them))
@@ -875,7 +889,6 @@ class MainApp(QMainWindow,Ui_MainWindow):
             print(self.selected_item_infor)
             self.selected_kvcho = None
             self.selected_tram = None
-
     def item_them_clicked(self, item1):
         self.uic4.Button_them.setEnabled(True)
         if item1.text() == "Trạm sạc":
@@ -892,7 +905,6 @@ class MainApp(QMainWindow,Ui_MainWindow):
             print(self.selected_them)
             self.selected_tram_them = None
             self.selected_kvcho_them = None
-
     def addtu_uic2_uic4(self):
         # ================lấy dữ liệu có sẵn trước đó trên mysql=================#
         db = mysql.connector.connect(
@@ -921,12 +933,10 @@ class MainApp(QMainWindow,Ui_MainWindow):
                    # ban_str = str(ban_int)
                     self.uic4.listWidget_themvao.addItem(f"Phòng {ban}")
             self.sap_xep_stt_ban_uic4()
-
     def extract_number(self, text):
         # Trích xuất số từ văn bản và trả về số dưới dạng chuỗi
         number = ''.join(filter(str.isdigit, text))
         return number
-
     def xoa_tungthanhphan(self):
         print('da bam nut xoa')
         mydb = mysql.connector.connect(
@@ -983,16 +993,14 @@ class MainApp(QMainWindow,Ui_MainWindow):
           #  button = getattr(self.sub_win1.uic, button_name)
           #  button.setText('Về khu vực chờ')
            # button.hide()
-    def savemap(self):
         map_folder_path = RobConf.MAP_FOLDER
+    def savemap(self):
         os.system(
             f'gnome-terminal -- bash -c "cd {map_folder_path} && rosrun map_server map_saver -f mymap2"')
         # time.sleep(3)
         print("1234556789")
-    
-
+################## GIAO DIEN THEM PHONG DE CHAY ##################
     def hien_thi_nut_theo_id(self):
-       
         nut_dict = {
             100: self.btn_tram_sac,
             200: self.btn_khu_vuc_cho,
@@ -1017,12 +1025,11 @@ class MainApp(QMainWindow,Ui_MainWindow):
                 nut.hide()
     def toggle_item(self, id):
         
+        # kiem tra nut nhan 
         if(id==100):
-            item_text = f"Trạm sạc"
-        
+            item_text = f"Trạm sạc" 
         elif(id==200):
             item_text = f"Khu vực chờ"
-        
         else:
             item_text = f"Phòng {id}"
             
@@ -1035,12 +1042,16 @@ class MainApp(QMainWindow,Ui_MainWindow):
                     self.listWidget_ds.takeItem(i)
                     self.item_states[id] = False
                     break
+        self.kiem_tra_du_dieu_khien_chay()
         self.sort_items() # Add this line to sort items after each toggle
+        
 
     def sort_items(self):
+        # Sap sep trinh tu di tram sac, 
         items = []
         for i in range(self.listWidget_ds.count()):
             items.append(self.listWidget_ds.item(i).text())
+        
 
         def sort_key(item):
             if item == "Trạm sạc":
@@ -1054,11 +1065,13 @@ class MainApp(QMainWindow,Ui_MainWindow):
                     return float('inf')  # Đặt các mục không phù hợp xuống cuối
 
         items.sort(key=sort_key)
-
+        
         self.listWidget_ds.clear()
         for item in items:
             self.listWidget_ds.addItem(item)
+        
 
+    ################## SHOW MAP  ##################
     def show_map(self):
         self.mymap = QMainWindow()
         self.uic5 = Ui_Form_map()
@@ -1070,7 +1083,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
 
         self.mymap.show()
         print("đã hiển thị Map")
-       # self.uic5.Button_thoat.clicked.connect(self.tat_map)
+        self.uic5.Button_thoat.clicked.connect(self.tat_map)
        # self.sub_win1.uic.page.mousePressEvent = self.xu_ly_close_map
       #  self.sub_win1.uic.label_3.mousePressEvent = self.xu_ly_close_map
         # -------------------- Phần thêm thông tin yaml --------------------------
@@ -1131,7 +1144,8 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.uic5.page.mousePressEvent = self.mouse_click_event
         # self.view.setGeometry(11, 1, 1876, 934)
         print(self.view.geometry())
-    
+    def tat_map(self):
+        self.mymap.close()
     def mouse_click_event(self, event):
         # Lấy tọa độ x, y khi click chuột trên QGraphicsView
         x = event.x() * self.scale_factor
@@ -1142,7 +1156,6 @@ class MainApp(QMainWindow,Ui_MainWindow):
         y_str = "{:.5f}".format(y)
         # In ra tọa độ (x, y) trên hình ảnh
         print("(x, y):", x_str, y_str)
-
     def scale_elements(self):
         self.scale_factor = self.uic5.slider_1_map.value() / 80
         # Thay đổi tỷ lệ của QGraphicsView, chính là hiệu ứng zoom
@@ -1279,82 +1292,237 @@ class MainApp(QMainWindow,Ui_MainWindow):
         label.setStyleSheet(csshome)
         label.setAlignment(Qt.AlignCenter)
         self.view.scene().addWidget(label)
-    def dan_duong(self):
-        self.stackedWidget.setCurrentWidget(self.page_robot_dichuyen)
-    def bat_dau_dan_duong(self):
-        goals = [self.listWidget_ds.item(index).text() for index in
-                    range(self.listWidget_ds.count())]
-        print('Goals: ', goals)
-        goal_ids = []
-        for goal in goals:
-            if 'Phòng' in goal:
-                goal_ids.append(int(goal.split()[-1]))
-            elif 'Home' in goal:
-                goal_ids.append(RobConf.HOME_ID)
-          
-        print('Goal ids: ', goal_ids)
-        if goals:  # kiểm tra danh sách có phần tử nào ko
-            first_item = goals[0]
-            self.label_tt.setText(first_item)  # label có ô vuông
-            self.current_item_index = 0
-        #print(self.currentPositionID, RobConf.TruocDockSacID)
-        if self.currentPositionID == RobConf.TruocDockSacID: # dang o dock sac -> qt: chay
-                #set pose tai diem 100
 
-                #----------------- BUOC 1: SET POSE TU SQL ----------------
-                self.ros2_handle.goal_publisher.set_goal_from_sql(100)
+################## PIN ##################
 
-                #----------------- BUOC 2: CHAY MU RA NGOAI ----------------
-                self.ros2_handle.cmd_vel_publisher.move_with_command('Up', 0.3, 0)
-                time.sleep(2)
-                self.ros2_handle.cmd_vel_publisher.move_with_command('Stop', 0, 0)
-                time.sleep(2)
-                #----------------- BUOC 3: GHI VI TRI HIEN TAI LEN FILE ODOM ----------------               
-                Uti.writePose2File(filePath = file_path_pose_data,x=self.ros2_handle.odom_listener.data_odom[0],
-                                    y=self.ros2_handle.odom_listener.data_odom[1],
-                                    z=self.ros2_handle.odom_listener.data_odom[2],
-                                    w=self.ros2_handle.odom_listener.data_odom[3])
-
-
-                #----------------- BUOC 4: DI DEN VI TRI MONG MUON ----------------      
-               # self.hien_thi_phan_tu_dau_tien()
-
+    def trangthai_pin(self, status):
+        if status == "A":
+            print("da nhan A")
         else:
-                self.dinhvi_dauhanhtrinh = False
-                self.hien_thi_phan_tu_dau_tien()
-                # chuyển sang nút xacnhan để sang vị trí bàn tiếp theo
-          
-                # --------------------- phat am thanh -------------------------
-                Uti.RobotSpeakWithPath('voice_hmi_new/new_nhuong_duong.wav')
-                # time.sleep(1)
-    def print_ds(self):
-        for i in range(self.listWidget_ds.count()):
-                print(self.listWidget_ds.item(i).text())
-    def hien_thi_phan_tu_dau_tien(self):
+          #  if self.on_off_sac_tu_dong== True:
+                if not self.navigation_thread.robot_dang_di_chuyen:
+                    print("--------------------gia tri dien ap----------------------: ", status)
+                    if status != "B":
+                        try:
+                            parts = status.split()  # Tách chuỗi thành danh sách các phần tử
+                            value = float(parts[0])  # Lấy phần tử đầu tiên và chuyển đổi
+                            if value < 10.6:
+                                print("Giá trị điện áp nhỏ hơn 10.8 :", value)
+                            #    Uti.RobotSpeakWithPath('voice_hmi_new/thongbao_pin_yeu.wav')
+                                time.sleep(2)
+                                self.navigation_thread.du_pin = False
+                                self.read_arduino.doc_pin.disconnect(self.trangthai_pin)
+                                self.read_arduino.stop()
+                           #     Uti.RobotSpeakWithPath('voice_hmi_new/batdau_quatrinh_sac.wav')
+                                time.sleep(2)
+                             #   self.Auto_charing()
+                            elif value > 10.6:
+                                print("Giá trị điện áp lớn hơn 10.8 :", value)
+                                time.sleep(2)
+                            #    Uti.RobotSpeakWithPath('voice_hmi_new/thongbao_pin_day.wav')
+                                self.navigation_thread.du_pin = True
+                                self.read_arduino.doc_pin.disconnect(self.trangthai_pin)
+                                self.read_arduino.stop()
+                             #   self.ve_home_trong_chu_trinh()
+                            else:
+                                print("Giá trị điện áp bình thường :", value)
+                                self.read_arduino.doc_pin.disconnect(self.trangthai_pin)
+                                self.read_arduino.stop()
+                        except (ValueError, IndexError): #Thêm IndexError đề phòng trường hợp parts không có index 0
+                            print(f"Không thể chuyển đổi '{status}' thành số thực.")
+                    else:
+                        print("Status la B")
+     #======================= ham on off che do sac tu dong khi het pin =======================
+    def che_do_sac(self):
+        self.on_off_sac_tu_dong = not self.on_off_sac_tu_dong
+        if self.on_off_sac_tu_dong:
+            self.btn_sac_auto.setStyleSheet("background-color: rgb(0,255,0);border-radius:20px;")
+            Uti.RobotSpeakWithPath('voice_hmi_new/bat_chedosac.wav')
+             # time.sleep(1)
            
-        self.navigation_thread.solanthu_vehome = 0
-        self.navigation_thread.solanthu_vecacvitrikhac = 0
+        else:
+            self.btn_sac_auto.setStyleSheet("background-color: rgb(255,255,255);border-radius:20px;")
+            Uti.RobotSpeakWithPath('voice_hmi_new/tat_chedosac.wav')
+            #time.sleep(1)
+        print("---- dao trang thai che do sac -----") 
+        
+        self.ham_chay_sac_tu_dong()
+    def ham_chay_sac_tu_dong(self):
+        if(self.on_off_sac_tu_dong == True):
+              self.read_arduino.start()
+           #   self.read_arduino.doc_pin.connect(self.trangthai_pin)
+              if not self.navigation_thread.robot_dang_di_chuyen:     
+                if(self.navigation_thread.du_pin == False):
+                    Uti.RobotSpeakWithPath('voice_hmi_new/thongbao_pin_yeu.wav')
+                    self.read_arduino.stop()
 
-        ##self.data_send_sql = self.data_sql[self.stt1]
-        x_goal, y_goal, z_goal, w_goal, idout = sql.doc_du_lieu_toado_robot(100)
+                    print("chay ve tram sac")
+                    self.sac_pin_tu_dong = True
+                    self.stackedWidget.setCurrentWidget(self.page_robot_dichuyen)
+                    self.man_hinh_dan_duong()
+
+                elif(self.navigation_thread.du_pin == True): 
+                    Uti.RobotSpeakWithPath('voice_hmi_new/thongbao_pin_day.wav')
+                    self.read_arduino.stop()
+                    print("chay ve home")
+                    self.sac_pin_tu_dong = True
+                
+               
+                  
+################## Navigate thread  ##################
+    def kiem_tra_du_dieu_khien_chay(self):
+        self.read_arduino.start()
+        self.read_arduino.doc_pin.connect(self.trangthai_pin)
+        ## Kiem tra dieu khien pin
+    #    print("du Pin")
+   
+        ## Kiem tra da nhap ten phong
+        if( self.navigation_thread.du_pin==True):
+            self.btn_batdau_danduong.setEnabled(True)
+            self.read_arduino.stop()
+            print("du Pin")
+        else:
+            self.btn_batdau_danduong.setEnabled(False)
+            Uti.RobotSpeakWithPath('voice_hmi_new/vuilongsacpin.wav')
+            self.read_arduino.stop()
+            print("Thieu Pin")
+
+    
+    def button_xn_pressed(self):
+           if(self.id_voice==200 or self.id_voice==123):
+            self.stackedWidget.setCurrentWidget(self.page_main)
+           else:
+            pass
+
+    def reached_goal(self, flag):
+        if flag:
+            self.btn_xac_nhan.setEnabled(True)
+            if self.id_voice == RobConf.HOME_ID:
+                Uti.RobotSpeakWithPath('new_voice/new_hoan_thanh.wav')
+                
+            else:
+                Uti.RobotSpeakWithPath('voice_hmi_new/new_xac_nhan.wav')
+    def ve_home_trong_chu_trinh(self):
+        # B1 chay ve home
+        x_goal, y_goal, z_goal, w_goal, idout = sql.doc_du_lieu_toado_robot(200)
 
         time.sleep(1)
-        print('Gửi data: start')
+        print('Go HOME')
+        Uti.RobotSpeakWithPath('voice_hmi_new/ve_home.wav')
         self.navigation_thread.clear_done_navigation_status() #reset bien done_navigation
-        self.giaotoi = 0
 
         self.navigation_thread.id =  idout#300
 
         self.navigation_thread.quatrinh_move = True
 
+        self.ros2_handle.goal_publisher.send_goal(x_goal, y_goal, z_goal, w_goal)
+        # B2 dinh vi 
+        print("Robot dang dinh vi")
+
+        print("da dinh vi xong")
+
+        self.listWidget_ds.clear()
+         # Đặt lại tất cả các trạng thái item về False
+        for id_item in self.item_states:
+            self.item_states[id_item] = False
+            
+        self.checkBox_kvc.setCheckState(Qt.Unchecked)
+
+       
+    def ve_dock_sac(self):
+
+        x_goal, y_goal, z_goal, w_goal, idout = sql.doc_du_lieu_toado_robot(123)
+
+        time.sleep(1)
+        print('Go DOCK')
+        Uti.RobotSpeakWithPath('voice_hmi_new/batdau_quatrinh_sac.wav')
+        self.navigation_thread.clear_done_navigation_status() #reset bien done_navigation
+
+        self.navigation_thread.id =  idout#300
+
+        self.navigation_thread.quatrinh_move = True
 
         self.ros2_handle.goal_publisher.send_goal(x_goal, y_goal, z_goal, w_goal)
 
+        self.listWidget_ds.clear()
+         # Đặt lại tất cả các trạng thái item về False
+        for id_item in self.item_states:
+            self.item_states[id_item] = False
+
+    def auto_clear(self,id):
+            x_goal, y_goal, z_goal, w_goal, idout = sql.doc_du_lieu_toado_robot(id)
+
+            time.sleep(1)
+           
+            self.navigation_thread.clear_done_navigation_status() #reset bien done_navigation
+
+            self.navigation_thread.id =  idout#300
+
+            self.navigation_thread.quatrinh_move = True
+
+            self.ros2_handle.goal_publisher.send_goal(x_goal, y_goal, z_goal, w_goal)
+ 
+            # B4 Xoa phan tu dau tien 
+            self.listWidget_ds.takeItem(0)
+            
+            
+    def man_hinh_dan_duong(self):
+           
+      #  if not self.arduino.batdau_sac:
+
+            self.btn_xac_nhan.setEnabled(False)
+            goals = [self.listWidget_ds.item(index).text() for index in range(self.listWidget_ds.count())]
+            print('Goals: ', goals)
+            self.goal_ids = []
+            for goal in goals:
+                if 'Phòng' in goal:
+                    self.goal_ids.append(int(goal.split()[-1]))
+                elif 'Khu vực chờ' in goal:
+                    self.goal_ids.append(RobConf.HOME_ID)
+                elif 'Trạm sạc' in goal:
+                    self.goal_ids.append(RobConf.TruocDockSacID)
+            print('Goal ids: ', self.goal_ids)
+            if goals:  # kiểm tra danh sách có phần tử nào ko
+                first_item = goals[0]
+                self.label_tt.setText(first_item)  # label có ô vuông
+            if not self.goal_ids:
+                if(self.sac_pin_tu_dong==True):
+                    self.label_tt.setText("Trạm sạc")
+                    self.id_voice = 123
+                    self.ve_dock_sac()
+
+                else:
+                    self.label_tt.setText("Khu vực chờ")
+                    self.id_voice = 200
+                    self.ve_home_trong_chu_trinh()  
+
+            else:    
+                Uti.RobotSpeakWithPath('voice_hmi_new/new_nhuong_duong.wav')
+                
+                if (self.goal_ids[0]==200):
+                    self.id_voiced = 200
+                    self.ve_home_trong_chu_trinh()
+           
+                elif(self.goal_ids[0]==123):
+                    self.id_voiced = 123
+                    self.ve_dock_sac()
+                else:
+                    self.id_voice = 0
+                    self.auto_clear(self.goal_ids[0])
+          
+      #  else:
+          #  Uti.RobotSpeakWithPath('voice_hmi_new/toidangdisac.wav')
+          #  print('toi dang di sac')
+            
+
+            
+            
+        
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MainApp()
-    
+
     window.show()
     #window.showFullScreen()
     sys.exit(app.exec_())

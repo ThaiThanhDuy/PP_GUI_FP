@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1921, 1116)
+        MainWindow.resize(1906, 1116)
         MainWindow.setIconSize(QtCore.QSize(50, 50))
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -34,7 +34,7 @@ class Ui_MainWindow(object):
         self.page_main.setStyleSheet("")
         self.page_main.setObjectName("page_main")
         self.tab_main = QtWidgets.QTabWidget(self.page_main)
-        self.tab_main.setGeometry(QtCore.QRect(20, 0, 1900, 911))
+        self.tab_main.setGeometry(QtCore.QRect(60, 20, 1800, 911))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
         brush.setStyle(QtCore.Qt.SolidPattern)
@@ -338,7 +338,7 @@ class Ui_MainWindow(object):
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.PlaceholderText, brush)
         self.tab_tinh_nang.setPalette(palette)
-        self.tab_tinh_nang.setStyleSheet("background-color: gray  ;")
+        self.tab_tinh_nang.setStyleSheet("")
         self.tab_tinh_nang.setObjectName("tab_tinh_nang")
         self.bt_dan_duong = QtWidgets.QPushButton(self.tab_tinh_nang)
         self.bt_dan_duong.setGeometry(QtCore.QRect(150, 400, 400, 250))
@@ -438,7 +438,7 @@ class Ui_MainWindow(object):
         self.label_chon_tn.setObjectName("label_chon_tn")
         self.tab_main.addTab(self.tab_tinh_nang, "")
         self.tab_cai_dat = QtWidgets.QWidget()
-        self.tab_cai_dat.setStyleSheet("background-color: gray  ;")
+        self.tab_cai_dat.setStyleSheet("")
         self.tab_cai_dat.setObjectName("tab_cai_dat")
         self.label_thong_so = QtWidgets.QLabel(self.tab_cai_dat)
         self.label_thong_so.setGeometry(QtCore.QRect(630, 30, 522, 200))
@@ -452,7 +452,7 @@ class Ui_MainWindow(object):
         self.label_thong_so.setObjectName("label_thong_so")
         self.frame_3 = QtWidgets.QFrame(self.tab_cai_dat)
         self.frame_3.setGeometry(QtCore.QRect(360, 260, 501, 541))
-        self.frame_3.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+        self.frame_3.setStyleSheet("background-color: gray;\n"
 "  border-radius: 20px;")
         self.frame_3.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -569,7 +569,7 @@ class Ui_MainWindow(object):
         self.bt_check_cam.setObjectName("bt_check_cam")
         self.frame_4 = QtWidgets.QFrame(self.tab_cai_dat)
         self.frame_4.setGeometry(QtCore.QRect(920, 260, 501, 541))
-        self.frame_4.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+        self.frame_4.setStyleSheet("background-color: gray;\n"
 "  border-radius: 20px;")
         self.frame_4.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_4.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -688,27 +688,98 @@ class Ui_MainWindow(object):
         self.bt_setup.setIcon(icon10)
         self.bt_setup.setIconSize(QtCore.QSize(60, 60))
         self.bt_setup.setObjectName("bt_setup")
+        self.btn_sac_auto = QtWidgets.QPushButton(self.tab_cai_dat)
+        self.btn_sac_auto.setGeometry(QtCore.QRect(1600, 20, 190, 60))
+        self.btn_sac_auto.setMinimumSize(QtCore.QSize(190, 60))
+        self.btn_sac_auto.setMaximumSize(QtCore.QSize(190, 60))
+        font = QtGui.QFont()
+        font.setFamily("MS Shell Dlg 2")
+        font.setPointSize(17)
+        font.setBold(False)
+        font.setItalic(False)
+        font.setWeight(9)
+        self.btn_sac_auto.setFont(font)
+        self.btn_sac_auto.setStyleSheet("QPushButton#btn_sac_auto{\n"
+"       border-radius: 15px;\n"
+"    font: 75 17pt \"MS Shell Dlg 2\";\n"
+"    \n"
+"    /*border: 3px solid rgb(230, 230, 230);*/\n"
+"    color: rgb(0, 0, 0);\n"
+"\n"
+"    \n"
+"\n"
+"    background-color: rgb(220, 220, 220);\n"
+"}\n"
+"QPushButton#btn_sac_auto:pressed{\n"
+"       border-radius: 15px;\n"
+"    font: 75 17pt \"MS Shell Dlg 2\";\n"
+"    \n"
+"    /*border: 3px solid rgb(230, 230, 230);*/\n"
+"    \n"
+"    font: 75 20pt \"Ubuntu Condensed\";\n"
+"    \n"
+"    background-color: #3498db;\n"
+"  color: white;           \n"
+"   padding-left: 2px;       \n"
+"  padding-top: 2px;\n"
+"    \n"
+"}")
+        icon11 = QtGui.QIcon()
+        icon11.addPixmap(QtGui.QPixmap("../../../lab/ROBOT_NH_V3/charging.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btn_sac_auto.setIcon(icon11)
+        self.btn_sac_auto.setIconSize(QtCore.QSize(50, 50))
+        self.btn_sac_auto.setObjectName("btn_sac_auto")
+        self.btn_huongdan = QtWidgets.QPushButton(self.tab_cai_dat)
+        self.btn_huongdan.setGeometry(QtCore.QRect(1600, 100, 190, 60))
+        self.btn_huongdan.setMinimumSize(QtCore.QSize(190, 60))
+        self.btn_huongdan.setMaximumSize(QtCore.QSize(190, 60))
+        self.btn_huongdan.setStyleSheet("QPushButton#btn_huongdan{\n"
+"       border-radius:15px;\n"
+"    font: 75 17pt \"MS Shell Dlg 2\";\n"
+"    \n"
+"    /*border: 3px solid rgb(230, 230, 230);*/\n"
+"    color: rgb(0, 0, 0);\n"
+"    \n"
+"    background-color: rgb(220, 220, 220);\n"
+"\n"
+"\n"
+"}\n"
+"\n"
+"QPushButton#btn_huongdan:pressed{\n"
+"padding-left :2px;\n"
+"padding-top :2px;\n"
+"\n"
+"    background-color: rgb(50, 192, 240);\n"
+"}\n"
+"")
+        icon12 = QtGui.QIcon()
+        icon12.addPixmap(QtGui.QPixmap("../../../lab/ROBOT_NH_V3/huong_dan.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btn_huongdan.setIcon(icon12)
+        self.btn_huongdan.setIconSize(QtCore.QSize(50, 50))
+        self.btn_huongdan.setObjectName("btn_huongdan")
         self.frame_4.raise_()
         self.frame_3.raise_()
         self.label_thong_so.raise_()
+        self.btn_sac_auto.raise_()
+        self.btn_huongdan.raise_()
         self.tab_main.addTab(self.tab_cai_dat, "")
         self.stackedWidget.addWidget(self.page_main)
-        self.page_diem_danh = QtWidgets.QWidget()
-        self.page_diem_danh.setObjectName("page_diem_danh")
-        self.label__diem_danh = QtWidgets.QLabel(self.page_diem_danh)
-        self.label__diem_danh.setGeometry(QtCore.QRect(630, 30, 522, 200))
+        self.page_mode = QtWidgets.QWidget()
+        self.page_mode.setObjectName("page_mode")
+        self.label__model = QtWidgets.QLabel(self.page_mode)
+        self.label__model.setGeometry(QtCore.QRect(690, 30, 522, 200))
         font = QtGui.QFont()
         font.setPointSize(28)
-        self.label__diem_danh.setFont(font)
-        self.label__diem_danh.setStyleSheet("\n"
+        self.label__model.setFont(font)
+        self.label__model.setStyleSheet("\n"
 "background-color: rgb(58, 192, 240);\n"
 "border-radius: 20px;\n"
 "")
-        self.label__diem_danh.setAlignment(QtCore.Qt.AlignCenter)
-        self.label__diem_danh.setObjectName("label__diem_danh")
-        self.bt_check_in = QtWidgets.QPushButton(self.page_diem_danh)
-        self.bt_check_in.setGeometry(QtCore.QRect(530, 430, 300, 200))
-        self.bt_check_in.setStyleSheet("QPushButton#bt_check_in{\n"
+        self.label__model.setAlignment(QtCore.Qt.AlignCenter)
+        self.label__model.setObjectName("label__model")
+        self.bt_mode_manual = QtWidgets.QPushButton(self.page_mode)
+        self.bt_mode_manual.setGeometry(QtCore.QRect(590, 430, 300, 200))
+        self.bt_mode_manual.setStyleSheet("QPushButton#bt_mode_manual{\n"
 "    background-color: rgb(255, 255, 255);\n"
 "\n"
 "color:rgba(0, 0, 0, 255);\n"
@@ -716,11 +787,11 @@ class Ui_MainWindow(object):
 "    \n"
 "    font: 75 30pt \"MS Shell Dlg 2\";\n"
 "}\n"
-"QPushButton#bt_check_in:hover{\n"
+"QPushButton#bt_mode_manual:hover{\n"
 "    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 255, 255, 255), stop:1 rgba(58, 192, 255, 255));\n"
 "\n"
 "}\n"
-"QPushButton#bt_check_in:pressed{\n"
+"QPushButton#bt_mode_manual:pressed{\n"
 "\n"
 " padding-left:5px;\n"
 " padding-top:5px;\n"
@@ -728,10 +799,12 @@ class Ui_MainWindow(object):
 "\n"
 "\n"
 "}")
-        self.bt_check_in.setObjectName("bt_check_in")
-        self.bt_check_out = QtWidgets.QPushButton(self.page_diem_danh)
-        self.bt_check_out.setGeometry(QtCore.QRect(1030, 430, 300, 200))
-        self.bt_check_out.setStyleSheet("QPushButton#bt_check_out{\n"
+        self.bt_mode_manual.setIcon(icon9)
+        self.bt_mode_manual.setIconSize(QtCore.QSize(50, 50))
+        self.bt_mode_manual.setObjectName("bt_mode_manual")
+        self.bt_mode_auto = QtWidgets.QPushButton(self.page_mode)
+        self.bt_mode_auto.setGeometry(QtCore.QRect(1030, 430, 300, 200))
+        self.bt_mode_auto.setStyleSheet("QPushButton#bt_mode_auto{\n"
 "    background-color: rgb(255, 255, 255);\n"
 "\n"
 "color:rgba(0, 0, 0, 255);\n"
@@ -739,11 +812,11 @@ class Ui_MainWindow(object):
 "    \n"
 "    font: 75 30pt \"MS Shell Dlg 2\";\n"
 "}\n"
-"QPushButton#bt_check_out:hover{\n"
+"QPushButton#bt_mode_auto:hover{\n"
 "    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 255, 255, 255), stop:1 rgba(58, 192, 255, 255));\n"
 "\n"
 "}\n"
-"QPushButton#bt_check_out:pressed{\n"
+"QPushButton#bt_mode_auto:pressed{\n"
 "\n"
 " padding-left:5px;\n"
 " padding-top:5px;\n"
@@ -751,10 +824,14 @@ class Ui_MainWindow(object):
 "\n"
 "\n"
 "}")
-        self.bt_check_out.setObjectName("bt_check_out")
-        self.bt_back_diem_danh = QtWidgets.QPushButton(self.page_diem_danh)
-        self.bt_back_diem_danh.setGeometry(QtCore.QRect(1640, 30, 151, 41))
-        self.bt_back_diem_danh.setStyleSheet("QPushButton#bt_back_diem_danh{\n"
+        icon13 = QtGui.QIcon()
+        icon13.addPixmap(QtGui.QPixmap("../images/xoafont_auto.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.bt_mode_auto.setIcon(icon13)
+        self.bt_mode_auto.setIconSize(QtCore.QSize(70, 70))
+        self.bt_mode_auto.setObjectName("bt_mode_auto")
+        self.bt_back_mode = QtWidgets.QPushButton(self.page_mode)
+        self.bt_back_mode.setGeometry(QtCore.QRect(1640, 30, 151, 41))
+        self.bt_back_mode.setStyleSheet("QPushButton#bt_back_mode{\n"
 "       border-bottom-right-radius :20px;\n"
 "    font: 75 18pt \"MS Shell Dlg 2\";\n"
 "    \n"
@@ -766,7 +843,7 @@ class Ui_MainWindow(object):
 "\n"
 "}\n"
 "\n"
-"QPushButton#bt_back_diem_danh:pressed{\n"
+"QPushButton#bt_back_mode:pressed{\n"
 "padding-left :2px;\n"
 "padding-top :2px;\n"
 "\n"
@@ -774,16 +851,16 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "")
-        icon11 = QtGui.QIcon()
-        icon11.addPixmap(QtGui.QPixmap("../images/quaylai_xoafont.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.bt_back_diem_danh.setIcon(icon11)
-        self.bt_back_diem_danh.setIconSize(QtCore.QSize(30, 30))
-        self.bt_back_diem_danh.setObjectName("bt_back_diem_danh")
-        self.stackedWidget.addWidget(self.page_diem_danh)
+        icon14 = QtGui.QIcon()
+        icon14.addPixmap(QtGui.QPixmap("../images/quaylai_xoafont.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.bt_back_mode.setIcon(icon14)
+        self.bt_back_mode.setIconSize(QtCore.QSize(30, 30))
+        self.bt_back_mode.setObjectName("bt_back_mode")
+        self.stackedWidget.addWidget(self.page_mode)
         self.page_setup = QtWidgets.QWidget()
         self.page_setup.setObjectName("page_setup")
         self.label_6 = QtWidgets.QLabel(self.page_setup)
-        self.label_6.setGeometry(QtCore.QRect(630, 30, 522, 200))
+        self.label_6.setGeometry(QtCore.QRect(670, 0, 522, 200))
         font = QtGui.QFont()
         font.setPointSize(28)
         self.label_6.setFont(font)
@@ -794,7 +871,7 @@ class Ui_MainWindow(object):
         self.label_6.setAlignment(QtCore.Qt.AlignCenter)
         self.label_6.setObjectName("label_6")
         self.bt_setup_robot = QtWidgets.QPushButton(self.page_setup)
-        self.bt_setup_robot.setGeometry(QtCore.QRect(150, 400, 400, 250))
+        self.bt_setup_robot.setGeometry(QtCore.QRect(210, 400, 400, 250))
         self.bt_setup_robot.setStyleSheet("QPushButton#bt_setup_robot{\n"
 "    background-color: rgb(255, 255, 255);\n"
 "\n"
@@ -815,13 +892,13 @@ class Ui_MainWindow(object):
 "\n"
 "\n"
 "}")
-        icon12 = QtGui.QIcon()
-        icon12.addPixmap(QtGui.QPixmap("../images/th.jpg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.bt_setup_robot.setIcon(icon12)
+        icon15 = QtGui.QIcon()
+        icon15.addPixmap(QtGui.QPixmap("../images/th.jpg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.bt_setup_robot.setIcon(icon15)
         self.bt_setup_robot.setIconSize(QtCore.QSize(60, 60))
         self.bt_setup_robot.setObjectName("bt_setup_robot")
         self.bt_setup_dinh_vi = QtWidgets.QPushButton(self.page_setup)
-        self.bt_setup_dinh_vi.setGeometry(QtCore.QRect(700, 400, 400, 250))
+        self.bt_setup_dinh_vi.setGeometry(QtCore.QRect(730, 400, 400, 250))
         self.bt_setup_dinh_vi.setStyleSheet("QPushButton#bt_setup_dinh_vi{\n"
 "    background-color: rgb(255, 255, 255);\n"
 "\n"
@@ -842,9 +919,9 @@ class Ui_MainWindow(object):
 "\n"
 "\n"
 "}")
-        icon13 = QtGui.QIcon()
-        icon13.addPixmap(QtGui.QPixmap("../images/dinhvi.jpg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.bt_setup_dinh_vi.setIcon(icon13)
+        icon16 = QtGui.QIcon()
+        icon16.addPixmap(QtGui.QPixmap("../images/dinhvi.jpg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.bt_setup_dinh_vi.setIcon(icon16)
         self.bt_setup_dinh_vi.setIconSize(QtCore.QSize(60, 60))
         self.bt_setup_dinh_vi.setObjectName("bt_setup_dinh_vi")
         self.bt_setup_tk = QtWidgets.QPushButton(self.page_setup)
@@ -870,9 +947,9 @@ class Ui_MainWindow(object):
 "\n"
 "}\n"
 "")
-        icon14 = QtGui.QIcon()
-        icon14.addPixmap(QtGui.QPixmap("../images/account.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.bt_setup_tk.setIcon(icon14)
+        icon17 = QtGui.QIcon()
+        icon17.addPixmap(QtGui.QPixmap("../images/account.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.bt_setup_tk.setIcon(icon17)
         self.bt_setup_tk.setIconSize(QtCore.QSize(60, 60))
         self.bt_setup_tk.setObjectName("bt_setup_tk")
         self.bt_back_setup = QtWidgets.QPushButton(self.page_setup)
@@ -896,14 +973,14 @@ class Ui_MainWindow(object):
 "    background-color: rgb(50, 192, 240);\n"
 "}\n"
 "")
-        self.bt_back_setup.setIcon(icon11)
+        self.bt_back_setup.setIcon(icon14)
         self.bt_back_setup.setIconSize(QtCore.QSize(60, 60))
         self.bt_back_setup.setObjectName("bt_back_setup")
         self.stackedWidget.addWidget(self.page_setup)
         self.page_dan_duong = QtWidgets.QWidget()
         self.page_dan_duong.setObjectName("page_dan_duong")
         self.frame = QtWidgets.QFrame(self.page_dan_duong)
-        self.frame.setGeometry(QtCore.QRect(20, 90, 951, 831))
+        self.frame.setGeometry(QtCore.QRect(70, 90, 951, 831))
         self.frame.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "  border-radius: 20px;")
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -988,10 +1065,7 @@ class Ui_MainWindow(object):
 "background-color: rgb(230, 230, 230);\n"
 "\n"
 "}\n"
-"QPushButton#btn_phong1:hover{\n"
-"background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));\n"
 "\n"
-"}\n"
 "QPushButton#btn_phong1:pressed{\n"
 "padding-left :2px;\n"
 "padding-top :2px;\n"
@@ -1267,11 +1341,11 @@ class Ui_MainWindow(object):
 "    background-color: rgb(50, 192, 240);\n"
 "}\n"
 "")
-        self.bt_back_dan_duong.setIcon(icon11)
+        self.bt_back_dan_duong.setIcon(icon14)
         self.bt_back_dan_duong.setIconSize(QtCore.QSize(50, 50))
         self.bt_back_dan_duong.setObjectName("bt_back_dan_duong")
         self.frame_2 = QtWidgets.QFrame(self.page_dan_duong)
-        self.frame_2.setGeometry(QtCore.QRect(1040, 90, 771, 831))
+        self.frame_2.setGeometry(QtCore.QRect(1040, 90, 821, 831))
         self.frame_2.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "  border-radius: 20px;")
         self.frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -1306,7 +1380,7 @@ class Ui_MainWindow(object):
         self.btn_thu_tu.setIconSize(QtCore.QSize(50, 50))
         self.btn_thu_tu.setObjectName("btn_thu_tu")
         self.btn_batdau_danduong = QtWidgets.QPushButton(self.frame_2)
-        self.btn_batdau_danduong.setGeometry(QtCore.QRect(470, 620, 250, 200))
+        self.btn_batdau_danduong.setGeometry(QtCore.QRect(470, 620, 301, 200))
         self.btn_batdau_danduong.setToolTipDuration(-8)
         self.btn_batdau_danduong.setStyleSheet("QPushButton#btn_batdau_danduong{\n"
 "    border-radius: 30px;\n"
@@ -1331,7 +1405,7 @@ class Ui_MainWindow(object):
 "")
         self.btn_batdau_danduong.setObjectName("btn_batdau_danduong")
         self.btn_them_bot = QtWidgets.QPushButton(self.frame_2)
-        self.btn_them_bot.setGeometry(QtCore.QRect(480, 200, 220, 150))
+        self.btn_them_bot.setGeometry(QtCore.QRect(480, 200, 291, 150))
         self.btn_them_bot.setStyleSheet("QPushButton#btn_them_bot{\n"
 "    border-radius: 20px;\n"
 "    font: 75 24pt \"MS Shell Dlg 2\";\n"
@@ -1360,7 +1434,7 @@ class Ui_MainWindow(object):
         self.btn_them_bot.setIconSize(QtCore.QSize(50, 50))
         self.btn_them_bot.setObjectName("btn_them_bot")
         self.checkBox_giong_noi = QtWidgets.QCheckBox(self.frame_2)
-        self.checkBox_giong_noi.setGeometry(QtCore.QRect(480, 60, 221, 91))
+        self.checkBox_giong_noi.setGeometry(QtCore.QRect(510, 60, 221, 91))
         font = QtGui.QFont()
         font.setFamily("MS Shell Dlg 2")
         font.setPointSize(24)
@@ -1404,7 +1478,7 @@ class Ui_MainWindow(object):
 "")
         self.checkBox_giong_noi.setObjectName("checkBox_giong_noi")
         self.btn_ban_do = QtWidgets.QPushButton(self.frame_2)
-        self.btn_ban_do.setGeometry(QtCore.QRect(480, 410, 220, 150))
+        self.btn_ban_do.setGeometry(QtCore.QRect(480, 410, 291, 150))
         self.btn_ban_do.setStyleSheet("QPushButton#btn_ban_do{\n"
 "    border-radius: 20px;\n"
 "    font: 75 28pt \"MS Shell Dlg 2\";\n"
@@ -1429,9 +1503,9 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "")
-        icon15 = QtGui.QIcon()
-        icon15.addPixmap(QtGui.QPixmap("../images/map.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.btn_ban_do.setIcon(icon15)
+        icon18 = QtGui.QIcon()
+        icon18.addPixmap(QtGui.QPixmap("../images/map.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btn_ban_do.setIcon(icon18)
         self.btn_ban_do.setIconSize(QtCore.QSize(50, 50))
         self.btn_ban_do.setObjectName("btn_ban_do")
         self.frame_thu_tu = QtWidgets.QFrame(self.frame_2)
@@ -1498,7 +1572,7 @@ class Ui_MainWindow(object):
         self.page_robot_dichuyen = QtWidgets.QWidget()
         self.page_robot_dichuyen.setObjectName("page_robot_dichuyen")
         self.label_xe = QtWidgets.QLabel(self.page_robot_dichuyen)
-        self.label_xe.setGeometry(QtCore.QRect(100, 100, 500, 804))
+        self.label_xe.setGeometry(QtCore.QRect(100, 50, 500, 804))
         self.label_xe.setMinimumSize(QtCore.QSize(500, 804))
         self.label_xe.setMaximumSize(QtCore.QSize(500, 804))
         self.label_xe.setMouseTracking(False)
@@ -1515,7 +1589,7 @@ class Ui_MainWindow(object):
         self.label_xe.setWordWrap(False)
         self.label_xe.setObjectName("label_xe")
         self.label_name_tt = QtWidgets.QLabel(self.page_robot_dichuyen)
-        self.label_name_tt.setGeometry(QtCore.QRect(620, 100, 1111, 120))
+        self.label_name_tt.setGeometry(QtCore.QRect(620, 50, 1111, 120))
         font = QtGui.QFont()
         font.setPointSize(36)
         self.label_name_tt.setFont(font)
@@ -1525,7 +1599,7 @@ class Ui_MainWindow(object):
         self.label_name_tt.setAlignment(QtCore.Qt.AlignCenter)
         self.label_name_tt.setObjectName("label_name_tt")
         self.label_tt = QtWidgets.QLabel(self.page_robot_dichuyen)
-        self.label_tt.setGeometry(QtCore.QRect(620, 240, 1111, 379))
+        self.label_tt.setGeometry(QtCore.QRect(620, 180, 1111, 379))
         font = QtGui.QFont()
         font.setPointSize(72)
         self.label_tt.setFont(font)
@@ -1536,7 +1610,7 @@ class Ui_MainWindow(object):
         self.label_tt.setAlignment(QtCore.Qt.AlignCenter)
         self.label_tt.setObjectName("label_tt")
         self.frame_10 = QtWidgets.QFrame(self.page_robot_dichuyen)
-        self.frame_10.setGeometry(QtCore.QRect(620, 640, 1111, 270))
+        self.frame_10.setGeometry(QtCore.QRect(620, 570, 1111, 281))
         self.frame_10.setStyleSheet("border: 3px solid rgb(255, 255, 255);\n"
 "background-color: rgb(255, 255, 255);\n"
 "border-radius: 20px;")
@@ -1575,9 +1649,9 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "")
-        icon16 = QtGui.QIcon()
-        icon16.addPixmap(QtGui.QPixmap("../../../lab/ROBOT_NH_V3/images/back.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.btn_ve_home_khancap.setIcon(icon16)
+        icon19 = QtGui.QIcon()
+        icon19.addPixmap(QtGui.QPixmap("../../../lab/ROBOT_NH_V3/images/back.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btn_ve_home_khancap.setIcon(icon19)
         self.btn_ve_home_khancap.setIconSize(QtCore.QSize(100, 100))
         self.btn_ve_home_khancap.setObjectName("btn_ve_home_khancap")
         self.btn_xac_nhan = QtWidgets.QPushButton(self.frame_10)
@@ -1612,18 +1686,18 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "")
-        icon17 = QtGui.QIcon()
-        icon17.addPixmap(QtGui.QPixmap("../images/checks.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.btn_xac_nhan.setIcon(icon17)
+        icon20 = QtGui.QIcon()
+        icon20.addPixmap(QtGui.QPixmap("../images/checks.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btn_xac_nhan.setIcon(icon20)
         self.btn_xac_nhan.setIconSize(QtCore.QSize(101, 100))
         self.btn_xac_nhan.setObjectName("btn_xac_nhan")
         self.stackedWidget.addWidget(self.page_robot_dichuyen)
         self.page_setup_ts_robot = QtWidgets.QWidget()
         self.page_setup_ts_robot.setObjectName("page_setup_ts_robot")
         self.frame_32 = QtWidgets.QFrame(self.page_setup_ts_robot)
-        self.frame_32.setGeometry(QtCore.QRect(89, 0, 1661, 900))
+        self.frame_32.setGeometry(QtCore.QRect(120, 0, 1700, 900))
         self.frame_32.setStyleSheet("background-color: rgb(255, 255, 255);\n"
-"  border-radius: 20px;")
+" border-radius: 20px;")
         self.frame_32.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_32.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_32.setObjectName("frame_32")
@@ -1873,7 +1947,7 @@ class Ui_MainWindow(object):
 "\n"
 "\n"
 "")
-        self.bt_back_setup_ts_robot.setIcon(icon11)
+        self.bt_back_setup_ts_robot.setIcon(icon14)
         self.bt_back_setup_ts_robot.setIconSize(QtCore.QSize(60, 60))
         self.bt_back_setup_ts_robot.setObjectName("bt_back_setup_ts_robot")
         self.stackedWidget.addWidget(self.page_setup_ts_robot)
@@ -1910,9 +1984,9 @@ class Ui_MainWindow(object):
 "\n"
 "")
         self.bt_RIGHT.setText("")
-        icon18 = QtGui.QIcon()
-        icon18.addPixmap(QtGui.QPixmap("../../../lab/ROBOT_NH_V3/images/phai_20_09.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.bt_RIGHT.setIcon(icon18)
+        icon21 = QtGui.QIcon()
+        icon21.addPixmap(QtGui.QPixmap("../../../lab/ROBOT_NH_V3/images/phai_20_09.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.bt_RIGHT.setIcon(icon21)
         self.bt_RIGHT.setIconSize(QtCore.QSize(140, 140))
         self.bt_RIGHT.setObjectName("bt_RIGHT")
         self.bt_UP = QtWidgets.QPushButton(self.frame_5)
@@ -1940,9 +2014,9 @@ class Ui_MainWindow(object):
 "}\n"
 "")
         self.bt_UP.setText("")
-        icon19 = QtGui.QIcon()
-        icon19.addPixmap(QtGui.QPixmap("../../../code/PP_GUI_FP/images/muitenlen_20_09.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.bt_UP.setIcon(icon19)
+        icon22 = QtGui.QIcon()
+        icon22.addPixmap(QtGui.QPixmap("../images/muitenlen_20_09.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.bt_UP.setIcon(icon22)
         self.bt_UP.setIconSize(QtCore.QSize(140, 140))
         self.bt_UP.setObjectName("bt_UP")
         self.bt_DOWN = QtWidgets.QPushButton(self.frame_5)
@@ -1968,9 +2042,9 @@ class Ui_MainWindow(object):
 "\n"
 "")
         self.bt_DOWN.setText("")
-        icon20 = QtGui.QIcon()
-        icon20.addPixmap(QtGui.QPixmap("../../../lab/ROBOT_NH_V3/images/pnd_down_21_09.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.bt_DOWN.setIcon(icon20)
+        icon23 = QtGui.QIcon()
+        icon23.addPixmap(QtGui.QPixmap("../../../lab/ROBOT_NH_V3/images/pnd_down_21_09.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.bt_DOWN.setIcon(icon23)
         self.bt_DOWN.setIconSize(QtCore.QSize(140, 140))
         self.bt_DOWN.setObjectName("bt_DOWN")
         self.bt_STOP = QtWidgets.QPushButton(self.frame_5)
@@ -1996,9 +2070,9 @@ class Ui_MainWindow(object):
 "\n"
 "")
         self.bt_STOP.setText("")
-        icon21 = QtGui.QIcon()
-        icon21.addPixmap(QtGui.QPixmap("../../../lab/ROBOT_NH_V3/images/circle_21_09.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.bt_STOP.setIcon(icon21)
+        icon24 = QtGui.QIcon()
+        icon24.addPixmap(QtGui.QPixmap("../../../lab/ROBOT_NH_V3/images/circle_21_09.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.bt_STOP.setIcon(icon24)
         self.bt_STOP.setIconSize(QtCore.QSize(140, 140))
         self.bt_STOP.setObjectName("bt_STOP")
         self.bt_LEFT = QtWidgets.QPushButton(self.frame_5)
@@ -2024,9 +2098,9 @@ class Ui_MainWindow(object):
 "\n"
 "")
         self.bt_LEFT.setText("")
-        icon22 = QtGui.QIcon()
-        icon22.addPixmap(QtGui.QPixmap("../../../lab/ROBOT_NH_V3/images/trai_20_09.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.bt_LEFT.setIcon(icon22)
+        icon25 = QtGui.QIcon()
+        icon25.addPixmap(QtGui.QPixmap("../../../lab/ROBOT_NH_V3/images/trai_20_09.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.bt_LEFT.setIcon(icon25)
         self.bt_LEFT.setIconSize(QtCore.QSize(140, 140))
         self.bt_LEFT.setObjectName("bt_LEFT")
         self.Slider_vantoc = QtWidgets.QSlider(self.frame_5)
@@ -2092,7 +2166,7 @@ class Ui_MainWindow(object):
 "    background-color: rgb(50, 192, 240);\n"
 "}\n"
 "")
-        self.bt_back_dichuyen_robot.setIcon(icon11)
+        self.bt_back_dichuyen_robot.setIcon(icon14)
         self.bt_back_dichuyen_robot.setIconSize(QtCore.QSize(50, 50))
         self.bt_back_dichuyen_robot.setObjectName("bt_back_dichuyen_robot")
         self.checkBox_dk_tuxa = QtWidgets.QCheckBox(self.page_dichuyen_robot)
@@ -2299,9 +2373,9 @@ class Ui_MainWindow(object):
 "\n"
 "}\n"
 "")
-        icon23 = QtGui.QIcon()
-        icon23.addPixmap(QtGui.QPixmap("../../../lab/ROBOT_NH_V3/images/xoa_iconcapnhat.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.Button_capnhat.setIcon(icon23)
+        icon26 = QtGui.QIcon()
+        icon26.addPixmap(QtGui.QPixmap("../../../lab/ROBOT_NH_V3/images/xoa_iconcapnhat.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.Button_capnhat.setIcon(icon26)
         self.Button_capnhat.setIconSize(QtCore.QSize(60, 60))
         self.Button_capnhat.setObjectName("Button_capnhat")
         self.gridLayout_5.addWidget(self.Button_capnhat, 0, 0, 1, 1)
@@ -2335,9 +2409,9 @@ class Ui_MainWindow(object):
 "\n"
 "}\n"
 "")
-        icon24 = QtGui.QIcon()
-        icon24.addPixmap(QtGui.QPixmap("../../../lab/ROBOT_NH_V3/images/xoafont_truicon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.Button_xoa.setIcon(icon24)
+        icon27 = QtGui.QIcon()
+        icon27.addPixmap(QtGui.QPixmap("../../../lab/ROBOT_NH_V3/images/xoafont_truicon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.Button_xoa.setIcon(icon27)
         self.Button_xoa.setIconSize(QtCore.QSize(60, 60))
         self.Button_xoa.setObjectName("Button_xoa")
         self.gridLayout_5.addWidget(self.Button_xoa, 2, 0, 1, 1)
@@ -2370,9 +2444,9 @@ class Ui_MainWindow(object):
 "\n"
 "}\n"
 "")
-        icon25 = QtGui.QIcon()
-        icon25.addPixmap(QtGui.QPixmap("../../../lab/ROBOT_NH_V3/images/xoafont_save.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.Button_toado.setIcon(icon25)
+        icon28 = QtGui.QIcon()
+        icon28.addPixmap(QtGui.QPixmap("../../../lab/ROBOT_NH_V3/images/xoafont_save.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.Button_toado.setIcon(icon28)
         self.Button_toado.setIconSize(QtCore.QSize(60, 60))
         self.Button_toado.setObjectName("Button_toado")
         self.gridLayout_5.addWidget(self.Button_toado, 5, 0, 1, 1)
@@ -2405,9 +2479,9 @@ class Ui_MainWindow(object):
 "\n"
 "}\n"
 "")
-        icon26 = QtGui.QIcon()
-        icon26.addPixmap(QtGui.QPixmap("../../../lab/ROBOT_NH_V3/images/xoafont_refesh.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.Button_lammoi.setIcon(icon26)
+        icon29 = QtGui.QIcon()
+        icon29.addPixmap(QtGui.QPixmap("../../../lab/ROBOT_NH_V3/images/xoafont_refesh.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.Button_lammoi.setIcon(icon29)
         self.Button_lammoi.setIconSize(QtCore.QSize(60, 60))
         self.Button_lammoi.setObjectName("Button_lammoi")
         self.gridLayout_5.addWidget(self.Button_lammoi, 4, 0, 1, 1)
@@ -2433,9 +2507,9 @@ class Ui_MainWindow(object):
 "\n"
 "}\n"
 "")
-        icon27 = QtGui.QIcon()
-        icon27.addPixmap(QtGui.QPixmap("../../../lab/ROBOT_NH_V3/images/xoafont_congion.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.Button_add.setIcon(icon27)
+        icon30 = QtGui.QIcon()
+        icon30.addPixmap(QtGui.QPixmap("../../../lab/ROBOT_NH_V3/images/xoafont_congion.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.Button_add.setIcon(icon30)
         self.Button_add.setIconSize(QtCore.QSize(80, 80))
         self.Button_add.setObjectName("Button_add")
         self.gridLayout_5.addWidget(self.Button_add, 1, 0, 1, 1)
@@ -2463,26 +2537,525 @@ class Ui_MainWindow(object):
 "}")
         self.bt_Tracking.setObjectName("bt_Tracking")
         self.stackedWidget.addWidget(self.page_dichuyen_robot)
+        self.page_setup_cam = QtWidgets.QWidget()
+        self.page_setup_cam.setObjectName("page_setup_cam")
+        self.frame_7 = QtWidgets.QFrame(self.page_setup_cam)
+        self.frame_7.setGeometry(QtCore.QRect(120, 0, 1700, 1000))
+        self.frame_7.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+"  border-radius: 20px;")
+        self.frame_7.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_7.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_7.setObjectName("frame_7")
+        self.label_caidat_cam = QtWidgets.QLabel(self.frame_7)
+        self.label_caidat_cam.setGeometry(QtCore.QRect(580, 40, 550, 60))
+        self.label_caidat_cam.setMaximumSize(QtCore.QSize(800, 200))
+        self.label_caidat_cam.setSizeIncrement(QtCore.QSize(800, 200))
+        font = QtGui.QFont()
+        font.setPointSize(20)
+        font.setBold(False)
+        font.setWeight(50)
+        self.label_caidat_cam.setFont(font)
+        self.label_caidat_cam.setStyleSheet("\n"
+"background-color: rgb(58,192,240);\n"
+"border-radius: 20px;\n"
+"")
+        self.label_caidat_cam.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_caidat_cam.setObjectName("label_caidat_cam")
+        self.frame_38 = QtWidgets.QFrame(self.frame_7)
+        self.frame_38.setGeometry(QtCore.QRect(250, 200, 800, 700))
+        self.frame_38.setStyleSheet("background-color: rgb(220, 220, 220);")
+        self.frame_38.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_38.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_38.setObjectName("frame_38")
+        self.lable_id_0 = QtWidgets.QLabel(self.frame_38)
+        self.lable_id_0.setGeometry(QtCore.QRect(180, 20, 120, 17))
+        self.lable_id_0.setStyleSheet("\n"
+"font: 75 14pt \"MS Shell Dlg 2\";")
+        self.lable_id_0.setObjectName("lable_id_0")
+        self.lable_id_2 = QtWidgets.QLabel(self.frame_38)
+        self.lable_id_2.setGeometry(QtCore.QRect(570, 20, 120, 17))
+        self.lable_id_2.setStyleSheet("\n"
+"font: 75 14pt \"MS Shell Dlg 2\";")
+        self.lable_id_2.setObjectName("lable_id_2")
+        self.lable_id_4 = QtWidgets.QLabel(self.frame_38)
+        self.lable_id_4.setGeometry(QtCore.QRect(180, 360, 120, 17))
+        self.lable_id_4.setStyleSheet("\n"
+"font: 75 14pt \"MS Shell Dlg 2\";")
+        self.lable_id_4.setObjectName("lable_id_4")
+        self.lable_id_6 = QtWidgets.QLabel(self.frame_38)
+        self.lable_id_6.setGeometry(QtCore.QRect(570, 360, 120, 17))
+        self.lable_id_6.setStyleSheet("\n"
+"font: 75 14pt \"MS Shell Dlg 2\";")
+        self.lable_id_6.setObjectName("lable_id_6")
+        self.chua_camera_0 = QtWidgets.QLabel(self.frame_38)
+        self.chua_camera_0.setGeometry(QtCore.QRect(60, 40, 300, 300))
+        self.chua_camera_0.setMinimumSize(QtCore.QSize(200, 200))
+        self.chua_camera_0.setMaximumSize(QtCore.QSize(900, 900))
+        self.chua_camera_0.setStyleSheet("border: 3px solid rgb(215, 215, 215);\n"
+"background-color: rgb(255, 255, 255);\n"
+"")
+        self.chua_camera_0.setText("")
+        self.chua_camera_0.setObjectName("chua_camera_0")
+        self.chua_camera_2 = QtWidgets.QLabel(self.frame_38)
+        self.chua_camera_2.setGeometry(QtCore.QRect(450, 40, 300, 300))
+        self.chua_camera_2.setMinimumSize(QtCore.QSize(200, 200))
+        self.chua_camera_2.setMaximumSize(QtCore.QSize(900, 900))
+        self.chua_camera_2.setStyleSheet("border: 3px solid rgb(215, 215, 215);\n"
+"background-color: rgb(255, 255, 255);\n"
+"")
+        self.chua_camera_2.setText("")
+        self.chua_camera_2.setObjectName("chua_camera_2")
+        self.chua_camera_4 = QtWidgets.QLabel(self.frame_38)
+        self.chua_camera_4.setGeometry(QtCore.QRect(60, 380, 300, 300))
+        self.chua_camera_4.setMinimumSize(QtCore.QSize(200, 200))
+        self.chua_camera_4.setMaximumSize(QtCore.QSize(900, 900))
+        self.chua_camera_4.setStyleSheet("border: 3px solid rgb(215, 215, 215);\n"
+"background-color: rgb(255, 255, 255);\n"
+"")
+        self.chua_camera_4.setText("")
+        self.chua_camera_4.setObjectName("chua_camera_4")
+        self.chua_camera_6 = QtWidgets.QLabel(self.frame_38)
+        self.chua_camera_6.setGeometry(QtCore.QRect(450, 380, 300, 300))
+        self.chua_camera_6.setMinimumSize(QtCore.QSize(200, 200))
+        self.chua_camera_6.setMaximumSize(QtCore.QSize(900, 900))
+        self.chua_camera_6.setStyleSheet("border: 3px solid rgb(215, 215, 215);\n"
+"background-color: rgb(255, 255, 255);\n"
+"")
+        self.chua_camera_6.setText("")
+        self.chua_camera_6.setObjectName("chua_camera_6")
+        self.frame_42 = QtWidgets.QFrame(self.frame_7)
+        self.frame_42.setGeometry(QtCore.QRect(1100, 200, 400, 700))
+        self.frame_42.setStyleSheet("background-color: rgb(220, 220, 220);")
+        self.frame_42.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_42.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_42.setObjectName("frame_42")
+        self.btn_save_id_camera = QtWidgets.QPushButton(self.frame_42)
+        self.btn_save_id_camera.setGeometry(QtCore.QRect(230, 550, 150, 70))
+        self.btn_save_id_camera.setStyleSheet("QPushButton#btn_save_id_camera{\n"
+" \n"
+"    border-radius: 15px;\n"
+"    background-color: rgb(58,192,240);\n"
+"    font: 75 17pt \"MS Shell Dlg 2\";\n"
+"    \n"
+"}\n"
+"\n"
+"QPushButton#btn_save_id_camera:pressed{\n"
+"padding-left :3px;\n"
+"padding-top :3px;\n"
+"border-radius: 15px;\n"
+"font: 75 17pt \"MS Shell Dlg 2\";\n"
+"\n"
+"    background-color: rgb(0, 255, 0);\n"
+"}\n"
+"")
+        self.btn_save_id_camera.setObjectName("btn_save_id_camera")
+        self.btn_start_setupcamera = QtWidgets.QPushButton(self.frame_42)
+        self.btn_start_setupcamera.setGeometry(QtCore.QRect(30, 550, 150, 70))
+        self.btn_start_setupcamera.setStyleSheet("QPushButton#btn_start_setupcamera{\n"
+" \n"
+"    border-radius: 15px;\n"
+"    \n"
+"    \n"
+"    background-color: rgb(138, 226, 52);\n"
+"    font: 75 17pt \"MS Shell Dlg 2\";\n"
+"    \n"
+"}\n"
+"\n"
+"QPushButton#btn_start_setupcamera:pressed{\n"
+"padding-left :3px;\n"
+"padding-top :3px;\n"
+"border-radius: 15px;\n"
+"font: 75 17pt \"MS Shell Dlg 2\";\n"
+"\n"
+"    background-color: rgb(0, 255, 0);\n"
+"}\n"
+"")
+        self.btn_start_setupcamera.setObjectName("btn_start_setupcamera")
+        self.label_chonchedo_9 = QtWidgets.QLabel(self.frame_42)
+        self.label_chonchedo_9.setGeometry(QtCore.QRect(20, 310, 200, 50))
+        self.label_chonchedo_9.setMaximumSize(QtCore.QSize(800, 200))
+        self.label_chonchedo_9.setSizeIncrement(QtCore.QSize(800, 200))
+        font = QtGui.QFont()
+        font.setPointSize(20)
+        font.setBold(False)
+        font.setWeight(50)
+        self.label_chonchedo_9.setFont(font)
+        self.label_chonchedo_9.setStyleSheet("")
+        self.label_chonchedo_9.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_chonchedo_9.setObjectName("label_chonchedo_9")
+        self.label_chonchedo_10 = QtWidgets.QLabel(self.frame_42)
+        self.label_chonchedo_10.setGeometry(QtCore.QRect(20, 120, 200, 50))
+        self.label_chonchedo_10.setMaximumSize(QtCore.QSize(800, 200))
+        self.label_chonchedo_10.setSizeIncrement(QtCore.QSize(800, 200))
+        font = QtGui.QFont()
+        font.setPointSize(20)
+        font.setBold(False)
+        font.setWeight(50)
+        self.label_chonchedo_10.setFont(font)
+        self.label_chonchedo_10.setStyleSheet("")
+        self.label_chonchedo_10.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_chonchedo_10.setObjectName("label_chonchedo_10")
+        self.label_chonchedo_11 = QtWidgets.QLabel(self.frame_42)
+        self.label_chonchedo_11.setGeometry(QtCore.QRect(20, 210, 200, 50))
+        self.label_chonchedo_11.setMaximumSize(QtCore.QSize(800, 200))
+        self.label_chonchedo_11.setSizeIncrement(QtCore.QSize(800, 200))
+        font = QtGui.QFont()
+        font.setPointSize(20)
+        font.setBold(False)
+        font.setWeight(50)
+        self.label_chonchedo_11.setFont(font)
+        self.label_chonchedo_11.setStyleSheet("")
+        self.label_chonchedo_11.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_chonchedo_11.setObjectName("label_chonchedo_11")
+        self.label_chonchedo_12 = QtWidgets.QLabel(self.frame_42)
+        self.label_chonchedo_12.setGeometry(QtCore.QRect(30, 410, 200, 50))
+        self.label_chonchedo_12.setMaximumSize(QtCore.QSize(800, 200))
+        self.label_chonchedo_12.setSizeIncrement(QtCore.QSize(800, 200))
+        font = QtGui.QFont()
+        font.setPointSize(20)
+        font.setBold(False)
+        font.setWeight(50)
+        self.label_chonchedo_12.setFont(font)
+        self.label_chonchedo_12.setStyleSheet("")
+        self.label_chonchedo_12.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_chonchedo_12.setObjectName("label_chonchedo_12")
+        self.label_chonchedo_13 = QtWidgets.QLabel(self.frame_42)
+        self.label_chonchedo_13.setGeometry(QtCore.QRect(50, 40, 120, 40))
+        self.label_chonchedo_13.setMaximumSize(QtCore.QSize(800, 200))
+        self.label_chonchedo_13.setSizeIncrement(QtCore.QSize(800, 200))
+        font = QtGui.QFont()
+        font.setPointSize(20)
+        font.setBold(False)
+        font.setWeight(50)
+        self.label_chonchedo_13.setFont(font)
+        self.label_chonchedo_13.setStyleSheet("\n"
+"background-color: rgb(58,192,240);\n"
+"border-radius: 10px;")
+        self.label_chonchedo_13.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_chonchedo_13.setObjectName("label_chonchedo_13")
+        self.label_chonchedo_14 = QtWidgets.QLabel(self.frame_42)
+        self.label_chonchedo_14.setGeometry(QtCore.QRect(260, 40, 120, 40))
+        self.label_chonchedo_14.setMaximumSize(QtCore.QSize(800, 200))
+        self.label_chonchedo_14.setSizeIncrement(QtCore.QSize(800, 200))
+        font = QtGui.QFont()
+        font.setPointSize(20)
+        font.setBold(False)
+        font.setWeight(50)
+        self.label_chonchedo_14.setFont(font)
+        self.label_chonchedo_14.setStyleSheet("\n"
+"background-color: rgb(58,192,240);\n"
+"border-radius: 10px;")
+        self.label_chonchedo_14.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_chonchedo_14.setObjectName("label_chonchedo_14")
+        self.combobox_headcame = QtWidgets.QComboBox(self.frame_42)
+        self.combobox_headcame.setGeometry(QtCore.QRect(280, 120, 86, 40))
+        self.combobox_headcame.setObjectName("combobox_headcame")
+        self.combobox_back = QtWidgets.QComboBox(self.frame_42)
+        self.combobox_back.setGeometry(QtCore.QRect(280, 210, 86, 40))
+        self.combobox_back.setObjectName("combobox_back")
+        self.combobox_front_1 = QtWidgets.QComboBox(self.frame_42)
+        self.combobox_front_1.setGeometry(QtCore.QRect(280, 310, 86, 40))
+        self.combobox_front_1.setObjectName("combobox_front_1")
+        self.combobox_front_2 = QtWidgets.QComboBox(self.frame_42)
+        self.combobox_front_2.setGeometry(QtCore.QRect(280, 410, 86, 40))
+        self.combobox_front_2.setObjectName("combobox_front_2")
+        self.stackedWidget.addWidget(self.page_setup_cam)
+        self.page_check_cam = QtWidgets.QWidget()
+        self.page_check_cam.setObjectName("page_check_cam")
+        self.frame_11 = QtWidgets.QFrame(self.page_check_cam)
+        self.frame_11.setGeometry(QtCore.QRect(120, 0, 1700, 1000))
+        self.frame_11.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+"  border-radius: 20px;")
+        self.frame_11.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_11.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_11.setObjectName("frame_11")
+        self.label_caidat_cam_2 = QtWidgets.QLabel(self.frame_11)
+        self.label_caidat_cam_2.setGeometry(QtCore.QRect(580, 40, 550, 60))
+        self.label_caidat_cam_2.setMaximumSize(QtCore.QSize(800, 200))
+        self.label_caidat_cam_2.setSizeIncrement(QtCore.QSize(800, 200))
+        font = QtGui.QFont()
+        font.setPointSize(20)
+        font.setBold(False)
+        font.setWeight(50)
+        self.label_caidat_cam_2.setFont(font)
+        self.label_caidat_cam_2.setStyleSheet("\n"
+"background-color: rgb(58,192,240);\n"
+"border-radius: 20px;\n"
+"")
+        self.label_caidat_cam_2.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_caidat_cam_2.setObjectName("label_caidat_cam_2")
+        self.stackedWidget.addWidget(self.page_check_cam)
+        self.page_setup_dinhvi = QtWidgets.QWidget()
+        self.page_setup_dinhvi.setObjectName("page_setup_dinhvi")
+        self.frame_9 = QtWidgets.QFrame(self.page_setup_dinhvi)
+        self.frame_9.setGeometry(QtCore.QRect(120, 0, 1700, 1000))
+        self.frame_9.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+"  border-radius: 20px;")
+        self.frame_9.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_9.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_9.setObjectName("frame_9")
+        self.label_caidat_dinhvi = QtWidgets.QLabel(self.frame_9)
+        self.label_caidat_dinhvi.setGeometry(QtCore.QRect(580, 40, 550, 60))
+        self.label_caidat_dinhvi.setMaximumSize(QtCore.QSize(800, 200))
+        self.label_caidat_dinhvi.setSizeIncrement(QtCore.QSize(800, 200))
+        font = QtGui.QFont()
+        font.setPointSize(20)
+        font.setBold(False)
+        font.setWeight(50)
+        self.label_caidat_dinhvi.setFont(font)
+        self.label_caidat_dinhvi.setStyleSheet("\n"
+"background-color: rgb(58,192,240);\n"
+"border-radius: 20px;\n"
+"")
+        self.label_caidat_dinhvi.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_caidat_dinhvi.setObjectName("label_caidat_dinhvi")
+        self.frame_26 = QtWidgets.QFrame(self.frame_9)
+        self.frame_26.setGeometry(QtCore.QRect(250, 200, 800, 700))
+        self.frame_26.setStyleSheet("background-color: rgb(220, 220, 220);")
+        self.frame_26.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_26.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_26.setObjectName("frame_26")
+        self.frame_28 = QtWidgets.QFrame(self.frame_26)
+        self.frame_28.setGeometry(QtCore.QRect(200, 50, 400, 120))
+        self.frame_28.setStyleSheet("background-color: rgb(58,192,240);")
+        self.frame_28.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_28.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_28.setObjectName("frame_28")
+        self.toado_x = QtWidgets.QLineEdit(self.frame_28)
+        self.toado_x.setGeometry(QtCore.QRect(20, 50, 100, 50))
+        self.toado_x.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.toado_x.setObjectName("toado_x")
+        self.toado_y = QtWidgets.QLineEdit(self.frame_28)
+        self.toado_y.setGeometry(QtCore.QRect(150, 50, 100, 50))
+        self.toado_y.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.toado_y.setObjectName("toado_y")
+        self.toado_z = QtWidgets.QLineEdit(self.frame_28)
+        self.toado_z.setGeometry(QtCore.QRect(280, 50, 100, 50))
+        self.toado_z.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.toado_z.setObjectName("toado_z")
+        self.label_8 = QtWidgets.QLabel(self.frame_28)
+        self.label_8.setGeometry(QtCore.QRect(60, 20, 67, 17))
+        self.label_8.setStyleSheet("\n"
+"font: 75 17pt \"MS Shell Dlg 2\";")
+        self.label_8.setObjectName("label_8")
+        self.label_10 = QtWidgets.QLabel(self.frame_28)
+        self.label_10.setGeometry(QtCore.QRect(190, 20, 67, 17))
+        self.label_10.setStyleSheet("\n"
+"font: 75 17pt \"MS Shell Dlg 2\";")
+        self.label_10.setObjectName("label_10")
+        self.label_11 = QtWidgets.QLabel(self.frame_28)
+        self.label_11.setGeometry(QtCore.QRect(320, 20, 67, 17))
+        self.label_11.setStyleSheet("\n"
+"font: 75 17pt \"MS Shell Dlg 2\";")
+        self.label_11.setObjectName("label_11")
+        self.frame_29 = QtWidgets.QFrame(self.frame_26)
+        self.frame_29.setGeometry(QtCore.QRect(620, 50, 120, 120))
+        self.frame_29.setStyleSheet("background-color: rgb(58,192,240);")
+        self.frame_29.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_29.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_29.setObjectName("frame_29")
+        self.id_vitri = QtWidgets.QComboBox(self.frame_29)
+        self.id_vitri.setGeometry(QtCore.QRect(10, 50, 100, 50))
+        self.id_vitri.setStyleSheet("background: white")
+        self.id_vitri.setObjectName("id_vitri")
+        self.label_12 = QtWidgets.QLabel(self.frame_29)
+        self.label_12.setGeometry(QtCore.QRect(50, 20, 67, 17))
+        self.label_12.setStyleSheet("\n"
+"font: 75 17pt \"MS Shell Dlg 2\";")
+        self.label_12.setObjectName("label_12")
+        self.tableWidget = QtWidgets.QTableWidget(self.frame_26)
+        self.tableWidget.setGeometry(QtCore.QRect(60, 180, 680, 430))
+        self.tableWidget.setStyleSheet("background: white")
+        self.tableWidget.setObjectName("tableWidget")
+        self.tableWidget.setColumnCount(0)
+        self.tableWidget.setRowCount(0)
+        self.frame_30 = QtWidgets.QFrame(self.frame_26)
+        self.frame_30.setGeometry(QtCore.QRect(60, 50, 120, 120))
+        self.frame_30.setStyleSheet("background-color: rgb(58,192,240);")
+        self.frame_30.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_30.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_30.setObjectName("frame_30")
+        self.label_13 = QtWidgets.QLabel(self.frame_30)
+        self.label_13.setGeometry(QtCore.QRect(20, 20, 80, 17))
+        self.label_13.setStyleSheet("\n"
+"font: 75 17pt \"MS Shell Dlg 2\";")
+        self.label_13.setObjectName("label_13")
+        self.btn_enable = QtWidgets.QPushButton(self.frame_30)
+        self.btn_enable.setGeometry(QtCore.QRect(10, 50, 100, 50))
+        self.btn_enable.setStyleSheet("QPushButton#btn_enable{\n"
+" \n"
+"    border-radius: 15px;\n"
+"    \n"
+"    background-color: rgb(220, 220, 220);\n"
+"    font: 75 14pt \"MS Shell Dlg 2\";\n"
+"    \n"
+"}\n"
+"\n"
+"QPushButton#btn_enable:pressed{\n"
+"padding-left :3px;\n"
+"padding-top :3px;\n"
+"border-radius: 15px;\n"
+"font: 75 14pt \"MS Shell Dlg 2\";\n"
+"\n"
+"    background-color: rgb(0, 255, 0);\n"
+"}\n"
+"\n"
+"\n"
+"\n"
+"")
+        self.btn_enable.setObjectName("btn_enable")
+        self.terminal_2 = QtWidgets.QPlainTextEdit(self.frame_26)
+        self.terminal_2.setGeometry(QtCore.QRect(60, 630, 681, 61))
+        self.terminal_2.setStyleSheet("background: white")
+        self.terminal_2.setObjectName("terminal_2")
+        self.label_14 = QtWidgets.QLabel(self.frame_26)
+        self.label_14.setGeometry(QtCore.QRect(60, 612, 90, 17))
+        self.label_14.setStyleSheet("\n"
+"font: 75 14pt \"MS Shell Dlg 2\";")
+        self.label_14.setObjectName("label_14")
+        self.frame_27 = QtWidgets.QFrame(self.frame_9)
+        self.frame_27.setGeometry(QtCore.QRect(1100, 200, 400, 700))
+        self.frame_27.setStyleSheet("background-color: rgb(220, 220, 220);")
+        self.frame_27.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_27.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_27.setObjectName("frame_27")
+        self.btn_save_data = QtWidgets.QPushButton(self.frame_27)
+        self.btn_save_data.setGeometry(QtCore.QRect(120, 50, 150, 70))
+        self.btn_save_data.setStyleSheet("QPushButton#btn_save_data{\n"
+" \n"
+"    border-radius: 15px;\n"
+"    background-color: rgb(58,192,240);\n"
+"    font: 75 17pt \"MS Shell Dlg 2\";\n"
+"    \n"
+"}\n"
+"\n"
+"QPushButton#btn_save_data:pressed{\n"
+"padding-left :3px;\n"
+"padding-top :3px;\n"
+"border-radius: 15px;\n"
+"font: 75 17pt \"MS Shell Dlg 2\";\n"
+"\n"
+"    background-color: rgb(0, 255, 0);\n"
+"}\n"
+"")
+        self.btn_save_data.setObjectName("btn_save_data")
+        self.btn_load_data = QtWidgets.QPushButton(self.frame_27)
+        self.btn_load_data.setGeometry(QtCore.QRect(120, 150, 150, 70))
+        self.btn_load_data.setStyleSheet("QPushButton#btn_load_data{\n"
+" \n"
+"    border-radius: 15px;\n"
+"    background-color: rgb(58,192,240);\n"
+"    font: 75 17pt \"MS Shell Dlg 2\";\n"
+"    \n"
+"}\n"
+"\n"
+"QPushButton#btn_load_data:pressed{\n"
+"padding-left :3px;\n"
+"padding-top :3px;\n"
+"border-radius: 15px;\n"
+"font: 75 17pt \"MS Shell Dlg 2\";\n"
+"\n"
+"    background-color: rgb(0, 255, 0);\n"
+"}\n"
+"")
+        self.btn_load_data.setObjectName("btn_load_data")
+        self.btn_delete_data = QtWidgets.QPushButton(self.frame_27)
+        self.btn_delete_data.setGeometry(QtCore.QRect(120, 250, 150, 70))
+        self.btn_delete_data.setStyleSheet("QPushButton#btn_delete_data{\n"
+" \n"
+"    border-radius: 15px;\n"
+"    background-color: rgb(58,192,240);\n"
+"    font: 75 17pt \"MS Shell Dlg 2\";\n"
+"    \n"
+"}\n"
+"\n"
+"QPushButton#btn_delete_data:pressed{\n"
+"padding-left :3px;\n"
+"padding-top :3px;\n"
+"border-radius: 15px;\n"
+"font: 75 17pt \"MS Shell Dlg 2\";\n"
+"\n"
+"background-color: rgb(0,255,0);\n"
+"}\n"
+"")
+        self.btn_delete_data.setObjectName("btn_delete_data")
+        self.btn_test = QtWidgets.QPushButton(self.frame_27)
+        self.btn_test.setGeometry(QtCore.QRect(120, 350, 150, 70))
+        self.btn_test.setStyleSheet("QPushButton#btn_test{\n"
+" \n"
+"    border-radius: 15px;\n"
+"    \n"
+"    \n"
+"    background-color: rgb(234, 101, 101);\n"
+"    font: 75 17pt \"MS Shell Dlg 2\";\n"
+"    \n"
+"}\n"
+"\n"
+"QPushButton#btn_test:pressed{\n"
+"padding-left :3px;\n"
+"padding-top :3px;\n"
+"border-radius: 15px;\n"
+"font: 75 17pt \"MS Shell Dlg 2\";\n"
+"\n"
+"background-color: rgb(0, 255, 0);\n"
+"}\n"
+"")
+        self.btn_test.setObjectName("btn_test")
+        self.terminal = QtWidgets.QPlainTextEdit(self.frame_27)
+        self.terminal.setGeometry(QtCore.QRect(30, 470, 350, 200))
+        self.terminal.setStyleSheet("background: white")
+        self.terminal.setObjectName("terminal")
+        self.label_15 = QtWidgets.QLabel(self.frame_27)
+        self.label_15.setGeometry(QtCore.QRect(30, 455, 120, 17))
+        self.label_15.setStyleSheet("\n"
+"font: 75 14pt \"MS Shell Dlg 2\";")
+        self.label_15.setObjectName("label_15")
+        self.stackedWidget.addWidget(self.page_setup_dinhvi)
+        self.page_dinhvi = QtWidgets.QWidget()
+        self.page_dinhvi.setObjectName("page_dinhvi")
+        self.frame_8 = QtWidgets.QFrame(self.page_dinhvi)
+        self.frame_8.setGeometry(QtCore.QRect(120, 0, 1700, 1000))
+        self.frame_8.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+"  border-radius: 20px;")
+        self.frame_8.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_8.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_8.setObjectName("frame_8")
+        self.label_caidat_dinhvi_2 = QtWidgets.QLabel(self.frame_8)
+        self.label_caidat_dinhvi_2.setGeometry(QtCore.QRect(580, 40, 550, 60))
+        self.label_caidat_dinhvi_2.setMaximumSize(QtCore.QSize(800, 200))
+        self.label_caidat_dinhvi_2.setSizeIncrement(QtCore.QSize(800, 200))
+        font = QtGui.QFont()
+        font.setPointSize(20)
+        font.setBold(False)
+        font.setWeight(50)
+        self.label_caidat_dinhvi_2.setFont(font)
+        self.label_caidat_dinhvi_2.setStyleSheet("\n"
+"background-color: rgb(58,192,240);\n"
+"border-radius: 20px;\n"
+"")
+        self.label_caidat_dinhvi_2.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_caidat_dinhvi_2.setObjectName("label_caidat_dinhvi_2")
+        self.stackedWidget.addWidget(self.page_dinhvi)
         self.bt_thoat = QtWidgets.QPushButton(self.centralwidget)
         self.bt_thoat.setGeometry(QtCore.QRect(1870, 0, 51, 41))
         self.bt_thoat.setText("")
-        icon28 = QtGui.QIcon()
-        icon28.addPixmap(QtGui.QPixmap("../images/close_screen.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.bt_thoat.setIcon(icon28)
+        icon31 = QtGui.QIcon()
+        icon31.addPixmap(QtGui.QPixmap("../images/close_screen.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.bt_thoat.setIcon(icon31)
         self.bt_thoat.setObjectName("bt_thoat")
         self.bt_thu_phong = QtWidgets.QPushButton(self.centralwidget)
         self.bt_thu_phong.setGeometry(QtCore.QRect(1810, 0, 61, 41))
         self.bt_thu_phong.setText("")
-        icon29 = QtGui.QIcon()
-        icon29.addPixmap(QtGui.QPixmap("../images/minimize_flaticon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.bt_thu_phong.setIcon(icon29)
+        icon32 = QtGui.QIcon()
+        icon32.addPixmap(QtGui.QPixmap("../images/minimize_flaticon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.bt_thu_phong.setIcon(icon32)
         self.bt_thu_phong.setObjectName("bt_thu_phong")
         self.bt_thu_nho = QtWidgets.QPushButton(self.centralwidget)
         self.bt_thu_nho.setGeometry(QtCore.QRect(1750, 0, 61, 41))
         self.bt_thu_nho.setText("")
-        icon30 = QtGui.QIcon()
-        icon30.addPixmap(QtGui.QPixmap("../images/mimiiii_flaticon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.bt_thu_nho.setIcon(icon30)
+        icon33 = QtGui.QIcon()
+        icon33.addPixmap(QtGui.QPixmap("../images/mimiiii_flaticon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.bt_thu_nho.setIcon(icon33)
         self.bt_thu_nho.setObjectName("bt_thu_nho")
         self.check_pin = QtWidgets.QPushButton(self.centralwidget)
         self.check_pin.setGeometry(QtCore.QRect(1490, 10, 150, 40))
@@ -2517,9 +3090,9 @@ class Ui_MainWindow(object):
 "}\n"
 "")
         self.check_pin.setText("")
-        icon31 = QtGui.QIcon()
-        icon31.addPixmap(QtGui.QPixmap("../../../lab/ROBOT_NH_V3/images/charging_pin.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.check_pin.setIcon(icon31)
+        icon34 = QtGui.QIcon()
+        icon34.addPixmap(QtGui.QPixmap("../../../lab/ROBOT_NH_V3/images/charging_pin.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.check_pin.setIcon(icon34)
         self.check_pin.setIconSize(QtCore.QSize(150, 60))
         self.check_pin.setObjectName("check_pin")
         self.label_icon_robot = QtWidgets.QLabel(self.centralwidget)
@@ -2564,7 +3137,7 @@ class Ui_MainWindow(object):
         self.bt_stop.setObjectName("bt_stop")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1921, 22))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1906, 22))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -2572,9 +3145,9 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(3)
+        self.stackedWidget.setCurrentIndex(0)
         self.tab_main.setCurrentIndex(2)
-        self.tabWidget_dan_duong.setCurrentIndex(1)
+        self.tabWidget_dan_duong.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -2596,11 +3169,13 @@ class Ui_MainWindow(object):
         self.bt_set_home.setText(_translate("MainWindow", "Set Home"))
         self.bt_di_chuyen.setText(_translate("MainWindow", "Di Chuyển"))
         self.bt_setup.setText(_translate("MainWindow", "Setup"))
+        self.btn_sac_auto.setText(_translate("MainWindow", "Sạc tự động"))
+        self.btn_huongdan.setText(_translate("MainWindow", "Hướng dẫn"))
         self.tab_main.setTabText(self.tab_main.indexOf(self.tab_cai_dat), _translate("MainWindow", "Cài Đặt"))
-        self.label__diem_danh.setText(_translate("MainWindow", "Điểm Danh "))
-        self.bt_check_in.setText(_translate("MainWindow", "Check In"))
-        self.bt_check_out.setText(_translate("MainWindow", "Check Out"))
-        self.bt_back_diem_danh.setText(_translate("MainWindow", "Quay Lại"))
+        self.label__model.setText(_translate("MainWindow", "CHỌN CHẾ ĐỘ"))
+        self.bt_mode_manual.setText(_translate("MainWindow", "THỦ CÔNG"))
+        self.bt_mode_auto.setText(_translate("MainWindow", "TỰ ĐỘNG"))
+        self.bt_back_mode.setText(_translate("MainWindow", "Quay Lại"))
         self.label_6.setText(_translate("MainWindow", "Setup"))
         self.bt_setup_robot.setText(_translate("MainWindow", "Setup Robot"))
         self.bt_setup_dinh_vi.setText(_translate("MainWindow", "Setup Định Vị"))
@@ -2659,4 +3234,32 @@ class Ui_MainWindow(object):
         self.Button_lammoi.setText(_translate("MainWindow", " Làm mới"))
         self.Button_add.setText(_translate("MainWindow", "    Thêm "))
         self.bt_Tracking.setText(_translate("MainWindow", "Tracking"))
+        self.label_caidat_cam.setText(_translate("MainWindow", "CÀI ĐẶT CAMERA"))
+        self.lable_id_0.setText(_translate("MainWindow", "ID: "))
+        self.lable_id_2.setText(_translate("MainWindow", "ID: "))
+        self.lable_id_4.setText(_translate("MainWindow", "ID: "))
+        self.lable_id_6.setText(_translate("MainWindow", "ID: "))
+        self.btn_save_id_camera.setText(_translate("MainWindow", "SAVE"))
+        self.btn_start_setupcamera.setText(_translate("MainWindow", "START"))
+        self.label_chonchedo_9.setText(_translate("MainWindow", "Camera trái:"))
+        self.label_chonchedo_10.setText(_translate("MainWindow", "Camera trên:"))
+        self.label_chonchedo_11.setText(_translate("MainWindow", "Camera sau:"))
+        self.label_chonchedo_12.setText(_translate("MainWindow", "Camera phải:"))
+        self.label_chonchedo_13.setText(_translate("MainWindow", "Camera"))
+        self.label_chonchedo_14.setText(_translate("MainWindow", "Port"))
+        self.label_caidat_cam_2.setText(_translate("MainWindow", "CHECK CAMERA"))
+        self.label_caidat_dinhvi.setText(_translate("MainWindow", "CÀI ĐẶT ĐỊNH VỊ ROBOT"))
+        self.label_8.setText(_translate("MainWindow", "X"))
+        self.label_10.setText(_translate("MainWindow", "Y"))
+        self.label_11.setText(_translate("MainWindow", "Z"))
+        self.label_12.setText(_translate("MainWindow", "ID"))
+        self.label_13.setText(_translate("MainWindow", "Enable"))
+        self.btn_enable.setText(_translate("MainWindow", "Press"))
+        self.label_14.setText(_translate("MainWindow", "Terminal"))
+        self.btn_save_data.setText(_translate("MainWindow", "Save"))
+        self.btn_load_data.setText(_translate("MainWindow", "Load"))
+        self.btn_delete_data.setText(_translate("MainWindow", "Delete"))
+        self.btn_test.setText(_translate("MainWindow", "Test"))
+        self.label_15.setText(_translate("MainWindow", "Test results"))
+        self.label_caidat_dinhvi_2.setText(_translate("MainWindow", "ĐỊNH VỊ ROBOT"))
         self.bt_stop.setText(_translate("MainWindow", "STOP"))
