@@ -2759,6 +2759,30 @@ class Ui_MainWindow(object):
         self.combobox_front_2 = QtWidgets.QComboBox(self.frame_42)
         self.combobox_front_2.setGeometry(QtCore.QRect(280, 410, 86, 40))
         self.combobox_front_2.setObjectName("combobox_front_2")
+        self.bt_back_setup_3 = QtWidgets.QPushButton(self.frame_7)
+        self.bt_back_setup_3.setGeometry(QtCore.QRect(1500, 40, 171, 41))
+        self.bt_back_setup_3.setStyleSheet("QPushButton#bt_back_setup_3{\n"
+"       border-bottom-right-radius :20px;\n"
+"    font: 75 18pt \"MS Shell Dlg 2\";\n"
+"    \n"
+"    /*border: 3px solid rgb(230, 230, 230);*/\n"
+"    color: rgb(0, 0, 0);\n"
+"    \n"
+"    background-color: rgb(220, 220, 220);\n"
+"    background-color: rgb(255, 255, 255);\n"
+"\n"
+"}\n"
+"\n"
+"QPushButton#bt_back_setup_3:pressed{\n"
+"padding-left :2px;\n"
+"padding-top :2px;\n"
+"\n"
+"    background-color: rgb(50, 192, 240);\n"
+"}\n"
+"")
+        self.bt_back_setup_3.setIcon(icon14)
+        self.bt_back_setup_3.setIconSize(QtCore.QSize(60, 60))
+        self.bt_back_setup_3.setObjectName("bt_back_setup_3")
         self.stackedWidget.addWidget(self.page_setup_cam)
         self.page_check_cam = QtWidgets.QWidget()
         self.page_check_cam.setObjectName("page_check_cam")
@@ -3010,6 +3034,30 @@ class Ui_MainWindow(object):
         self.label_15.setStyleSheet("\n"
 "font: 75 14pt \"MS Shell Dlg 2\";")
         self.label_15.setObjectName("label_15")
+        self.bt_back_setup_2 = QtWidgets.QPushButton(self.frame_9)
+        self.bt_back_setup_2.setGeometry(QtCore.QRect(1500, 40, 171, 41))
+        self.bt_back_setup_2.setStyleSheet("QPushButton#bt_back_setup_2{\n"
+"       border-bottom-right-radius :20px;\n"
+"    font: 75 18pt \"MS Shell Dlg 2\";\n"
+"    \n"
+"    /*border: 3px solid rgb(230, 230, 230);*/\n"
+"    color: rgb(0, 0, 0);\n"
+"    \n"
+"    background-color: rgb(220, 220, 220);\n"
+"    background-color: rgb(255, 255, 255);\n"
+"\n"
+"}\n"
+"\n"
+"QPushButton#bt_back_setup_2:pressed{\n"
+"padding-left :2px;\n"
+"padding-top :2px;\n"
+"\n"
+"    background-color: rgb(50, 192, 240);\n"
+"}\n"
+"")
+        self.bt_back_setup_2.setIcon(icon14)
+        self.bt_back_setup_2.setIconSize(QtCore.QSize(60, 60))
+        self.bt_back_setup_2.setObjectName("bt_back_setup_2")
         self.stackedWidget.addWidget(self.page_setup_dinhvi)
         self.page_dinhvi = QtWidgets.QWidget()
         self.page_dinhvi.setObjectName("page_dinhvi")
@@ -3247,6 +3295,7 @@ class Ui_MainWindow(object):
         self.label_chonchedo_12.setText(_translate("MainWindow", "Camera phải:"))
         self.label_chonchedo_13.setText(_translate("MainWindow", "Camera"))
         self.label_chonchedo_14.setText(_translate("MainWindow", "Port"))
+        self.bt_back_setup_3.setText(_translate("MainWindow", "Quay Lại"))
         self.label_caidat_cam_2.setText(_translate("MainWindow", "CHECK CAMERA"))
         self.label_caidat_dinhvi.setText(_translate("MainWindow", "CÀI ĐẶT ĐỊNH VỊ ROBOT"))
         self.label_8.setText(_translate("MainWindow", "X"))
@@ -3261,5 +3310,6 @@ class Ui_MainWindow(object):
         self.btn_delete_data.setText(_translate("MainWindow", "Delete"))
         self.btn_test.setText(_translate("MainWindow", "Test"))
         self.label_15.setText(_translate("MainWindow", "Test results"))
+        self.bt_back_setup_2.setText(_translate("MainWindow", "Quay Lại"))
         self.label_caidat_dinhvi_2.setText(_translate("MainWindow", "ĐỊNH VỊ ROBOT"))
         self.bt_stop.setText(_translate("MainWindow", "STOP"))

@@ -5785,6 +5785,50 @@ border-radius: 10px;</string>
         </property>
        </widget>
       </widget>
+      <widget class="QPushButton" name="bt_back_setup_3">
+       <property name="geometry">
+        <rect>
+         <x>1500</x>
+         <y>40</y>
+         <width>171</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton#bt_back_setup_3{
+   	border-bottom-right-radius :20px;
+	font: 75 18pt &quot;MS Shell Dlg 2&quot;;
+	
+	/*border: 3px solid rgb(230, 230, 230);*/
+	color: rgb(0, 0, 0);
+	
+	background-color: rgb(220, 220, 220);
+	background-color: rgb(255, 255, 255);
+
+}
+
+QPushButton#bt_back_setup_3:pressed{
+padding-left :2px;
+padding-top :2px;
+
+	background-color: rgb(50, 192, 240);
+}
+</string>
+       </property>
+       <property name="text">
+        <string>Quay Lại</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>../images/quaylai_xoafont.png</normaloff>../images/quaylai_xoafont.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>60</width>
+         <height>60</height>
+        </size>
+       </property>
+      </widget>
      </widget>
     </widget>
     <widget class="QWidget" name="page_check_cam">
@@ -6381,6 +6425,50 @@ font: 75 14pt &quot;MS Shell Dlg 2&quot;;</string>
          <string>Test results</string>
         </property>
        </widget>
+      </widget>
+      <widget class="QPushButton" name="bt_back_setup_2">
+       <property name="geometry">
+        <rect>
+         <x>1500</x>
+         <y>40</y>
+         <width>171</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton#bt_back_setup_2{
+   	border-bottom-right-radius :20px;
+	font: 75 18pt &quot;MS Shell Dlg 2&quot;;
+	
+	/*border: 3px solid rgb(230, 230, 230);*/
+	color: rgb(0, 0, 0);
+	
+	background-color: rgb(220, 220, 220);
+	background-color: rgb(255, 255, 255);
+
+}
+
+QPushButton#bt_back_setup_2:pressed{
+padding-left :2px;
+padding-top :2px;
+
+	background-color: rgb(50, 192, 240);
+}
+</string>
+       </property>
+       <property name="text">
+        <string>Quay Lại</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>../images/quaylai_xoafont.png</normaloff>../images/quaylai_xoafont.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>60</width>
+         <height>60</height>
+        </size>
+       </property>
       </widget>
      </widget>
     </widget>

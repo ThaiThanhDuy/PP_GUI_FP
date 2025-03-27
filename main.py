@@ -1,12 +1,48 @@
+#!/home/robot/robot_lib/bin/python3
 #Library python
-
-import sys
 import os
-import subprocess
-import mysql.connector
-import math
-import yaml
+import traceback
+import tensorflow as tf
+
+
+import numpy as np
+import serial
+import cv2
+import collections
+import threading
 import time
+import sys
+import keyyyyy
+import threading
+import yaml
+import numpy as np
+import math
+from PIL import Image
+import keyboard
+# import rospy
+import os
+import pygame
+import subprocess
+from gtts import gTTS
+from datetime import datetime
+import cv2
+from pydub import AudioSegment
+import unicodedata
+import unidecode
+
+from datetime import datetime, timedelta
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import letter
+from openpyxl.styles import Alignment, Border, Side
+from openpyxl.utils import get_column_letter
+from openpyxl.styles import Alignment
+from fpdf import FPDF
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+from reportlab.lib.styles import getSampleStyleSheet
+import re
+import mysql.connector
 # File Python 
 import Utilities as Uti
 import RobotConfig as RobConf
@@ -18,14 +54,19 @@ from status_popup import StatusPopup, NamedMap
 from FILE_QT.from_nhapphong import Ui_Form_nhaptenban
 from FILE_QT.form_themvao import Ui_Form_them
 from FILE_QT.form_map import Ui_Form_map
+from FILE_QT.from_finish_setup_cam import Ui_Form_finish_setup_cam
+from FILE_QT.from_dang_nd_cam import Ui_Form_dangnhap_cam
+from FILE_QT.from_error_cam import Ui_Form_error_cam
+from FILE_QT.from_finish_cam import Ui_Form_finish_cam
+# FILE CUSTOM
 from navigation_thread import NavigationThread
 from arduino_connection import ReadArduinoPin, arduino
 from ros2_handle import ROS2Handle
 import ros2_handle as ros2_handle
 import SQL as sql
-
+from ModuleSetupDinhVi import SetupDinhVi
 # Library GUI
-from PyQt5 import QtCore
+from PyQt5 import QtCore, QtGui
 
 from PyQt5.QtCore import *
 from PyQt5.QtCore import QEvent, Qt, QThread, pyqtSignal
@@ -36,9 +77,10 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import *
 from PyQt5.QtWidgets import QApplication,QMainWindow,QTableWidgetItem, QCheckBox, QMessageBox,QLineEdit, QVBoxLayout,QWidget
 
+from PyQt5.QtGui import *
 
 # build QT - pyuic5 QT_main.ui -o QT_main.py
-
+headCamera = RobConf.headCamera 
 def xuly_cham_ngoai(): # ham xu ly khi cham ra ngoai ban phim se tat
     try:
         if not hasattr(keyyyyy.Registe, "virtual_keyboard") or not keyyyyy.Registe.virtual_keyboard.isVisible():
@@ -89,7 +131,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.selected_kvcho = None
         self.selected_tram = None
         self.selected_them = None
-
+        self.trangthai_kv = None
         self.setupSingal()
         self.soban = {
             "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}
@@ -112,7 +154,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.on_off_sac_tu_dong=False
         self.read_arduino = ReadArduinoPin()
         self.read_arduino.doc_pin.connect(self.trangthai_pin)
-
+     
         self.sac_pin_tu_dong =False
         self.arduino = arduino()
     
@@ -140,7 +182,8 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.bt_back_dichuyen_robot.clicked.connect(self.back_setup)
         self.bt_back_setup_ts_robot.clicked.connect(self.back_setup)
         self.bt_back_dan_duong.clicked.connect(self.back_setup)
-
+        self.bt_back_setup_3.clicked.connect(self.back_setup)
+        self.bt_back_setup_2.clicked.connect(self.back_setup)
         ## diem danh button
         
        
@@ -153,6 +196,21 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.btn_load_sql.clicked.connect(self.show_thong_so_robot)
         self.btn_resetall_sql.clicked.connect(self.fcn_resetall_sql)
         self.btn_sac_auto.clicked.connect(self.che_do_sac)
+        
+        self.bt_setup_dinh_vi.clicked.connect(self.show_page_setup_dinhvi)
+        #Camera
+        self.bt_setup_cam.clicked.connect(self.show_page_setup_cam)
+        self.bt_check_cam.clicked.connect(self.dang_nd_cam)
+        self.btn_start_setupcamera.clicked.connect(self.fcn_start_setup_camera)
+        self.btn_save_id_camera.clicked.connect(self.fcn_save_id_camera)
+        port_hC = [RobConf.headCamera, 0,1, 2, 3, 4, 5, 6]
+        port_bC = [RobConf.chargCame, 0, 1, 2, 3, 4, 5, 6]
+        port_flC = [RobConf.faceCam2, 0, 1, 2, 3, 4, 5, 6]
+        port_frC = [RobConf.faceCame1, 0, 1, 2, 3, 4, 5, 6]
+        self.combobox_headcame.addItems([str(i) for i in port_hC])
+        self.combobox_back.addItems([str(i) for i in port_bC])
+        self.combobox_front_1.addItems([str(i) for i in port_flC])
+        self.combobox_front_2.addItems([str(i) for i in port_frC])
         #Ros button
         self.bt_back_mode.clicked.connect(self.back_setup)
         self.bt_dan_duong.clicked.connect(self.show_page_mode)
@@ -222,15 +280,16 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.stackedWidget.setCurrentWidget(self.page_setup_ts_robot)
     def show_dichuyen_robot(self):
         self.stackedWidget.setCurrentWidget(self.page_dichuyen_robot)
-        
+    def show_page_setup_cam(self):
+        self.stackedWidget.setCurrentWidget(self.page_setup_cam)
+    def show_page_setup_dinhvi(self):
+        self.stackedWidget.setCurrentWidget(self.page_setup_dinhvi)
     #Page ros
     def show_page_mode(self):
         self.stackedWidget.setCurrentWidget(self.page_mode)
     def show_dan_duong(self):
         self.stackedWidget.setCurrentWidget(self.page_dan_duong)
         
-        
-
     def show_page_setup(self):
         self.stackedWidget.setCurrentWidget(self.page_setup)
         self.show_thong_so_robot()
@@ -405,6 +464,198 @@ class MainApp(QMainWindow,Ui_MainWindow):
 
             # Hiển thị thông báo thành công
             self.display_thanhcong("Dữ Liệu Đã Được Reset")
+################## CAMERA ##################
+    def capture_images_from_cameras(self, output_folder=Uti.image_path("image_setup_camera"), threshold=10, max_attempts=30):
+        # Tạo thư mục lưu ảnh nếu chưa có
+        camera_ids = [0, 2, 4, 6]
+
+        if not os.path.exists(output_folder):
+            os.makedirs(output_folder)
+
+        # Duyệt qua các ID camera và kiểm tra camera nào mở được
+        for idx, cam_id in enumerate(camera_ids):
+            cap = cv2.VideoCapture(cam_id)
+            
+            if cap.isOpened():
+                print(f"Camera {cam_id} mở được.")
+                
+                attempts = 0
+                frame = None
+                
+                while attempts < max_attempts:
+                    # Đọc khung hình từ camera
+                    ret, frame = cap.read()
+
+                    if not ret:
+                        print(f"[capture_image] Không thể đọc khung hình từ camera {cam_id}.")
+                        break
+
+                    # Tính độ sáng trung bình của khung hình (tính trên kênh độ xám)
+                    gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+                    brightness = np.mean(gray_frame)
+                    print(f"[capture_image] Độ sáng khung hình từ camera {cam_id}: {brightness}")
+
+                    # Kiểm tra nếu độ sáng lớn hơn ngưỡng (threshold), lưu ảnh và thoát
+                    if brightness > threshold:
+                        file_name = f"camera_{cam_id}.jpg"
+                        file_path = os.path.join(output_folder, file_name)
+                        cv2.imwrite(file_path, frame)
+                        print(f"Đã chụp và lưu ảnh từ camera {cam_id} vào {file_path}")
+                        print("DA VO DE GHI ANH LEN TABLE")
+                        # Hiển thị khung hình lên QLabel tương ứng
+                        break
+                    else:
+                        print(f"[capture_image] Khung hình từ camera {cam_id} quá tối, chụp lại...")
+                        attempts += 1
+                
+                if attempts == max_attempts:
+                    print(f"[capture_image] Đã đạt đến số lần chụp tối đa từ camera {cam_id} mà vẫn chưa có khung hình sáng.")
+                
+            else:
+                print(f"Camera {cam_id} không mở được.")
+            
+            # Giải phóng camera sau khi sử dụng
+            cap.release()
+    def get_camera_id_from_filename(self, filename):
+        # Sử dụng regex để tìm số trong tên file
+        match = re.search(r'camera_(\d+)', filename)
+        if match:
+            return int(match.group(1))
+        return None
+    def read_images_from_folder(self, folder_path):
+        images = []
+        # Lặp qua tất cả các file trong folder
+        for filename in os.listdir(folder_path):
+            # Kiểm tra nếu file có định dạng hình ảnh
+            if filename.endswith(('.jpg', '.jpeg', '.png')):
+                image_path = os.path.join(folder_path, filename)
+                camera_id = self.get_camera_id_from_filename(filename)
+                if camera_id is not None:
+                    images.append((camera_id, image_path))
+        print(images)
+        return images
+    def display_image_on_table(self, port, image_path, lable, table):
+        # Tải ảnh từ đường dẫn
+        lable.setText(f"Port: {port}")
+        pixmap = QtGui.QPixmap(image_path)
+        
+        # Resize QPixmap theo kích thước mong muốn (400x400)
+        resized_pixmap = pixmap.scaled(400, 400, QtCore.Qt.KeepAspectRatio)
+        
+        # Đặt QPixmap vào QLabel
+        table.setPixmap(resized_pixmap)
+
+    def fcn_start_setup_camera(self):
+            #self.display_thanhcong("Đang trong quá trình setup Camera")
+            Uti.RobotSpeakWithPath('voice_hmi_new/setup_cam.wav')
+            self.capture_images_from_cameras()
+            folder_image = Uti.image_path("image_setup_camera")
+            image_files = self.read_images_from_folder(folder_image)
+            idx = 0
+            lable_port =  [
+                self.lable_id_0,
+                self.lable_id_2,
+                self.lable_id_4,
+                self.lable_id_6
+            ]
+
+            table_port =  [
+                self.chua_camera_0,
+                self.chua_camera_2,
+                self.chua_camera_4,
+                self.chua_camera_6
+            ]
+
+            for camera_id, image_path in image_files:
+                print(f"Camera ID: {camera_id}, Image Path: {image_path}")
+                self.display_image_on_table(camera_id,image_path, lable_port[idx], table_port[idx])
+                idx += 1
+            self.finish_setup_cam()
+    
+    def fcn_save_id_camera(self):
+
+        try:
+            self.port_headcamera = int(self.combobox_headcame.currentText())
+            self.port_backcamera = int(self.combobox_back.currentText())
+            self.port_front_L = int(self.combobox_front_1.currentText())
+            self.port_front_R = int(self.combobox_front_2.currentText())
+
+        except ValueError:
+            return None, None, None, None  # Trả về None nếu có lỗi
+        
+        
+        sql.setupRobot_sql_save(
+            self.VX_AUTO_MAX,
+            self.VW_AUTO_MAX,
+            self.VX_MANUAL_MAX,
+            self.VW_MANUAL_MAX,
+            self.DUNG_SAI_DIEM_DEN_VITRI,
+            self.DUNG_SAI_DIEM_DEN_GOC,
+            self.CHIEU_CAO_LED,
+            self.username_global,
+            self.password_global,
+            self.MUC_DIEN_AP_SAC_PIN,
+            self.port_backcamera,
+            self.port_headcamera,
+            self.port_front_L,
+            self.port_front_R,
+        )
+    def finish_setup_cam(self):
+        self.from_finish_setup_cam = QMainWindow()
+        self.uic14 = Ui_Form_finish_setup_cam()
+        self.uic14.setupUi(self.from_finish_setup_cam)
+        self.from_finish_setup_cam.setGeometry(680, 240, 550, 250)
+        self.from_finish_setup_cam.setStyleSheet("background-color:rgb(255, 255, 255);")
+        self.from_finish_setup_cam.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint)
+        
+        self.from_finish_setup_cam.show()
+        self.uic14.btn_finish_setup_cam.clicked.connect(self.close_finish_setup_cam)
+
+    def close_finish_setup_cam(self):
+        self.from_finish_setup_cam.close()
+     #========================== cac ham xu ly cua nut nhan CHECK CAM ===============================
+    def dang_nd_cam(self):
+        self.from_dang_nd_cam = QMainWindow()
+        self.uic10 = Ui_Form_dangnhap_cam()
+        self.uic10.setupUi(self.from_dang_nd_cam)
+        self.from_dang_nd_cam.setGeometry(680, 240, 550, 250)
+        self.from_dang_nd_cam.setStyleSheet("background-color:rgb(255, 255, 255);")
+        self.from_dang_nd_cam.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint)
+        self.from_dang_nd_cam.show()
+        # self.uic10.btn_dang_nd_cam.clicked.connect(self.close_dang_nd_cam)
+        self.uic10.btn_dang_nd_cam.clicked.connect(self.close_dang_nd_cam)
+    def close_dang_nd_cam(self):
+        # self.dinh_vi()
+        self.from_dang_nd_cam.close()
+        Uti.RobotSpeakWithPath('voice_hmi_new/check_cam.wav')
+        self.check_cam()
+
+
+    def finish_cam(self):
+        self.from_finish_cam = QMainWindow()
+        self.uic12= Ui_Form_finish_cam()
+        self.uic12.setupUi(self.from_finish_cam)
+        self.from_finish_cam.setGeometry(680, 240, 550, 250)
+        self.from_finish_cam.setStyleSheet("background-color:rgb(255, 255, 255);")
+        self.from_finish_cam.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint)
+        self.from_finish_cam.show()
+        self.uic12.btn_xacnhan_hoanthanh_cam.clicked.connect(self.close_finish_cam)
+
+    def close_finish_cam(self):
+        self.from_finish_cam.close()
+    def error_cam(self):
+        self.from_error_cam = QMainWindow()
+        self.uic11 = Ui_Form_error_cam()
+        self.uic11.setupUi(self.from_error_cam)
+        self.from_error_cam.setGeometry(680, 240, 550, 250)
+        self.from_error_cam.setStyleSheet("background-color:rgb(255, 255, 255);")
+        self.from_error_cam.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint)
+        self.from_error_cam.show()
+        self.uic11.btn_error_cam.clicked.connect(self.close_err_cam)
+
+    def close_err_cam(self):
+        self.from_error_cam.close()
+    
 ################## ROS ##################
 ################## MANUAL ##################
     def thaydoivantoc(self):
@@ -419,6 +670,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.ros2_handle.start()
         self.ros2_handle.progress_status.connect(self.status_popup.update_status)
         self.ros2_handle.goal_publisher.reached_goal.connect(self.reached_goal)
+   
     def mapping(self, ):
         self.mapping_button.setEnabled(False)
         self.ros2_handle.stop_navigation()
@@ -1308,6 +1560,8 @@ class MainApp(QMainWindow,Ui_MainWindow):
                             value = float(parts[0])  # Lấy phần tử đầu tiên và chuyển đổi
                             if value < 10.6:
                                 print("Giá trị điện áp nhỏ hơn 10.8 :", value)
+                             
+                                print("Thiếu điện")
                             #    Uti.RobotSpeakWithPath('voice_hmi_new/thongbao_pin_yeu.wav')
                                 time.sleep(2)
                                 self.navigation_thread.du_pin = False
@@ -1318,6 +1572,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
                              #   self.Auto_charing()
                             elif value > 10.6:
                                 print("Giá trị điện áp lớn hơn 10.8 :", value)
+                                print("Đủ điện")
                                 time.sleep(2)
                             #    Uti.RobotSpeakWithPath('voice_hmi_new/thongbao_pin_day.wav')
                                 self.navigation_thread.du_pin = True
@@ -1365,7 +1620,9 @@ class MainApp(QMainWindow,Ui_MainWindow):
                     Uti.RobotSpeakWithPath('voice_hmi_new/thongbao_pin_day.wav')
                     self.read_arduino.stop()
                     print("chay ve home")
-                    self.sac_pin_tu_dong = True
+                    self.sac_pin_tu_dong = False
+                    self.stackedWidget.setCurrentWidget(self.page_robot_dichuyen)
+                    self.man_hinh_dan_duong()
                 
                
                   
@@ -1395,13 +1652,19 @@ class MainApp(QMainWindow,Ui_MainWindow):
             pass
 
     def reached_goal(self, flag):
-        if flag:
-            self.btn_xac_nhan.setEnabled(True)
-            if self.id_voice == RobConf.HOME_ID:
-                Uti.RobotSpeakWithPath('new_voice/new_hoan_thanh.wav')
-                
-            else:
-                Uti.RobotSpeakWithPath('voice_hmi_new/new_xac_nhan.wav')
+    
+            if flag:
+                self.btn_xac_nhan.setEnabled(True)
+                if self.id_voice == RobConf.HOME_ID:
+                    Uti.RobotSpeakWithPath('new_voice/new_hoan_thanh.wav')
+                    
+                else:
+                    Uti.RobotSpeakWithPath('voice_hmi_new/new_xac_nhan.wav')
+                    self.listWidget_ds.takeItem(0)
+            else: 
+                print("fail go")
+                self.man_hinh_dan_duong()
+  
     def ve_home_trong_chu_trinh(self):
         # B1 chay ve home
         x_goal, y_goal, z_goal, w_goal, idout = sql.doc_du_lieu_toado_robot(200)
@@ -1443,7 +1706,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.navigation_thread.quatrinh_move = True
 
         self.ros2_handle.goal_publisher.send_goal(x_goal, y_goal, z_goal, w_goal)
-
+        Uti.RobotSpeakWithPath('voice_hmi_new/toidangdisac.wav')
         self.listWidget_ds.clear()
          # Đặt lại tất cả các trạng thái item về False
         for id_item in self.item_states:
@@ -1461,9 +1724,9 @@ class MainApp(QMainWindow,Ui_MainWindow):
             self.navigation_thread.quatrinh_move = True
 
             self.ros2_handle.goal_publisher.send_goal(x_goal, y_goal, z_goal, w_goal)
- 
+
             # B4 Xoa phan tu dau tien 
-            self.listWidget_ds.takeItem(0)
+            
             
             
     def man_hinh_dan_duong(self):

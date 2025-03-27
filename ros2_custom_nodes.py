@@ -332,6 +332,7 @@ class PoseListener(QThread):
 class GoalPosePublisher(QThread):
     # progress_status = pyqtSignal(str, str)  # status_type, message
     reached_goal = pyqtSignal(bool)
+    accepted_goal = pyqtSignal(bool)
     def __init__(self, progress_status):
         super().__init__()
         self.progress_status = progress_status
@@ -383,9 +384,11 @@ class GoalPosePublisher(QThread):
         goal_handle = future.result()
         if not goal_handle.accepted:
             self.node.get_logger().info('Goal rejected.')
+            self.reached_goal.emit(False)
             return
 
         self.node.get_logger().info('Goal accepted.')
+       
         self._get_result_future = goal_handle.get_result_async()
         self._get_result_future.add_done_callback(self.get_result_callback)
 
