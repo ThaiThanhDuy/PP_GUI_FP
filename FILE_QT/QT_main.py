@@ -574,9 +574,9 @@ class Ui_MainWindow(object):
         self.frame_4.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_4.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_4.setObjectName("frame_4")
-        self.bt_dinh_vi = QtWidgets.QPushButton(self.frame_4)
-        self.bt_dinh_vi.setGeometry(QtCore.QRect(100, 20, 300, 100))
-        self.bt_dinh_vi.setStyleSheet("QPushButton#bt_dinh_vi{\n"
+        self.btn_dinh_vi = QtWidgets.QPushButton(self.frame_4)
+        self.btn_dinh_vi.setGeometry(QtCore.QRect(100, 20, 300, 100))
+        self.btn_dinh_vi.setStyleSheet("QPushButton#btn_dinh_vi{\n"
 "    background-color: rgb(255, 255, 128);\n"
 "\n"
 "color:rgba(0, 0, 0, 255);\n"
@@ -584,11 +584,11 @@ class Ui_MainWindow(object):
 "    \n"
 "    font: 75 30pt \"MS Shell Dlg 2\";\n"
 "}\n"
-"QPushButton#bt_dinh_vi:hover{\n"
+"QPushButton#btn_dinh_vi:hover{\n"
 "    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 255, 255, 255), stop:1 rgba(58, 192, 255, 255));\n"
 "\n"
 "}\n"
-"QPushButton#bt_dinh_vi:pressed{\n"
+"QPushButton#btn_dinh_vi:pressed{\n"
 "\n"
 " padding-left:5px;\n"
 " padding-top:5px;\n"
@@ -599,9 +599,9 @@ class Ui_MainWindow(object):
 "")
         icon7 = QtGui.QIcon()
         icon7.addPixmap(QtGui.QPixmap("../images/gps.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.bt_dinh_vi.setIcon(icon7)
-        self.bt_dinh_vi.setIconSize(QtCore.QSize(60, 60))
-        self.bt_dinh_vi.setObjectName("bt_dinh_vi")
+        self.btn_dinh_vi.setIcon(icon7)
+        self.btn_dinh_vi.setIconSize(QtCore.QSize(60, 60))
+        self.btn_dinh_vi.setObjectName("btn_dinh_vi")
         self.bt_set_home = QtWidgets.QPushButton(self.frame_4)
         self.bt_set_home.setGeometry(QtCore.QRect(100, 150, 300, 100))
         self.bt_set_home.setStyleSheet("QPushButton#bt_set_home{\n"
@@ -2848,14 +2848,17 @@ class Ui_MainWindow(object):
         self.toado_x = QtWidgets.QLineEdit(self.frame_28)
         self.toado_x.setGeometry(QtCore.QRect(20, 50, 100, 50))
         self.toado_x.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.toado_x.setAlignment(QtCore.Qt.AlignJustify|QtCore.Qt.AlignVCenter)
         self.toado_x.setObjectName("toado_x")
         self.toado_y = QtWidgets.QLineEdit(self.frame_28)
         self.toado_y.setGeometry(QtCore.QRect(150, 50, 100, 50))
         self.toado_y.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.toado_y.setAlignment(QtCore.Qt.AlignJustify|QtCore.Qt.AlignVCenter)
         self.toado_y.setObjectName("toado_y")
         self.toado_z = QtWidgets.QLineEdit(self.frame_28)
         self.toado_z.setGeometry(QtCore.QRect(280, 50, 100, 50))
         self.toado_z.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.toado_z.setAlignment(QtCore.Qt.AlignJustify|QtCore.Qt.AlignVCenter)
         self.toado_z.setObjectName("toado_z")
         self.label_8 = QtWidgets.QLabel(self.frame_28)
         self.label_8.setGeometry(QtCore.QRect(60, 20, 67, 17))
@@ -2930,6 +2933,9 @@ class Ui_MainWindow(object):
         self.btn_enable.setObjectName("btn_enable")
         self.terminal_2 = QtWidgets.QPlainTextEdit(self.frame_26)
         self.terminal_2.setGeometry(QtCore.QRect(60, 630, 681, 61))
+        font = QtGui.QFont()
+        font.setPointSize(20)
+        self.terminal_2.setFont(font)
         self.terminal_2.setStyleSheet("background: white")
         self.terminal_2.setObjectName("terminal_2")
         self.label_14 = QtWidgets.QLabel(self.frame_26)
@@ -2937,6 +2943,26 @@ class Ui_MainWindow(object):
         self.label_14.setStyleSheet("\n"
 "font: 75 14pt \"MS Shell Dlg 2\";")
         self.label_14.setObjectName("label_14")
+        self.btn_toado_td = QtWidgets.QPushButton(self.frame_26)
+        self.btn_toado_td.setGeometry(QtCore.QRect(620, 5, 120, 40))
+        self.btn_toado_td.setStyleSheet("QPushButton#btn_toado_td{\n"
+" \n"
+"    border-radius: 15px;\n"
+"    background-color: rgb(58,192,240);\n"
+"    font: 75 17pt \"MS Shell Dlg 2\";\n"
+"    \n"
+"}\n"
+"\n"
+"QPushButton#btn_toado_td:pressed{\n"
+"padding-left :3px;\n"
+"padding-top :3px;\n"
+"border-radius: 15px;\n"
+"font: 75 17pt \"MS Shell Dlg 2\";\n"
+"\n"
+"    background-color: rgb(0, 255, 0);\n"
+"}\n"
+"")
+        self.btn_toado_td.setObjectName("btn_toado_td")
         self.frame_27 = QtWidgets.QFrame(self.frame_9)
         self.frame_27.setGeometry(QtCore.QRect(1100, 200, 400, 700))
         self.frame_27.setStyleSheet("background-color: rgb(220, 220, 220);")
@@ -3213,7 +3239,7 @@ class Ui_MainWindow(object):
         self.bt_wifi.setText(_translate("MainWindow", "Wifi"))
         self.bt_setup_cam.setText(_translate("MainWindow", "Setup Cam"))
         self.bt_check_cam.setText(_translate("MainWindow", "Check Cam"))
-        self.bt_dinh_vi.setText(_translate("MainWindow", "Định Vị"))
+        self.btn_dinh_vi.setText(_translate("MainWindow", "Định Vị"))
         self.bt_set_home.setText(_translate("MainWindow", "Set Home"))
         self.bt_di_chuyen.setText(_translate("MainWindow", "Di Chuyển"))
         self.bt_setup.setText(_translate("MainWindow", "Setup"))
@@ -3298,6 +3324,9 @@ class Ui_MainWindow(object):
         self.bt_back_setup_3.setText(_translate("MainWindow", "Quay Lại"))
         self.label_caidat_cam_2.setText(_translate("MainWindow", "CHECK CAMERA"))
         self.label_caidat_dinhvi.setText(_translate("MainWindow", "CÀI ĐẶT ĐỊNH VỊ ROBOT"))
+        self.toado_x.setPlaceholderText(_translate("MainWindow", "Nhập X"))
+        self.toado_y.setPlaceholderText(_translate("MainWindow", "Nhập Y"))
+        self.toado_z.setPlaceholderText(_translate("MainWindow", "Nhập Z"))
         self.label_8.setText(_translate("MainWindow", "X"))
         self.label_10.setText(_translate("MainWindow", "Y"))
         self.label_11.setText(_translate("MainWindow", "Z"))
@@ -3305,6 +3334,7 @@ class Ui_MainWindow(object):
         self.label_13.setText(_translate("MainWindow", "Enable"))
         self.btn_enable.setText(_translate("MainWindow", "Press"))
         self.label_14.setText(_translate("MainWindow", "Terminal"))
+        self.btn_toado_td.setText(_translate("MainWindow", "AUTO"))
         self.btn_save_data.setText(_translate("MainWindow", "Save"))
         self.btn_load_data.setText(_translate("MainWindow", "Load"))
         self.btn_delete_data.setText(_translate("MainWindow", "Delete"))

@@ -2,7 +2,8 @@ import sqlite3
 import cv2
 import os
 import time
-import RobotConfig as robotconf
+#import RobotConfig as robotconf
+import RobotConfig as RobConf
 import Utilities as Uti
 import cv2
 import numpy as np
@@ -34,21 +35,21 @@ class SetupDinhVi():
         self.id_delete = None
         self.conn = sqlite3.connect(self.db_path)
       
-        #self.model = models.resnet50(weights=torchvision.models.resnet.ResNet50_Weights.DEFAULT)
-        #self.model.eval()
+        self.model = models.resnet50(weights=torchvision.models.resnet.ResNet50_Weights.DEFAULT)
+        self.model.eval()
 
-        self.model = None
+        #self.model = None
 
         
-        #self.model = torch.nn.Sequential(*list(self.model.children())[:-1])
+        self.model = torch.nn.Sequential(*list(self.model.children())[:-1])
 
 
-      #  self.preprocess = transforms.Compose([
-    #         transforms.Resize(256),
-     #        transforms.CenterCrop(224),
-      #       transforms.ToTensor(),
-        #     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-       #  ])
+        self.preprocess = transforms.Compose([
+             transforms.Resize(256),
+             transforms.CenterCrop(224),
+             transforms.ToTensor(),
+             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+         ])
 
         # Trích xuất đặc trưng cho tất cả các ảnh đã lưu
         #self.extract_features_for_all_images()
@@ -124,65 +125,70 @@ class SetupDinhVi():
         
         self.conn.commit()
 
+    def add_data(self, x, y, z, image_id, capC, capF):
+        combined_features = self.capture_and_extract_features(capC, capF)
+        # Save combined features to a file
+        features_path = os.path.join(self.image_dir, f'{self.timestamp}.pkl')
+        with open(features_path, 'wb') as f:
+            pickle.dump(combined_features, f)
 
-    
-    def capture_imag(self, save_path, image_name, id_camera, cap):
-        #cap = cv2.VideoCapture(id_camera)
-        print("[capture_image] DA VO DE CHUP ANH")
-        #while True:
+        self.update_data(features_path, x, y, z, image_id)
 
-        # Đọc khung hình từ camera
-        ret, frame = cap.read()
-        
-        frame = cv2.flip(frame, 0)
-
-        # Thay đổi kích thước khung hình
-        if ret:
-            image_path = os.path.join(save_path, image_name)
-            cv2.imwrite(image_path, frame)
-           
-            #count = count + 1
-            # if count == 25:
-            #     break
-
-        cap.release()
-        return ret
-    
-
-
-    def capture_image(self, save_path, image_name, id_camera, cap, threshold=10):
+    def capture_image(self, save_path, image_name, id_camera, cap=None, threshold=10):
         print("[capture_image] Đã vào để chụp ảnh")
-        
-        while True:
-            # Đọc khung hình từ camera
-            ret, frame = cap.read()
-            frame = cv2.flip(frame, 0)
 
-            if not ret:
-                print("[capture_image] Không thể đọc khung hình từ camera.")
-                cap.release()
+        if cap is None or not cap.isOpened():
+            try:
+                cap = cv2.VideoCapture(id_camera)
+                time.sleep(1) #thêm 1 giây chờ sau khi mở camera.
+                print(f"[capture_image] cap.isOpened() : {cap.isOpened()}") # debug
+                print(f"[ID_camera] {id_camera}")
+                if not cap.isOpened():
+                    print(f"[capture_image] Không thể mở camera {id_camera}.")
+                    return False
+            except Exception as e:
+                print(f"[capture_image] Lỗi khi mở camera: {e}")
                 return False
+        
+        os.makedirs(save_path, exist_ok=True)
+        cap.set(cv2.CAP_PROP_BRIGHTNESS, 100) # điều chỉnh độ sáng.
+        retry_count = 0
+        max_retries = 5
 
-            # Tính độ sáng trung bình của khung hình (tính trên kênh độ xám)
-            gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            brightness = np.mean(gray_frame)
-            
-            print(f"[capture_image] Độ sáng khung hình: {brightness}")
+        while retry_count < max_retries:
+            try:
+                
+                ret, frame = cap.read() #frame1
+                ret, frame = cap.read() #frame2
+                ret, frame = cap.read() #frame3
+                print(f"[capture_image] ret : {ret}") #debug
+            #    print(f"[capture_image] frame : {frame}") #debug
 
-            # Kiểm tra nếu độ sáng nhỏ hơn ngưỡng (threshold), tiếp tục chụp lại
-            if brightness > threshold:
-                # Thay đổi kích thước khung hình nếu cần thiết
-                image_path = os.path.join(save_path, image_name)
-                cv2.imwrite(image_path, frame)
-                print(f"[capture_image] Đã lưu ảnh tại {image_path}")
-                break
-            else:
-                print("[capture_image] Khung hình quá tối, chụp lại...")
+                frame = cv2.flip(frame, 0)
+                gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+                brightness = np.mean(gray_frame)
 
-        cap.release()
-        print("[capture_image] dang dong camera")
-        return ret
+                print(f"[capture_image] Độ sáng khung hình: {brightness}")
 
+                if brightness >= threshold:
+                    image_path = os.path.join(save_path, image_name)
+                    cv2.imwrite(image_path, frame)
+                    print(f"[capture_image] Đã lưu ảnh tại {image_path}")
+                    break
+                else:
+                    print(f"[capture_image] Khung hình quá tối ({brightness}), chụp lại... (Lần {retry_count+1}/{max_retries})")
+                    retry_count += 1
+                    time.sleep(0.5)
+
+            except Exception as e:
+                print(f"[capture_image] Lỗi khi chụp ảnh: {e}")
+                retry_count += 1
+
+        if cap is not None and cap.isOpened():
+            cap.release()
+            print("[capture_image] Đã đóng camera")
+
+        return retry_count < max_retries
 
 
     def capture_and_extract_features(self, capC, capF):
@@ -190,13 +196,14 @@ class SetupDinhVi():
 
         # Capture and extract features for the ceiling image
         image_name_ceiling = '{}_ceiling.jpg'.format(self.timestamp)
-        self.capture_image(self.image_dir, image_name_ceiling, robotconf.headCamera, capC)
+     
+        self.capture_image(self.image_dir, image_name_ceiling,RobConf.headCamera, capC)
         image_ceiling = Image.open(os.path.join(self.image_dir, image_name_ceiling)).convert('RGB')
         features_ceiling = self.extract_features(image_ceiling, self.model)
 
         # Capture and extract features for the front image
         image_name_front = '{}_front.jpg'.format( self.timestamp)
-        self.capture_image(self.image_dir, image_name_front, robotconf.faceCame1,capF)
+        self.capture_image(self.image_dir, image_name_front, RobConf.faceCame1,capF)
         image_front = Image.open(os.path.join(self.image_dir, image_name_front)).convert('RGB')
         features_front = self.extract_features(image_front, self.model)
 
@@ -208,12 +215,12 @@ class SetupDinhVi():
     
         # Capture and extract features for the ceiling image
         image_name_ceiling = 'ceiling_test.jpg'
-        self.capture_image(self.image_dir_test, image_name_ceiling, robotconf.headCamera)
+        self.capture_image(self.image_dir_test, image_name_ceiling, RobConf.headCamera)
         image_ceiling = Image.open(os.path.join(self.image_dir_test, image_name_ceiling)).convert('RGB')
         
         # Capture and extract features for the front image
         image_name_front = 'front_test.jpg'
-        self.capture_image(self.image_dir_test, image_name_front, robotconf.faceCame1)
+        self.capture_image(self.image_dir_test, image_name_front, RobConf.faceCame1)
         image_front = Image.open(os.path.join(self.image_dir_test, image_name_front)).convert('RGB')
 
 
@@ -231,8 +238,8 @@ class SetupDinhVi():
         }
     
         # Capture images (assuming this saves them to disk)
-        self.capture_image(self.image_dir_test, image_paths['ceiling'], robotconf.headCamera, capC)
-        self.capture_image(self.image_dir_test, image_paths['front'], robotconf.faceCame1, capF)
+        self.capture_image(self.image_dir_test, image_paths['ceiling'], RobConf.headCamera, capC)
+        self.capture_image(self.image_dir_test, image_paths['front'], RobConf.faceCame1, capF)
         
         # Extract features from captured images
         features = {}
@@ -246,15 +253,6 @@ class SetupDinhVi():
         
         return combined_features
     
-
-    def add_data(self, x, y, z, image_id, capC, capF):
-        combined_features = self.capture_and_extract_features(capC, capF)
-        # Save combined features to a file
-        features_path = os.path.join(self.image_dir, f'{self.timestamp}.pkl')
-        with open(features_path, 'wb') as f:
-            pickle.dump(combined_features, f)
-
-        self.update_data(features_path, x, y, z, image_id)
 
     
     def test_image1(self, target_id, yawdeg):
@@ -338,9 +336,10 @@ class SetupDinhVi():
             else:
                 features_path = file_name
             
-            print("[array_storted_data] features_path trong test_image:", features_path)
+          #  print("[array_storted_data] features_path trong test_image:", features_path)
             
             # Mở và load dữ liệu từ file
+
             with open(features_path, 'rb') as f:
                 stored_features = pickle.load(f)
             

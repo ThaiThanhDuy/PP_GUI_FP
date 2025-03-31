@@ -1417,7 +1417,7 @@ QPushButton#bt_check_cam:pressed{
         <property name="frameShadow">
          <enum>QFrame::Raised</enum>
         </property>
-        <widget class="QPushButton" name="bt_dinh_vi">
+        <widget class="QPushButton" name="btn_dinh_vi">
          <property name="geometry">
           <rect>
            <x>100</x>
@@ -1427,7 +1427,7 @@ QPushButton#bt_check_cam:pressed{
           </rect>
          </property>
          <property name="styleSheet">
-          <string notr="true">QPushButton#bt_dinh_vi{
+          <string notr="true">QPushButton#btn_dinh_vi{
 	background-color: rgb(255, 255, 128);
 
 color:rgba(0, 0, 0, 255);
@@ -1435,11 +1435,11 @@ border-radius:20px;
 	
 	font: 75 30pt &quot;MS Shell Dlg 2&quot;;
 }
-QPushButton#bt_dinh_vi:hover{
+QPushButton#btn_dinh_vi:hover{
 	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 255, 255, 255), stop:1 rgba(58, 192, 255, 255));
 
 }
-QPushButton#bt_dinh_vi:pressed{
+QPushButton#btn_dinh_vi:pressed{
 
  padding-left:5px;
  padding-top:5px;
@@ -6003,6 +6003,12 @@ border-radius: 20px;
          <property name="styleSheet">
           <string notr="true">background-color: rgb(255, 255, 255);</string>
          </property>
+         <property name="alignment">
+          <set>Qt::AlignJustify|Qt::AlignVCenter</set>
+         </property>
+         <property name="placeholderText">
+          <string>Nhập X</string>
+         </property>
         </widget>
         <widget class="QLineEdit" name="toado_y">
          <property name="geometry">
@@ -6016,6 +6022,12 @@ border-radius: 20px;
          <property name="styleSheet">
           <string notr="true">background-color: rgb(255, 255, 255);</string>
          </property>
+         <property name="alignment">
+          <set>Qt::AlignJustify|Qt::AlignVCenter</set>
+         </property>
+         <property name="placeholderText">
+          <string>Nhập Y</string>
+         </property>
         </widget>
         <widget class="QLineEdit" name="toado_z">
          <property name="geometry">
@@ -6028,6 +6040,12 @@ border-radius: 20px;
          </property>
          <property name="styleSheet">
           <string notr="true">background-color: rgb(255, 255, 255);</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignJustify|Qt::AlignVCenter</set>
+         </property>
+         <property name="placeholderText">
+          <string>Nhập Z</string>
          </property>
         </widget>
         <widget class="QLabel" name="label_8">
@@ -6225,6 +6243,11 @@ font: 75 14pt &quot;MS Shell Dlg 2&quot;;
           <height>61</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>20</pointsize>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">background: white</string>
         </property>
@@ -6244,6 +6267,38 @@ font: 75 14pt &quot;MS Shell Dlg 2&quot;;</string>
         </property>
         <property name="text">
          <string>Terminal</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btn_toado_td">
+        <property name="geometry">
+         <rect>
+          <x>620</x>
+          <y>5</y>
+          <width>120</width>
+          <height>40</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton#btn_toado_td{
+ 
+	border-radius: 15px;
+	background-color: rgb(58,192,240);
+	font: 75 17pt &quot;MS Shell Dlg 2&quot;;
+	
+}
+
+QPushButton#btn_toado_td:pressed{
+padding-left :3px;
+padding-top :3px;
+border-radius: 15px;
+font: 75 17pt &quot;MS Shell Dlg 2&quot;;
+
+	background-color: rgb(0, 255, 0);
+}
+</string>
+        </property>
+        <property name="text">
+         <string>AUTO</string>
         </property>
        </widget>
       </widget>

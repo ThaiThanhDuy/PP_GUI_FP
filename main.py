@@ -54,10 +54,20 @@ from status_popup import StatusPopup, NamedMap
 from FILE_QT.from_nhapphong import Ui_Form_nhaptenban
 from FILE_QT.form_themvao import Ui_Form_them
 from FILE_QT.form_map import Ui_Form_map
+
 from FILE_QT.from_finish_setup_cam import Ui_Form_finish_setup_cam
+
 from FILE_QT.from_dang_nd_cam import Ui_Form_dangnhap_cam
 from FILE_QT.from_error_cam import Ui_Form_error_cam
 from FILE_QT.from_finish_cam import Ui_Form_finish_cam
+
+from FILE_QT.from_setup_cam import Ui_Form_dang_setup_cam
+from FILE_QT.from_error_setup_cam import Ui_Form_error_setup_cam
+from FILE_QT.from_finish_setup_cam import Ui_Form_finish_setup_cam
+
+from FILE_QT.from_dinhvi import Ui_Form_dang_dinhvi
+from FILE_QT.from_error_dinhvi import Ui_Form_error_dinhvi
+from FILE_QT.from_finish_dinhvi import Ui_Form_finish_dinhvi
 # FILE CUSTOM
 from navigation_thread import NavigationThread
 from arduino_connection import ReadArduinoPin, arduino
@@ -65,7 +75,6 @@ from ros2_handle import ROS2Handle
 import ros2_handle as ros2_handle
 import SQL as sql
 from ModuleSetupDinhVi import SetupDinhVi
-
 # Library GUI
 from PyQt5 import QtCore, QtGui
 
@@ -81,7 +90,7 @@ from PyQt5.QtWidgets import QApplication,QMainWindow,QTableWidgetItem, QCheckBox
 from PyQt5.QtGui import *
 
 # build QT - pyuic5 QT_main.ui -o QT_main.py
-headCamera = RobConf.headCamera 
+# fix duong dan - ../ROBOT_HD/
 def xuly_cham_ngoai(): # ham xu ly khi cham ra ngoai ban phim se tat
     try:
         if not hasattr(keyyyyy.Registe, "virtual_keyboard") or not keyyyyy.Registe.virtual_keyboard.isVisible():
@@ -125,7 +134,9 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.port_backcamera = RobConf.chargCame
         self.port_front_R = RobConf.faceCame1
         self.port_front_L = RobConf.faceCam2
-
+        self.cap_qr = None
+        self.capC = None
+        
         self.selected_item_infor = None
         self.selected_tram_them = None
         self.selected_kvcho_them = None
@@ -151,6 +162,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.dinhvi_dauhanhtrinh = False
         self.goal_ids = []
         self.btn_xac_nhan.setEnabled(False)
+
         # PIN
         self.on_off_sac_tu_dong=False
         self.read_arduino = ReadArduinoPin()
@@ -158,7 +170,6 @@ class MainApp(QMainWindow,Ui_MainWindow):
      
         self.sac_pin_tu_dong =False
         self.arduino = arduino()
-    
         
         # Kiemtra robot co dang du chuyen ko 
         if(self.navigation_thread.robot_dang_di_chuyen==True):
@@ -169,10 +180,29 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.btn_batdau_danduong.setEnabled(False)
         self.btn_xac_nhan.pressed.connect(self.button_xn_pressed)
         self.btn_xn_enable = self.btn_xac_nhan.isEnabled()
+
+        # DINH VI
     
+        values = [200,100, 123, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        self.id_vitri.addItems([str(i) for i in values])
+        self.setup_dv  = SetupDinhVi()
+        self.DINH_VI_BTN()
+
+    def xu_ly_nhap_banphim(self, event):
+        print("da nhap")
+        try:
+            if not hasattr(keyyyyy.Registe, "virtual_keyboard") or not keyyyyy.Registe.virtual_keyboard.isVisible():
+                keyyyyy.Registe.virtual_keyboard = keyyyyy.VKBD(self.uic3.lineEdit_nhaptenban)
+                keyyyyy.Registe.virtual_keyboard.show()
+        
+            else:
+                #keyyyyy.Registe.virtual_keyboard.activateWindow()
+                keyyyyy.Registe.virtual_keyboard.hide()
+        except:
+            print("failed to open virtual keyboard ,already exist ")
 ################### Button event ##################
     def setupSingal(self):
-       # self.ros2_handle = ROS2Handle()  # Create an instance
+    
         
         self.bt_thoat.clicked.connect(self.close) 
         self.bt_thu_phong.clicked.connect(self.toggleFullScreen)
@@ -270,7 +300,14 @@ class MainApp(QMainWindow,Ui_MainWindow):
     
         self.btn_ban_do.clicked.connect(self.show_map)
         self.btn_batdau_danduong.clicked.connect(self.dan_duong)
-
+    def DINH_VI_BTN(self):
+        self.btn_enable.clicked.connect(self.fcn_enable_type)
+        self.btn_toado_td.clicked.connect(self.fcn_nhap_toado_td)
+        self.btn_save_data.clicked.connect(self.fcn_save_vitri)
+        self.btn_load_data.clicked.connect(self.fcn_load_data)
+        self.btn_delete_data.clicked.connect(self.fcn_delete_data) 
+        self.btn_test.clicked.connect(self.fcn_test_data)
+        self.btn_dinh_vi.clicked.connect(self.dinh_vi_fcn_1)
     # Funtion Page
 ################### Page Setup ##################
 
@@ -601,6 +638,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
             self.port_front_L,
             self.port_front_R,
         )
+    #========================== cac ham GUI cua nut nhan SETUP CAM ===============================
     def finish_setup_cam(self):
         self.from_finish_setup_cam = QMainWindow()
         self.uic14 = Ui_Form_finish_setup_cam()
@@ -614,7 +652,8 @@ class MainApp(QMainWindow,Ui_MainWindow):
 
     def close_finish_setup_cam(self):
         self.from_finish_setup_cam.close()
-     #========================== cac ham xu ly cua nut nhan CHECK CAM ===============================
+
+     #========================== cac ham GUI  cua nut nhan CHECK CAM ===============================
     def dang_nd_cam(self):
         self.from_dang_nd_cam = QMainWindow()
         self.uic10 = Ui_Form_dangnhap_cam()
@@ -630,8 +669,6 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.from_dang_nd_cam.close()
         Uti.RobotSpeakWithPath('voice_hmi_new/check_cam.wav')
         self.check_cam()
-
-
     def finish_cam(self):
         self.from_finish_cam = QMainWindow()
         self.uic12= Ui_Form_finish_cam()
@@ -641,7 +678,6 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.from_finish_cam.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint)
         self.from_finish_cam.show()
         self.uic12.btn_xacnhan_hoanthanh_cam.clicked.connect(self.close_finish_cam)
-
     def close_finish_cam(self):
         self.from_finish_cam.close()
     def error_cam(self):
@@ -653,10 +689,110 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.from_error_cam.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint)
         self.from_error_cam.show()
         self.uic11.btn_error_cam.clicked.connect(self.close_err_cam)
-
     def close_err_cam(self):
         self.from_error_cam.close()
-    
+    #======================= ham cua nut nhan CHECK CAM ======================
+    def check_cam(self):
+        global headCamera
+        # self.dang_nd_cam()
+
+        brightness_value = 100
+
+        print('------------ Bắt đầu tìm tâm hình tròn -----------')
+        # print("sanggggg: ", brightness_value)
+
+        cap = cv2.VideoCapture(0)
+
+        if not cap.isOpened():
+            print("Không thể mở camera.")
+            return
+        
+        cap.set(cv2.CAP_PROP_BRIGHTNESS, brightness_value / 1)
+        start_time = time.time()
+        max_radius = 0
+        circle_count = 0  # Đếm số lượng hình tròn
+        while True:
+            ret, frame = cap.read()
+            if not ret:
+                print("Không thể đọc khung hình từ camera.")
+                break
+            frame = cv2.resize(frame, (1000, 600))  
+            blurred_frame = cv2.GaussianBlur(frame, (25, 25), 0) 
+            hsv = cv2.cvtColor(blurred_frame, cv2.COLOR_BGR2HSV)
+            color_ranges = {
+                'yellow': ([20, 100, 100], [36, 255, 255]) 
+                # 'green': ([36, 25, 25], [86, 255, 255])
+            }
+            gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            combined_mask = np.zeros(gray_frame.shape[:2], dtype=np.uint8)
+            centers = {}
+
+            found_circle = False
+            circle_count = 0  # Đếm số lượng hình tròn
+
+            for color_name, (lower, upper) in color_ranges.items():
+                mask = cv2.inRange(hsv, np.array(lower), np.array(upper))
+                combined_mask = cv2.bitwise_or(combined_mask, mask)
+                contours, _ = cv2.findContours(combined_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+                for contour in contours:
+                    ((x, y), radius) = cv2.minEnclosingCircle(contour)
+                    center = (int(x), int(y))
+                    radius = int(radius)
+                    if radius > max_radius:
+                        max_radius = radius
+                    cv2.circle(frame, center, radius, (0, 255, 0), 2)
+                    cv2.circle(frame, center, 5, (0, 0, 255), -1)
+                    text = f"{radius}px" 
+                    cv2.putText(frame, text, (center[0] - 10, center[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+                    found_circle = True
+                    circle_count += 1  # Tăng đếm số lượng hình tròn
+
+                # cv2.imshow('Webcam', frame)
+
+            
+
+            if not found_circle:
+                brightness_value += 5
+                if brightness_value > 255:
+                    brightness_value = 150
+                    print("Không tìm thấy hình tròn sau khi điều chỉnh độ sáng.")
+                    break
+                cap.set(cv2.CAP_PROP_BRIGHTNESS, brightness_value / 1)
+                time.sleep(0.5)
+
+         #   if (cv2.waitKey(1) & 0xFF == ord('q')) or (time.time() - start_time > 10):
+              #  brightness_value = 100
+             #   break
+
+        cap.release()
+        # cv2.destroyAllWindows()
+
+        print(f"Bán kính lớn nhất được phát hiện: {max_radius} pixel")
+
+
+        #---- giao diện thông báo ------
+        if circle_count == 1:
+            self.finish_cam()
+            Uti.RobotSpeakWithPath('voice_hmi_new/finish_check_cam.wav')
+        else:
+            print(f"Phát hiện được {circle_count} hình tròn")
+            self.error_cam()
+    def check_and_opencamera(self):
+        # Mở camera nếu chưa mở
+        if self.cap_qr is None or not self.cap_qr.isOpened():
+            print("[check_and_opencamera] dang mo camera F")
+            try:
+                self.cap_qr = cv2.VideoCapture(RobConf.faceCame1)
+            except Exception as e:
+                print(e)
+
+        if self.capC is None or not self.capC.isOpened():
+            print("[check_and_opencamera] dang mo camera C")
+            try:
+                self.capC = cv2.VideoCapture(RobConf.headCamera)
+            except Exception as e:
+                print(e)
 ################## ROS ##################
 ################## MANUAL ##################
     def thaydoivantoc(self):
@@ -792,18 +928,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.uic3.Button_khacc.setStyleSheet(self.css_unham)
     def ham_khacc(self):
         print("ham_khacc")
-    def xu_ly_nhap_banphim(self, event):
-        print("da nhap")
-        try:
-            if not hasattr(keyyyyy.Registe, "virtual_keyboard") or not keyyyyy.Registe.virtual_keyboard.isVisible():
-                keyyyyy.Registe.virtual_keyboard = keyyyyy.VKBD(self.uic3.lineEdit_nhaptenban)
-                keyyyyy.Registe.virtual_keyboard.show()
-        
-            else:
-                #keyyyyy.Registe.virtual_keyboard.activateWindow()
-                keyyyyy.Registe.virtual_keyboard.hide()
-        except:
-            print("failed to open virtual keyboard ,already exist ")
+   
     def tatmanhinh_capnhat(self):
         self.from_nhap.close()
     def close_manhinh_nhapban(self):
@@ -1624,9 +1749,275 @@ class MainApp(QMainWindow,Ui_MainWindow):
                     self.sac_pin_tu_dong = False
                     self.stackedWidget.setCurrentWidget(self.page_robot_dichuyen)
                     self.man_hinh_dan_duong()
-                
-               
-                  
+################## Dinh vi C  ##################              
+ # SETUP DINH VI 
+ ## KIEM TRA NUT NHAN PRESS
+    def enable_editing(self, enable):
+        xuly_cham_ngoai()
+        # Kích hoạt hoặc vô hiệu hóa các QLineEdit
+        self.toado_x.setEnabled(enable)
+        self.toado_y.setEnabled(enable)
+        self.toado_z.setEnabled(enable)
+     
+        # Update visual state to match the enabled/disabled state
+        if enable:
+            # Optional: Change background color when enabled
+            self.toado_x.setStyleSheet("background-color: white;")
+            self.toado_y.setStyleSheet("background-color: white;")
+            self.toado_z.setStyleSheet("background-color: white;")
+     
+     
+        else:
+            # Optional: Change background color when disabled
+            self.toado_x.setStyleSheet("background-color: lightgray;")
+            self.toado_y.setStyleSheet("background-color: lightgray;")
+            self.toado_z.setStyleSheet("background-color: lightgray;")
+ ## HAM NUT NHAN CHO PHÉP NHAP TOA DO X Y Z
+    def fcn_enable_type(self):
+        # Kiểm tra trạng thái hiện tại của các QLineEdit
+        current_state = self.toado_x.isEnabled()
+        # Chuyển trạng thái của các QLineEdit
+        self.enable_editing(not current_state)
+         # Update button text to reflect current state
+        if not current_state:  
+          
+            print("Cho Phép Nhập")
+            self.btn_toado_td.setEnabled(True)
+            xuly_cham_ngoai()
+            self.toado_x.mousePressEvent = self.xu_ly_nhap_banphim
+            self.toado_y.mousePressEvent = self.xu_ly_nhap_banphim
+            self.toado_z.mousePressEvent = self.xu_ly_nhap_banphim
+        else:  
+            print("Khóa Nhập")
+            self.btn_toado_td.setEnabled(False)
+    def fcn_nhap_toado_td(self):
+      # self.toado_x.setText() = self.ros2_handle.odom_listener.data_odom[0]
+    #   self.toado_y = self.ros2_handle.odom_listener.data_odom[1]
+      # self.toado_z = (self.ros2_handle.odom_listener.data_odom[3]*180.0)/math.pi
+       self.toado_x.setText(str(round(self.ros2_handle.odom_listener.data_odom[0], 3)))
+       self.toado_y.setText(str(round(self.ros2_handle.odom_listener.data_odom[1], 3)))
+       self.toado_z.setText(str(round(((self.ros2_handle.odom_listener.data_odom[3]*180.0)/math.pi),3)))
+       print("Cap nhat toa do dinh vi")
+       print("X:"+str(self.ros2_handle.odom_listener.data_odom[0]))
+       print("Y:"+str(self.ros2_handle.odom_listener.data_odom[1]))
+       print("Z:"+str((self.ros2_handle.odom_listener.data_odom[3]*180.0)/math.pi))
+     # HAM DUNG DE SAVE VI TRI SAU KHI NHAP
+    def fcn_save_vitri(self):
+        try:
+           
+            toa_do_x = float(self.toado_x.text())
+          #  toa_do_x = float(self.toado_x)
+        except ValueError:
+            self.terminal_2.setPlainText("Error: toado_x is not a valid number")
+            return
+
+        try:
+            toa_do_y = float(self.toado_y.text())
+           # toa_do_y = float(self.toado_y)
+        except ValueError:
+            self.terminal_2.setPlainText("Error: toado_y is not a valid number")
+            return
+
+        try:
+            toa_do_z = float(self.toado_z.text())
+           # toa_do_z = float(self.toado_z)
+        except ValueError:
+            self.terminal_2.setPlainText("Error: toado_z is not a valid number")
+            return
+        try:
+            id_vi_tri = float(self.id_vitri.currentText())
+        except ValueError:
+            self.terminal_2.setPlainText("Error: id_vitri is not a valid number")
+            return
+       
+        self.setup_dv.add_data(toa_do_x, toa_do_y, toa_do_z, id_vi_tri, self.capC, self.cap_qr)
+
+       # self.speak_test("Vị trí đã được lưu")
+        self.check_and_opencamera()
+        self.fcn_load_data()
+        self.terminal_2.setPlainText("Data saved successfully")
+
+    # HAM DUNG DE SET CHIEU RONG CUA COT
+    def set_column_widths(self):
+        self.tableWidget.setColumnWidth(0, 85)  # Cột checkbox
+        self.tableWidget.setColumnWidth(1, 180)  # Cột Image Name
+        self.tableWidget.setColumnWidth(2, 100)  # Cột X
+        self.tableWidget.setColumnWidth(3, 100)  # Cột Y
+        self.tableWidget.setColumnWidth(4, 100)  # Cột Z
+        self.tableWidget.setColumnWidth(5, 100)  # Cột ID
+    # SET CHIEU CAO CUA HANG
+    def set_row_heights(self):
+        for row in range(self.tableWidget.rowCount()):
+            self.tableWidget.setRowHeight(row, 30)  # Chiều cao mỗi hàng là 30 pixel
+
+    # HAM LOAD DATA LEN BANG
+    def fcn_load_data(self):
+        self.setup_dv.array_storted_data()
+        data = self.setup_dv.load_images()
+        num_rows = len(data)
+        num_columns = 6  # 5 dữ liệu và 1 checkbox
+        
+        self.tableWidget.setRowCount(num_rows)
+        self.tableWidget.setColumnCount(num_columns)  
+        self.tableWidget.setHorizontalHeaderLabels(['Select', 'Image Name', 'X', 'Y', 'Z', 'ID'])
+
+        for row_idx, row_data in enumerate(data):
+            # Tạo checkbox cho từng hàng và căn giữa
+            checkbox = QCheckBox()
+            checkbox_widget = QWidget()
+            layout = QHBoxLayout(checkbox_widget)
+            layout.addWidget(checkbox)
+            layout.setAlignment(Qt.AlignCenter)
+            layout.setContentsMargins(0, 0, 0, 0)
+            checkbox_widget.setLayout(layout)
+
+            # Kết nối tín hiệu checkbox với hàm xử lý
+            checkbox.stateChanged.connect(self.get_selected_rows)
+
+            # Thêm widget checkbox vào bảng
+            self.tableWidget.setCellWidget(row_idx, 0, checkbox_widget)
+
+            # Thêm dữ liệu vào các cột còn lại và căn giữa
+            for col_idx, item in enumerate(row_data):
+                item_widget = QTableWidgetItem(str(item))
+                item_widget.setTextAlignment(Qt.AlignCenter)
+                self.tableWidget.setItem(row_idx, col_idx + 1, item_widget)
+
+        self.set_column_widths()
+        self.set_row_heights()
+
+        self.terminal_2.setPlainText("Data loaded successfully")
+
+    # HAM CHON CHECKBOX
+
+    def get_selected_rows(self):
+        self.selected_rows = []
+        num_rows = self.tableWidget.rowCount()
+        for row in range(num_rows):
+            # Lấy widget checkbox từ ô
+            checkbox_widget = self.tableWidget.cellWidget(row, 0)
+            if checkbox_widget and isinstance(checkbox_widget, QWidget):
+                checkbox = checkbox_widget.findChild(QCheckBox)
+                if checkbox and checkbox.isChecked():
+                    # Thêm chỉ số hàng vào mảng, +1 để chỉ số bắt đầu từ 1
+                    self.selected_rows.append(row + 1)
+        
+        print("Selected rows:", self.selected_rows)
+        return self.selected_rows
+    # HAM XOA DU LIEU
+    def fcn_delete_data(self):
+
+        for i in range(len(self.selected_rows)):
+            self.setup_dv.delete_data(self.selected_rows[i])
+
+        self.fcn_load_data()
+        self.terminal.clear()
+        self.selected_rows = []
+     # HAM TEST
+
+    def fcn_test_data(self):
+        start_time = time.time()
+        self.terminal_2.setPlainText("Testing ...")
+        #self.speak_test("Đang kiểm tra vị trí")
+        
+        #rdeg, pdeg, yawdeg = Uti.quaternion_to_euler(self.ros2_handle.odom_listener.data_odom[0],self.ros2_handle.odom_listener.data_odom[1], self.ros2_handle.odom_listener.data_odom[2], self.ros2_handle.odom_listener.data_odom[3])
+       # roll, pitch, yawdeg = self.euler_from_quaternion([0,0, self.ros2_handle.odom_listener.data_odom[2], self.ros2_handle.odom_listener.data_odom[3]])
+        #print("R"+str(roll))
+        #print("P"+str(pitch))
+        #print("Y"+str(yawdeg))
+        #yawdeg = yawdeg*180/math.pi
+        yawdeg  =round((self.ros2_handle.odom_listener.data_odom[3]*180.0)/math.pi,3)
+        print(yawdeg)
+        result  = self.setup_dv.test_image(200, yawdeg, self.capC,  self.cap_qr)
+        result_text = ""
+        for idx, (coords, similarity) in enumerate(result[:1]):
+            result_text += f"({coords[0]}, {coords[1]}, {coords[2]}, {coords[3]}) "
+            result_text += f"{similarity:.6f} \n"
+
+        print(result_text)
+           
+        end_time = time.time() - start_time
+        print("THOI GIAN THUC THI", end_time)
+        self.terminal.setPlainText(result_text)
+        #self.sub_win1.uic.terminal_2.setPlainText("complete the test")
+        #self.sub_win1.uic.terminal_2.setPlainText("time: "+str(end_time)+ " yaw: "+str(yawdeg))
+        #self.sub_win1.uic.terminal_2.setPlainText(str(yawdeg))
+
+        #self.cap_qr = cv2.VideoCapture(RobConf.faceCame1)
+        #self.capC = cv2.VideoCapture(RobConf.headCamera)
+        self.check_and_opencamera()
+
+        self.terminal_2.setPlainText("time: "+str(round(end_time,3))+"s"+ " - yaw: "+str(yawdeg))
+
+
+ # Chay DINH VI
+    def dongThongbaoKTSetup(self, flag):
+            print("done file:   ",flag)
+            if flag == 1:
+                self.from_setup_cam.close()
+                Uti.RobotSpeakWithPath('voice_hmi_new/finish_setup_cam.wav')
+                self.finish_setup_cam()
+            elif flag == 2:
+                print("=============DONE DINH VI ==============")
+            #   self.from_dang_dinhvi.close()
+                Uti.RobotSpeakWithPath('voice_hmi_new/finish_dinhvi.wav')
+                self.finish_dinhvi()
+            elif flag == 10:
+                self.error_setup_cam()
+            else:
+                pass
+    #======================== ham cua nut nhan DINH VI =======================
+     #========================== cac ham GUI nut nhan DINH VI ========================================
+    def dang_dinhvi(self):
+        self.from_dang_dinhvi = QMainWindow()
+        self.uic15 = Ui_Form_dang_dinhvi()
+        self.uic15.setupUi(self.from_dang_dinhvi)
+        self.from_dang_dinhvi.setGeometry(680, 240, 550, 250)
+        self.from_dang_dinhvi.setStyleSheet("background-color:rgb(255, 255, 255);")
+        self.from_dang_dinhvi.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint)
+        self.from_dang_dinhvi.show()
+
+    def error_dinhvi(self):
+        self.from_error_dinhvi = QMainWindow()
+        self.uic16 = Ui_Form_error_dinhvi()
+        self.uic16.setupUi(self.from_error_dinhvi)
+        self.from_error_dinhvi.setGeometry(680, 240, 550, 250)
+        self.from_error_dinhvi.setStyleSheet("background-color:rgb(255, 255, 255);")
+        self.from_error_dinhvi.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint)
+        self.from_error_dinhvi.show()
+        self.uic16.btn_error_gps.clicked.connect(self.close_error_dinhvi)
+
+    def close_error_dinhvi(self):
+        self.from_error_dinhvi.close()
+
+    def finish_dinhvi(self):
+        self.from_finish_dinhvi = QMainWindow()
+        self.uic17 = Ui_Form_finish_dinhvi()
+        self.uic17.setupUi(self.from_finish_dinhvi)
+        self.from_finish_dinhvi.setGeometry(680, 240, 550, 250)
+        self.from_finish_dinhvi.setStyleSheet("background-color:rgb(255, 255, 255);")
+        self.from_finish_dinhvi.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint)
+        self.from_finish_dinhvi.show()
+        self.uic17.btn_finish_gps.clicked.connect(self.close_finish_dinhvi)
+
+    def close_finish_dinhvi(self):
+        self.from_finish_dinhvi.close()
+
+    #========================== cac ham xu ly cua nut nhan DINH VI ========================================
+    def dinh_vi_fcn_1(self): 
+            self.check_and_opencamera()       
+            Uti.RobotSpeakWithPath('voice_hmi_new/dinhvi.wav')
+            print('[dinh_vi_fcn_1]Dang dinh vi ')
+
+          #  if self.dinh_vi_fcn():
+           #     self.dongThongbaoKTSetup(2)
+            #    self.from_dang_dinhvi.close()
+
+            #else:
+             #   print('[dinh_vi_fcn_1]Dinh vi that bai')
+              #  Uti.RobotSpeakWithPath('voice_hmi_new/dinh_vi_that_bai.mp3')
+      
+
 ################## Navigate thread  ##################
     def kiem_tra_du_dieu_khien_chay(self):
         self.read_arduino.start()
@@ -1779,10 +2170,8 @@ class MainApp(QMainWindow,Ui_MainWindow):
           #  print('toi dang di sac')
             
 
-            
-            
-        
-
+                 
+    
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MainApp()
