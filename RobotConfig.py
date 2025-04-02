@@ -94,3 +94,6 @@ LockedVelMode = 2
 UnLockedVelMode = 5
 ManualVelMode = 1
 AutoVelMode = 0
+
+######### KHU VUC BIEN DINH VI
+DO_TUONG_DONG_CAM_DINHVIN = 0.5

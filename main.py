@@ -2006,39 +2006,179 @@ class MainApp(QMainWindow,Ui_MainWindow):
     #========================== cac ham xu ly cua nut nhan DINH VI ========================================
     def dinh_vi_fcn_1(self): 
             self.check_and_opencamera()       
-            Uti.RobotSpeakWithPath('voice_hmi_new/dinhvi.wav')
+          #  Uti.RobotSpeakWithPath('voice_hmi_new/dinhvi.wav')
             print('[dinh_vi_fcn_1]Dang dinh vi ')
 
-          #  if self.dinh_vi_fcn():
-           #     self.dongThongbaoKTSetup(2)
-            #    self.from_dang_dinhvi.close()
+            if self.dinh_vi_fcn():
+                self.dongThongbaoKTSetup(2)
+                self.from_dang_dinhvi.close()
 
-            #else:
-             #   print('[dinh_vi_fcn_1]Dinh vi that bai')
-              #  Uti.RobotSpeakWithPath('voice_hmi_new/dinh_vi_that_bai.mp3')
-      
+            else:
+                print('[dinh_vi_fcn_1]Dinh vi that bai')
+                Uti.RobotSpeakWithPath('voice_hmi_new/dinh_vi_that_bai.mp3')
+    
+    def quaternion_to_euler(self,x, y, z, w):  
+        t0 = +2.0 * (w * x + y * z)
+        t1 = +1.0 - 2.0 * (x * x + y * y)
+        X = math.degrees(math.atan2(t0, t1))
+
+        t2 = +2.0 * (w * y - z * x)
+        t2 = +1.0 if t2 > +1.0 else t2
+        t2 = -1.0 if t2 < -1.0 else t2
+        Y = math.degrees(math.asin(t2))
+
+        t3 = +2.0 * (w * z + x * y)
+        t4 = +1.0 - 2.0 * (y * y + z * z)
+        Z = math.degrees(math.atan2(t3, t4))
+
+        return (X, Y, Z)
+
+    def euler_to_quaternion(self,yaw = 0, pitch = 0, roll = 0):
+        qx = np.sin(roll/2) * np.cos(pitch/2) * np.cos(yaw/2) - np.cos(roll/2) * np.sin(pitch/2) * np.sin(yaw/2)
+        qy = np.cos(roll/2) * np.sin(pitch/2) * np.cos(yaw/2) + np.sin(roll/2) * np.cos(pitch/2) * np.sin(yaw/2)
+        qz = np.cos(roll/2) * np.cos(pitch/2) * np.sin(yaw/2) - np.sin(roll/2) * np.sin(pitch/2) * np.cos(yaw/2)
+        qw = np.cos(roll/2) * np.cos(pitch/2) * np.cos(yaw/2) + np.sin(roll/2) * np.sin(pitch/2) * np.sin(yaw/2)
+
+        return (qx, qy, qz, qw)
+        
+    def dinh_vi_fcn(self):
+        self.navigation_thread.dang_dinhvi_status = True
+        self.dang_dinhvi_cnt = 0
+        Uti.RobotSpeakWithPath('voice_hmi_new/dinhvi.wav')
+        
+        #self.dang_dinhvi()
+         # Tạo cửa sổ thông báo
+        '''msg_box = QMessageBox()
+        msg_box.setWindowTitle("Thông báo")
+        msg_box.setText("Đang định vị robot...")
+        msg_box.setStandardButtons(QMessageBox.NoButton)  # Không có nút bấm nào
+
+        # Hiện cửa sổ thông báo
+        msg_box.show()'''
+        
+     
+    
+        #self.run_file_code_thread.duongdan = 2
+        print('[dinh_vi_fcn]---------------------------BAT DAU QUA TRINH DINH VI------------------------')
+        # self.run_file_code_thread.script_path = "cam_odom/final_cam_set.py"
+        # self.run_file_code_thread.start()
+        #B1: TIM HINH TRONG MAU VANG TREN CAM: NEU CO DUONG TRON THI TINH TAM VA CAP NHAT VI TRI
+        counterMove = 0
+        timeReadcame = 10
+        cricle_yes = False
+        radius_step = 0.5
+        yaw_step = 45
+        radius_current = 0
+        yaw_current = 300
+        result = False
+        while (not result) and (counterMove < timeReadcame): # quay lai qua trinh doc came
+            #if self.navigation_thread.quatrinh_move == False:
+                            #time.sleep(2)
+            rdeg, pdeg, yawdeg = self.quaternion_to_euler(self.ros2_handle.odom_listener.data_odom[0],self.ros2_handle.odom_listener.data_odom[1], self.ros2_handle.odom_listener.data_odom[2], self.ros2_handle.odom_listener.data_odom[3])
+        #self.sub_win1.uic.terminal_2.setPlainText(str(yawdeg))
+       # print("GOC YAWdeg now: ", yawdeg)
+            
+            result  = self.setup_dv.test_image(self.navigation_thread.id, yawdeg, self.capC, self.cap_qr)
+            
+            result_simlar = 0
+            x_best, y_best, yaw_best = 0,0,0
+            for idx, (coords, similarity) in enumerate(result[:1]):
+                x_best, y_best, yaw_best, result_simlar = coords[0], coords[1], coords[2],similarity
+                # result_text += f"({coords[0]}, {coords[1]}, {coords[2]}, {coords[3]}) "
+                # result_text += f"{similarity:.6f} \n"
+
+
+            # rdeg, pdeg, yawdeg = Uti.quaternion_to_euler(self.ros2_handle.odom_listener.data_odom[0],self.ros2_handle.odom_listener.data_odom[1], self.ros2_handle.odom_listener.data_odom[2], self.ros2_handle.odom_listener.data_odom[3])
+            # yess, cx, cy, radius = Uti.dieuchinhvaTimduongtron(camID=headCamera, yaw_ros= yawdeg)
+            if result_simlar > RobConf.DO_TUONG_DONG_CAM_DINHVIN:
+                yess = True
+            else:
+                yess = False
+
+            if yess:
+                # Tinh duoc vi tri hinhtron                    
+                cricle_yes = True
+                # Chinh Pose he thong
+                    # doc thong so ti le cam/m va vi tri home
+                    # Đọc các giá trị từ tệp văn bản
+                xx, yy = x_best,y_best
+           
+                print(f'[dinh_vi_fcn]Vi tri Diem hien tai cho x: {xx}, y = {yy}.')
+                self.navigation_thread.user_set_PoseXY(xx, yy)
+                result = True
+                # print(f"x_dinhvi: {xx};  y_dinhvi: {yy}")
+                # THONG BAO TAT CAC POPUP
+                #self.run_file_code_thread.duongdan = 2
+                #GHI VI TRI HIEN TAI VAO FILE
+                
+                print('[dinh_vi_fcn]------------------- ĐÃ LẤY XONG TỌA ĐỘ ---------------------')
+                # time.sleep(3)
+                Uti.writePose2File(filePath = file_path_pose_data,x=xx,y=yy,z=self.ros2_handle.odom_listener.data_odom[2],w=self.ros2_handle.odom_listener.data_odom[3])
+                #with open('file_text_odom/odom_data.txt', 'w') as file:
+                #    file.write(f'x: {xx}, y: {yy}, z: {self.ros2_handle.odom_listener.data_odom[2]}, w: {self.ros2_handle.odom_listener.data_odom[3]}\n')
+                print(f'[dinh_vi_fcn] x: {xx}, y: {yy}, z: {self.ros2_handle.odom_listener.data_odom[2]}, w: {self.ros2_handle.odom_listener.data_odom[3]}','-pose cam')
+                print("[dinh_vi_fcn]DINH VI XONG!!!!!")
+                break
+            else: #NEU KHONG CO DUOI N LAN THI QUA B2: GOI LENH DI CHUYEN ROBOT DEN VI TRI MONG MUON, CHO HE THONG DUNG, TIM HINH TRON MAU VANG
+                # goi lenh di chuyen robot den vi tri moi
+                # di chuyen den vi tri mong muon
+                # tinh x, y mong muon   
+                # cho he thong dung
+                #kiem tra robot da toi diem mong muon chua:                    
+                yaw_current =yaw_current +  yaw_step
+                if(yaw_current > 360):
+                    radius_current = radius_current+radius_step
+                    yaw_current = 0
+                x_desired = radius_current*np.cos(math.radians(yaw_current))
+                y_desired = radius_current*np.sin(math.radians(yaw_current))
+                z_desired = 0
+                yaw_desired = math.radians(0)
+                qx, qy, qz, qw = self.euler_to_quaternion(yaw_desired,0,0)
+                w_desired = qw 
+                print(f'[dinh_vi_fcn]-------Tim duong tron, Di chuyen den vi tri nay: goc = {yaw_current}, x = {x_desired}, y = {y_desired}')
+                #self.desired_move(x_desired=x_desired, y_desired=y_desired, z_desired=qz, w_desired=qw,id_desired=200)      
+                self.ros2_handle.goal_publisher.send_goal( x = x_desired, y = y_desired, z = z_desired, w = w_desired)
+                print('[dinh_vi_fcn]CHO ROBOT TOI DIEM MOI XONG')
+                counterMove += 1
+
+        #NEU KHONG CO TREN N LAN THI THOAT RA VA THONG BAO BANG HINH ANH VA GIONG NOI
+        self.navigation_thread.dang_dinhvi_status = False 
+        if not cricle_yes:
+            print("DINH VI THAT BAI")
+            Uti.RobotSpeakWithPath('khongtimthayhinhtron.mp3')
+
+            return False
+        else:
+            print("DINH VI XONG HOAN TOAN")
+            # Đóng cửa sổ thông báo sau khi hoàn thành
+            #msg_box.close()
+            return result 
 
 ################## Navigate thread  ##################
     def kiem_tra_du_dieu_khien_chay(self):
-        self.read_arduino.start()
-        self.read_arduino.doc_pin.connect(self.trangthai_pin)
+    #    self.read_arduino.start()
+    #    self.read_arduino.doc_pin.connect(self.trangthai_pin)
         ## Kiem tra dieu khien pin
     #    print("du Pin")
    
         ## Kiem tra da nhap ten phong
-        if( self.navigation_thread.du_pin==True):
-            self.btn_batdau_danduong.setEnabled(True)
-            self.read_arduino.stop()
-            print("du Pin")
-        else:
-            self.btn_batdau_danduong.setEnabled(False)
-            Uti.RobotSpeakWithPath('voice_hmi_new/vuilongsacpin.wav')
-            self.read_arduino.stop()
-            print("Thieu Pin")
+    #    if( self.navigation_thread.du_pin==True):
+   #         self.btn_batdau_danduong.setEnabled(True)
+    #        self.read_arduino.stop()
+    #        print("du Pin")
+     #   else:
+     #       self.btn_batdau_danduong.setEnabled(False)
+    #        Uti.RobotSpeakWithPath('voice_hmi_new/vuilongsacpin.wav')
+      #      self.read_arduino.stop()
+     #       print("Thieu Pin")
+        self.btn_batdau_danduong.setEnabled(True)
 
     
     def button_xn_pressed(self):
-           if(self.id_voice==200 or self.id_voice==123):
+           if(self.id_voice==200):
+            self.stackedWidget.setCurrentWidget(self.page_main)
+           # self.dinh_vi_fcn_1()
+           elif( self.id_voice==123):
             self.stackedWidget.setCurrentWidget(self.page_main)
            else:
             pass
@@ -2049,6 +2189,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
                 self.btn_xac_nhan.setEnabled(True)
                 if self.id_voice == RobConf.HOME_ID:
                     Uti.RobotSpeakWithPath('new_voice/new_hoan_thanh.wav')
+                    
                     
                 else:
                     Uti.RobotSpeakWithPath('voice_hmi_new/new_xac_nhan.wav')
@@ -2073,7 +2214,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.ros2_handle.goal_publisher.send_goal(x_goal, y_goal, z_goal, w_goal)
         # B2 dinh vi 
         print("Robot dang dinh vi")
-
+        
         print("da dinh vi xong")
 
         self.listWidget_ds.clear()
