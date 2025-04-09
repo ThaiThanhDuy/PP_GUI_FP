@@ -329,6 +329,8 @@ class PoseListener(QThread):
             self.node.destroy_node()
 
 
+       
+
 class GoalPosePublisher(QThread):
     # progress_status = pyqtSignal(str, str)  # status_type, message
     reached_goal = pyqtSignal(bool)

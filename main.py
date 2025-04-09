@@ -184,7 +184,9 @@ class MainApp(QMainWindow,Ui_MainWindow):
         # DINH VI
     
         values = [200,100, 123, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        values_yaw = [0,45, 90, 135, 180, -45, -90, -135]
         self.id_vitri.addItems([str(i) for i in values])
+        self.toado_z.addItems([str(i) for i in values_yaw])
         self.setup_dv  = SetupDinhVi()
         self.DINH_VI_BTN()
 
@@ -215,6 +217,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.bt_back_dan_duong.clicked.connect(self.back_setup)
         self.bt_back_setup_3.clicked.connect(self.back_setup)
         self.bt_back_setup_2.clicked.connect(self.back_setup)
+        self.bt_back_dinhvi.clicked.connect(self.back_setup)
         ## diem danh button
         
        
@@ -306,8 +309,10 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.btn_save_data.clicked.connect(self.fcn_save_vitri)
         self.btn_load_data.clicked.connect(self.fcn_load_data)
         self.btn_delete_data.clicked.connect(self.fcn_delete_data) 
+        self.btn_delete_data_all.clicked.connect(self.fcn_delete_data_all) 
         self.btn_test.clicked.connect(self.fcn_test_data)
-        self.btn_dinh_vi.clicked.connect(self.dinh_vi_fcn_1)
+        self.btn_dinh_vi.clicked.connect(self.show_page_dinhvi)
+        self.btn_bd_dinhvi.clicked.connect(self.dinh_vi_fcn_1)
     # Funtion Page
 ################### Page Setup ##################
 
@@ -327,7 +332,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.stackedWidget.setCurrentWidget(self.page_mode)
     def show_dan_duong(self):
         self.stackedWidget.setCurrentWidget(self.page_dan_duong)
-        
+    
     def show_page_setup(self):
         self.stackedWidget.setCurrentWidget(self.page_setup)
         self.show_thong_so_robot()
@@ -336,6 +341,9 @@ class MainApp(QMainWindow,Ui_MainWindow):
     def dan_duong(self):
         self.stackedWidget.setCurrentWidget(self.page_robot_dichuyen)
         self.man_hinh_dan_duong()
+    def show_page_dinhvi(self):
+        self.stackedWidget.setCurrentWidget(self.page_dinhvi)
+   
     # Funtion event 
     def toggleFullScreen(self):
         """ Bật hoặc tắt chế độ toàn màn hình """
@@ -1082,7 +1090,9 @@ class MainApp(QMainWindow,Ui_MainWindow):
             mydb.commit()
             # print(f"Đã xóa các dữ liệu có IDban = {id} trùng lặp")
             # =======gửi tọa độ đã đặt sẵn vào biến data_to_insert
-        self.x, self.y, self.z, self.w = self.ros2_handle.pose_listener.data_odom
+     #   self.x, self.y, self.z, self.w = self.ros2_handle.pose_listener.data_odom
+        self.x, self.y, self.z, self.w = self.ros2_handle.odom_listener.data_odom
+  
        # print(self.x)
        # print(self.y)
        # print(self.z)
@@ -1764,14 +1774,14 @@ class MainApp(QMainWindow,Ui_MainWindow):
             # Optional: Change background color when enabled
             self.toado_x.setStyleSheet("background-color: white;")
             self.toado_y.setStyleSheet("background-color: white;")
-            self.toado_z.setStyleSheet("background-color: white;")
+          # self.toado_z.setStyleSheet("background-color: white;")
      
      
         else:
             # Optional: Change background color when disabled
             self.toado_x.setStyleSheet("background-color: lightgray;")
             self.toado_y.setStyleSheet("background-color: lightgray;")
-            self.toado_z.setStyleSheet("background-color: lightgray;")
+          #  self.toado_z.setStyleSheet("background-color: lightgray;")
  ## HAM NUT NHAN CHO PHÉP NHAP TOA DO X Y Z
     def fcn_enable_type(self):
         # Kiểm tra trạng thái hiện tại của các QLineEdit
@@ -1786,7 +1796,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
             xuly_cham_ngoai()
             self.toado_x.mousePressEvent = self.xu_ly_nhap_banphim
             self.toado_y.mousePressEvent = self.xu_ly_nhap_banphim
-            self.toado_z.mousePressEvent = self.xu_ly_nhap_banphim
+        #    self.toado_z.mousePressEvent = self.xu_ly_nhap_banphim
         else:  
             print("Khóa Nhập")
             self.btn_toado_td.setEnabled(False)
@@ -1796,11 +1806,13 @@ class MainApp(QMainWindow,Ui_MainWindow):
       # self.toado_z = (self.ros2_handle.odom_listener.data_odom[3]*180.0)/math.pi
        self.toado_x.setText(str(round(self.ros2_handle.odom_listener.data_odom[0], 3)))
        self.toado_y.setText(str(round(self.ros2_handle.odom_listener.data_odom[1], 3)))
-       self.toado_z.setText(str(round(((self.ros2_handle.odom_listener.data_odom[3]*180.0)/math.pi),3)))
+   #    self.toado_z.setText(str(round(((self.ros2_handle.odom_listener.data_odom[3]*180.0)/math.pi),3)))
        print("Cap nhat toa do dinh vi")
        print("X:"+str(self.ros2_handle.odom_listener.data_odom[0]))
        print("Y:"+str(self.ros2_handle.odom_listener.data_odom[1]))
        print("Z:"+str((self.ros2_handle.odom_listener.data_odom[3]*180.0)/math.pi))
+       print("Z:"+self.toado_z.currentText())
+
      # HAM DUNG DE SAVE VI TRI SAU KHI NHAP
     def fcn_save_vitri(self):
         try:
@@ -1819,7 +1831,8 @@ class MainApp(QMainWindow,Ui_MainWindow):
             return
 
         try:
-            toa_do_z = float(self.toado_z.text())
+           # toa_do_z = float(self.toado_z.text())
+            toa_do_z = float(self.toado_z.currentText())
            # toa_do_z = float(self.toado_z)
         except ValueError:
             self.terminal_2.setPlainText("Error: toado_z is not a valid number")
@@ -1913,6 +1926,18 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.fcn_load_data()
         self.terminal.clear()
         self.selected_rows = []
+
+
+      # HAM XOA DU LIEU
+    def fcn_delete_data_all(self):
+
+        
+        self.setup_dv.delete_data_all()
+
+        self.fcn_load_data()
+        self.terminal.clear()
+   
+    
      # HAM TEST
 
     def fcn_test_data(self):
@@ -2007,12 +2032,12 @@ class MainApp(QMainWindow,Ui_MainWindow):
     def dinh_vi_fcn_1(self): 
             self.check_and_opencamera()       
           #  Uti.RobotSpeakWithPath('voice_hmi_new/dinhvi.wav')
+           
             print('[dinh_vi_fcn_1]Dang dinh vi ')
-
+            
             if self.dinh_vi_fcn():
                 self.dongThongbaoKTSetup(2)
                 self.from_dang_dinhvi.close()
-
             else:
                 print('[dinh_vi_fcn_1]Dinh vi that bai')
                 Uti.RobotSpeakWithPath('voice_hmi_new/dinh_vi_that_bai.mp3')
@@ -2060,25 +2085,29 @@ class MainApp(QMainWindow,Ui_MainWindow):
     
         #self.run_file_code_thread.duongdan = 2
         print('[dinh_vi_fcn]---------------------------BAT DAU QUA TRINH DINH VI------------------------')
-        # self.run_file_code_thread.script_path = "cam_odom/final_cam_set.py"
-        # self.run_file_code_thread.start()
+
         #B1: TIM HINH TRONG MAU VANG TREN CAM: NEU CO DUONG TRON THI TINH TAM VA CAP NHAT VI TRI
         counterMove = 0
         timeReadcame = 10
         cricle_yes = False
         radius_step = 0.5
         yaw_step = 45
-        radius_current = 0
-        yaw_current = 300
+        radius_current = 0.0
+        radius_step = 0.5
+        yaw_index = 0
+        yaw_current = 0
+       # yaw_list = [0, 45, 90, 135, 180, -135, -90, -45]
+        yaw_list = [0, 45, 90, 135, 180, 225, 270, 315]
         result = False
         while (not result) and (counterMove < timeReadcame): # quay lai qua trinh doc came
             #if self.navigation_thread.quatrinh_move == False:
                             #time.sleep(2)
-            rdeg, pdeg, yawdeg = self.quaternion_to_euler(self.ros2_handle.odom_listener.data_odom[0],self.ros2_handle.odom_listener.data_odom[1], self.ros2_handle.odom_listener.data_odom[2], self.ros2_handle.odom_listener.data_odom[3])
+            rdeg, pdeg, yawdeg = self.quaternion_to_euler(self.ros2_handle.odom_listener.data_odom[0],self.ros2_handle.odom_listener.data_odom[1],
+             0,self.ros2_handle.odom_listener.data_odom[3])
         #self.sub_win1.uic.terminal_2.setPlainText(str(yawdeg))
        # print("GOC YAWdeg now: ", yawdeg)
             
-            result  = self.setup_dv.test_image(self.navigation_thread.id, yawdeg, self.capC, self.cap_qr)
+            result  = self.setup_dv.test_image(200, yawdeg, self.capC, self.cap_qr)
             
             result_simlar = 0
             x_best, y_best, yaw_best = 0,0,0
@@ -2125,31 +2154,42 @@ class MainApp(QMainWindow,Ui_MainWindow):
                 # tinh x, y mong muon   
                 # cho he thong dung
                 #kiem tra robot da toi diem mong muon chua:                    
-                yaw_current =yaw_current +  yaw_step
-                if(yaw_current > 360):
-                    radius_current = radius_current+radius_step
-                    yaw_current = 0
+              #  yaw_current = yaw_current +  yaw_step
+                yaw_current = yaw_list[yaw_index]
+               # if(yaw_current >= 360):
+               #     radius_current = radius_current+radius_step
+              #      yaw_current = (yaw_current + yaw_step) % 360
+                   # yaw_current = 0
+             
+                
                 x_desired = radius_current*np.cos(math.radians(yaw_current))
                 y_desired = radius_current*np.sin(math.radians(yaw_current))
                 z_desired = 0
-                yaw_desired = math.radians(0)
+              #  yaw_desired = math.radians(0)
+                yaw_desired = math.radians(yaw_current)
                 qx, qy, qz, qw = self.euler_to_quaternion(yaw_desired,0,0)
                 w_desired = qw 
                 print(f'[dinh_vi_fcn]-------Tim duong tron, Di chuyen den vi tri nay: goc = {yaw_current}, x = {x_desired}, y = {y_desired}')
                 #self.desired_move(x_desired=x_desired, y_desired=y_desired, z_desired=qz, w_desired=qw,id_desired=200)      
                 self.ros2_handle.goal_publisher.send_goal( x = x_desired, y = y_desired, z = z_desired, w = w_desired)
                 print('[dinh_vi_fcn]CHO ROBOT TOI DIEM MOI XONG')
+                time.sleep(5)
                 counterMove += 1
-
+                # Cập nhật vòng lặp
+                yaw_index += 1
+                if yaw_index >= len(yaw_list):
+                    yaw_index = 0
+                    radius_current += radius_step
         #NEU KHONG CO TREN N LAN THI THOAT RA VA THONG BAO BANG HINH ANH VA GIONG NOI
         self.navigation_thread.dang_dinhvi_status = False 
         if not cricle_yes:
             print("DINH VI THAT BAI")
-            Uti.RobotSpeakWithPath('khongtimthayhinhtron.mp3')
-
+          #  Uti.RobotSpeakWithPath('khongtimthayhinhtron.mp3')
+            self.label_status.setText("Robot định vị thất bại")
             return False
         else:
             print("DINH VI XONG HOAN TOAN")
+            self.label_status.setText("Robot định vị thành công")
             # Đóng cửa sổ thông báo sau khi hoàn thành
             #msg_box.close()
             return result 
@@ -2176,7 +2216,8 @@ class MainApp(QMainWindow,Ui_MainWindow):
     
     def button_xn_pressed(self):
            if(self.id_voice==200):
-            self.stackedWidget.setCurrentWidget(self.page_main)
+          #  self.stackedWidget.setCurrentWidget(self.page_main)
+            self.show_page_dinhvi()
            # self.dinh_vi_fcn_1()
            elif( self.id_voice==123):
             self.stackedWidget.setCurrentWidget(self.page_main)

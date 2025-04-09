@@ -407,6 +407,27 @@ class SetupDinhVi():
         id_delete = id_delete - 1
         self.delete_image_by_index(id_delete)
 
+    def delete_data_all(self):
+            # Clear stored data
+        self.stored_data = []
+
+        # Delete all image files in the directory
+        for file_name in os.listdir(self.image_dir):
+            file_path = os.path.join(self.image_dir, file_name)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+                print(f"Deleted file {file_path}")
+
+        # Optional: delete associated folders/files by keyword (if needed)
+        # Get all filenames without extension
+        for file_name in os.listdir(self.image_dir):
+            file_base, _ = os.path.splitext(file_name)
+            self.delete_specific_files(file_base)
+
+        # Delete all records from the database table
+        query = "DELETE FROM images"
+        self.conn.execute(query)
+        self.conn.commit()
 
     def close(self):
         self.conn.close()

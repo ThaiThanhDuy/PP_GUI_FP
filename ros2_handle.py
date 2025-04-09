@@ -121,6 +121,7 @@ class ROS2Handle(QThread):
         self.pose_listener = PoseListener(self.progress_status)
         self.goal_publisher = GoalPosePublisher(self.progress_status)
 
+
         self.workers = [self.cmd_vel_publisher, self.map_viewer_subcriber, self.odom_listener, self.goal_publisher,self.pose_listener]
         for worker in self.workers:
             worker.start()

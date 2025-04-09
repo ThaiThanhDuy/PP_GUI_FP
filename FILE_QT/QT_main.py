@@ -1013,7 +1013,7 @@ class Ui_MainWindow(object):
 "background-color: rgb(230, 230, 230);\n"
 "\n"
 "}\n"
-"QPushButton#btn_phong3:hover{\n"
+"QPushButton#btn_phong3:pressed{\n"
 "background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));\n"
 "\n"
 "}\n"
@@ -1039,7 +1039,7 @@ class Ui_MainWindow(object):
 "background-color: rgb(230, 230, 230);\n"
 "\n"
 "}\n"
-"QPushButton#btn_phong2:hover{\n"
+"QPushButton#btn_phong2:pressed{\n"
 "background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));\n"
 "\n"
 "}\n"
@@ -1088,7 +1088,7 @@ class Ui_MainWindow(object):
 "background-color: rgb(230, 230, 230);\n"
 "\n"
 "}\n"
-"QPushButton#btn_phong4:hover{\n"
+"QPushButton#btn_phong4:pressed{\n"
 "background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));\n"
 "\n"
 "}\n"
@@ -1114,7 +1114,7 @@ class Ui_MainWindow(object):
 "background-color: rgb(230, 230, 230);\n"
 "\n"
 "}\n"
-"QPushButton#btn_phong5:hover{\n"
+"QPushButton#btn_phong5:pressed{\n"
 "background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));\n"
 "\n"
 "}\n"
@@ -1140,7 +1140,7 @@ class Ui_MainWindow(object):
 "background-color: rgb(230, 230, 230);\n"
 "\n"
 "}\n"
-"QPushButton#btn_phong6:hover{\n"
+"QPushButton#btn_phong6:pressed{\n"
 "background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));\n"
 "\n"
 "}\n"
@@ -1166,7 +1166,7 @@ class Ui_MainWindow(object):
 "background-color: rgb(230, 230, 230);\n"
 "\n"
 "}\n"
-"QPushButton#btn_phong7:hover{\n"
+"QPushButton#btn_phong7:pressed{\n"
 "background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));\n"
 "\n"
 "}\n"
@@ -1192,7 +1192,7 @@ class Ui_MainWindow(object):
 "background-color: rgb(230, 230, 230);\n"
 "\n"
 "}\n"
-"QPushButton#btn_phong8:hover{\n"
+"QPushButton#btn_phong8:pressed{\n"
 "background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));\n"
 "\n"
 "}\n"
@@ -1218,7 +1218,7 @@ class Ui_MainWindow(object):
 "background-color: rgb(230, 230, 230);\n"
 "\n"
 "}\n"
-"QPushButton#btn_phong9:hover{\n"
+"QPushButton#btn_phong9:pressed{\n"
 "background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));\n"
 "\n"
 "}\n"
@@ -1244,7 +1244,7 @@ class Ui_MainWindow(object):
 "background-color: rgb(230, 230, 230);\n"
 "\n"
 "}\n"
-"QPushButton#btn_phong10:hover{\n"
+"QPushButton#btn_phong10:pressed{\n"
 "background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));\n"
 "\n"
 "}\n"
@@ -2855,11 +2855,6 @@ class Ui_MainWindow(object):
         self.toado_y.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.toado_y.setAlignment(QtCore.Qt.AlignJustify|QtCore.Qt.AlignVCenter)
         self.toado_y.setObjectName("toado_y")
-        self.toado_z = QtWidgets.QLineEdit(self.frame_28)
-        self.toado_z.setGeometry(QtCore.QRect(280, 50, 100, 50))
-        self.toado_z.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.toado_z.setAlignment(QtCore.Qt.AlignJustify|QtCore.Qt.AlignVCenter)
-        self.toado_z.setObjectName("toado_z")
         self.label_8 = QtWidgets.QLabel(self.frame_28)
         self.label_8.setGeometry(QtCore.QRect(60, 20, 67, 17))
         self.label_8.setStyleSheet("\n"
@@ -2871,10 +2866,14 @@ class Ui_MainWindow(object):
 "font: 75 17pt \"MS Shell Dlg 2\";")
         self.label_10.setObjectName("label_10")
         self.label_11 = QtWidgets.QLabel(self.frame_28)
-        self.label_11.setGeometry(QtCore.QRect(320, 20, 67, 17))
+        self.label_11.setGeometry(QtCore.QRect(300, 20, 67, 17))
         self.label_11.setStyleSheet("\n"
 "font: 75 17pt \"MS Shell Dlg 2\";")
         self.label_11.setObjectName("label_11")
+        self.toado_z = QtWidgets.QComboBox(self.frame_28)
+        self.toado_z.setGeometry(QtCore.QRect(280, 50, 100, 50))
+        self.toado_z.setStyleSheet("background: white")
+        self.toado_z.setObjectName("toado_z")
         self.frame_29 = QtWidgets.QFrame(self.frame_26)
         self.frame_29.setGeometry(QtCore.QRect(620, 50, 120, 120))
         self.frame_29.setStyleSheet("background-color: rgb(58,192,240);")
@@ -2970,7 +2969,7 @@ class Ui_MainWindow(object):
         self.frame_27.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_27.setObjectName("frame_27")
         self.btn_save_data = QtWidgets.QPushButton(self.frame_27)
-        self.btn_save_data.setGeometry(QtCore.QRect(120, 50, 150, 70))
+        self.btn_save_data.setGeometry(QtCore.QRect(120, 10, 150, 70))
         self.btn_save_data.setStyleSheet("QPushButton#btn_save_data{\n"
 " \n"
 "    border-radius: 15px;\n"
@@ -2990,7 +2989,7 @@ class Ui_MainWindow(object):
 "")
         self.btn_save_data.setObjectName("btn_save_data")
         self.btn_load_data = QtWidgets.QPushButton(self.frame_27)
-        self.btn_load_data.setGeometry(QtCore.QRect(120, 150, 150, 70))
+        self.btn_load_data.setGeometry(QtCore.QRect(120, 100, 150, 70))
         self.btn_load_data.setStyleSheet("QPushButton#btn_load_data{\n"
 " \n"
 "    border-radius: 15px;\n"
@@ -3010,7 +3009,7 @@ class Ui_MainWindow(object):
 "")
         self.btn_load_data.setObjectName("btn_load_data")
         self.btn_delete_data = QtWidgets.QPushButton(self.frame_27)
-        self.btn_delete_data.setGeometry(QtCore.QRect(120, 250, 150, 70))
+        self.btn_delete_data.setGeometry(QtCore.QRect(120, 190, 150, 70))
         self.btn_delete_data.setStyleSheet("QPushButton#btn_delete_data{\n"
 " \n"
 "    border-radius: 15px;\n"
@@ -3030,7 +3029,7 @@ class Ui_MainWindow(object):
 "")
         self.btn_delete_data.setObjectName("btn_delete_data")
         self.btn_test = QtWidgets.QPushButton(self.frame_27)
-        self.btn_test.setGeometry(QtCore.QRect(120, 350, 150, 70))
+        self.btn_test.setGeometry(QtCore.QRect(120, 370, 150, 70))
         self.btn_test.setStyleSheet("QPushButton#btn_test{\n"
 " \n"
 "    border-radius: 15px;\n"
@@ -3060,6 +3059,26 @@ class Ui_MainWindow(object):
         self.label_15.setStyleSheet("\n"
 "font: 75 14pt \"MS Shell Dlg 2\";")
         self.label_15.setObjectName("label_15")
+        self.btn_delete_data_all = QtWidgets.QPushButton(self.frame_27)
+        self.btn_delete_data_all.setGeometry(QtCore.QRect(120, 280, 150, 70))
+        self.btn_delete_data_all.setStyleSheet("QPushButton#btn_delete_data_all{\n"
+" \n"
+"    border-radius: 15px;\n"
+"    background-color: rgb(58,192,240);\n"
+"    font: 75 17pt \"MS Shell Dlg 2\";\n"
+"    \n"
+"}\n"
+"\n"
+"QPushButton#btn_delete_data_all:pressed{\n"
+"padding-left :3px;\n"
+"padding-top :3px;\n"
+"border-radius: 15px;\n"
+"font: 75 17pt \"MS Shell Dlg 2\";\n"
+"\n"
+"background-color: rgb(0,255,0);\n"
+"}\n"
+"")
+        self.btn_delete_data_all.setObjectName("btn_delete_data_all")
         self.bt_back_setup_2 = QtWidgets.QPushButton(self.frame_9)
         self.bt_back_setup_2.setGeometry(QtCore.QRect(1500, 40, 171, 41))
         self.bt_back_setup_2.setStyleSheet("QPushButton#bt_back_setup_2{\n"
@@ -3109,6 +3128,56 @@ class Ui_MainWindow(object):
 "")
         self.label_caidat_dinhvi_2.setAlignment(QtCore.Qt.AlignCenter)
         self.label_caidat_dinhvi_2.setObjectName("label_caidat_dinhvi_2")
+        self.label_status = QtWidgets.QLabel(self.frame_8)
+        self.label_status.setGeometry(QtCore.QRect(710, 370, 421, 121))
+        font = QtGui.QFont()
+        font.setPointSize(26)
+        self.label_status.setFont(font)
+        self.label_status.setObjectName("label_status")
+        self.btn_bd_dinhvi = QtWidgets.QPushButton(self.frame_8)
+        self.btn_bd_dinhvi.setGeometry(QtCore.QRect(660, 700, 211, 71))
+        self.btn_bd_dinhvi.setStyleSheet("QPushButton#btn_bd_dinhvi{\n"
+" \n"
+"    border-radius: 15px;\n"
+"    background-color: rgb(58,192,240);\n"
+"    font: 75 17pt \"MS Shell Dlg 2\";\n"
+"    \n"
+"}\n"
+"\n"
+"QPushButton#btn_bd_dinhvi:pressed{\n"
+"padding-left :3px;\n"
+"padding-top :3px;\n"
+"border-radius: 15px;\n"
+"font: 75 17pt \"MS Shell Dlg 2\";\n"
+"\n"
+"    background-color: rgb(0, 255, 0);\n"
+"}\n"
+"")
+        self.btn_bd_dinhvi.setObjectName("btn_bd_dinhvi")
+        self.bt_back_dinhvi = QtWidgets.QPushButton(self.frame_8)
+        self.bt_back_dinhvi.setGeometry(QtCore.QRect(1400, 80, 171, 41))
+        self.bt_back_dinhvi.setStyleSheet("QPushButton#bt_back_dinhvi{\n"
+"       border-bottom-right-radius :20px;\n"
+"    font: 75 18pt \"MS Shell Dlg 2\";\n"
+"    \n"
+"    /*border: 3px solid rgb(230, 230, 230);*/\n"
+"    color: rgb(0, 0, 0);\n"
+"    \n"
+"    background-color: rgb(220, 220, 220);\n"
+"    background-color: rgb(255, 255, 255);\n"
+"\n"
+"}\n"
+"\n"
+"QPushButton#bt_back_dinhvi:pressed{\n"
+"padding-left :2px;\n"
+"padding-top :2px;\n"
+"\n"
+"    background-color: rgb(50, 192, 240);\n"
+"}\n"
+"")
+        self.bt_back_dinhvi.setIcon(icon14)
+        self.bt_back_dinhvi.setIconSize(QtCore.QSize(60, 60))
+        self.bt_back_dinhvi.setObjectName("bt_back_dinhvi")
         self.stackedWidget.addWidget(self.page_dinhvi)
         self.bt_thoat = QtWidgets.QPushButton(self.centralwidget)
         self.bt_thoat.setGeometry(QtCore.QRect(1870, 0, 51, 41))
@@ -3219,7 +3288,7 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(10)
         self.tab_main.setCurrentIndex(2)
         self.tabWidget_dan_duong.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -3326,10 +3395,9 @@ class Ui_MainWindow(object):
         self.label_caidat_dinhvi.setText(_translate("MainWindow", "CÀI ĐẶT ĐỊNH VỊ ROBOT"))
         self.toado_x.setPlaceholderText(_translate("MainWindow", "Nhập X"))
         self.toado_y.setPlaceholderText(_translate("MainWindow", "Nhập Y"))
-        self.toado_z.setPlaceholderText(_translate("MainWindow", "Nhập Z"))
         self.label_8.setText(_translate("MainWindow", "X"))
         self.label_10.setText(_translate("MainWindow", "Y"))
-        self.label_11.setText(_translate("MainWindow", "Z"))
+        self.label_11.setText(_translate("MainWindow", "YAW"))
         self.label_12.setText(_translate("MainWindow", "ID"))
         self.label_13.setText(_translate("MainWindow", "Enable"))
         self.btn_enable.setText(_translate("MainWindow", "Press"))
@@ -3340,6 +3408,10 @@ class Ui_MainWindow(object):
         self.btn_delete_data.setText(_translate("MainWindow", "Delete"))
         self.btn_test.setText(_translate("MainWindow", "Test"))
         self.label_15.setText(_translate("MainWindow", "Test results"))
+        self.btn_delete_data_all.setText(_translate("MainWindow", "Delete ALL"))
         self.bt_back_setup_2.setText(_translate("MainWindow", "Quay Lại"))
         self.label_caidat_dinhvi_2.setText(_translate("MainWindow", "ĐỊNH VỊ ROBOT"))
+        self.label_status.setText(_translate("MainWindow", "Robot đang định vị "))
+        self.btn_bd_dinhvi.setText(_translate("MainWindow", "BAT DAU DINH VI"))
+        self.bt_back_dinhvi.setText(_translate("MainWindow", "Quay Lại"))
         self.bt_stop.setText(_translate("MainWindow", "STOP"))

@@ -38,7 +38,7 @@ def RobotSpeakWithPath(pathFile):
   pygame.mixer.music.load(voice_path(pathFile))
   pygame.mixer.music.play()
   
-def writePose2File(filePath = 'file_text_odom/odom_data.txt',x=0,y=0,z=0,w=1):
+def writePose2File(filePath = 'txt/odom_data.txt',x=0,y=0,z=0,w=1):
   with open(filePath, 'w') as file:
     file.write(f'x: {x}, y: {y}, z: {z}, w: {w}\n')
   time.sleep(0.1)
