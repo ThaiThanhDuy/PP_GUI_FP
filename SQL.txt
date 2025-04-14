@@ -1,0 +1,34 @@
+- Tao SQL ( Name , ID, Checkin , Checkout , Room,Image(Face) : id_nameID_0 : out , id_nameID_1 : in ) 
+- Mo Camera : + Checkin : Input Checkin.SQL 
+	      + Check Out : Input Checkout.SQL 
+
+CREATE TABLE dd(
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(255) NOT NULL,
+    Room VARCHAR(100) NOT NULL,
+    Checkin BOOLEAN DEFAULT FALSE,
+    Checkout BOOLEAN DEFAULT FALSE,
+    Image_Checkin VARCHAR(255),
+    Image_Checkout VARCHAR(255) );
+
+INSERT INTO dd (Name, Room, Checkin, Checkout,Image_Checkin,Image_Checkout)  
+VALUES ('Nguyen Van B', 'Room 102', TRUE, FALSE,'../image/checkin/1.jpg','../image/checkout/1.jpg');
+
+ALTER TABLE dd
+MODIFY COLUMN Checkin TIME;
+MODIFY COLUMN Checkout TIME;
+
+
+UPDATE dd  
+SET Image_Checkin = CONCAT(ID,'.jpg')  
+WHERE ID = LAST_INSERT_ID(); 
+
+
+ * mysql -u root -p (123456789)
+ * show databases ; 
+ * use 'name_databases';
+ * show tables ; 
+ * select * from ' name_tables' ; 
+ * select " ID " , " Name " from 'name_tables'
+
+
