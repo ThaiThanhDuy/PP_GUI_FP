@@ -1,4 +1,5 @@
 import mysql.connector
+from datetime import datetime
 
 def doc_du_lieu_param_robot(input):
     """Đọc dữ liệu từ bảng parameter_robot và trả về giá trị hoặc danh sách các bản ghi."""
@@ -277,4 +278,80 @@ def setupRobot_sql_save( aVx=0, aVw=0, mVx=0, mVw=0, ss_kc=0, ss_gx=0, led=0, us
 
    
     
-    
+def doc_du_lieu_list(input):
+    """Đọc dữ liệu từ bảng LIST và trả về giá trị hoặc danh sách các bản ghi."""
+
+    try:
+        mydb = mysql.connector.connect(
+            user="robot",
+            password="12345678",
+            host="127.0.0.1",
+            database="sql_rsr"
+        )
+        mycursor = mydb.cursor()
+    except mysql.connector.Error as err:
+        print(f"Lỗi kết nối cơ sở dữ liệu: {err}")
+        return None
+
+    # Truy vấn để lấy dữ liệu từ bảng LIST
+    select_query = "SELECT * FROM LIST;"
+    mycursor.execute(select_query)
+
+    # Lấy tất cả các bản ghi
+    results = mycursor.fetchall()
+
+    # Mapping input keys to corresponding row indices and data types for LIST table
+    input_mapping = {
+        'ID': (0, int),
+        'Name': (1, str),
+        'Room': (2, str),
+        'DateTime_Checkin': (3, datetime),
+        'DateTime_CheckOut': (4, datetime),
+        'Image_Checkin': (5, str),
+        'Image_Checkout': (6, str),
+        'readall': (None, None)  # Special case for readall
+    }
+
+    for row in results:
+        if input in input_mapping:
+            index, data_type = input_mapping[input]
+            if index is not None:
+                return data_type(row[index])
+            elif input == 'readall':
+                return [
+                    (int(row[0]), str(row[1]), str(row[2]),
+                     row[3], row[4], str(row[5]), str(row[6]))
+                    for row in results
+                ]
+
+    return None  # Trả về None nếu input không hợp lệ hoặc không tìm thấy dữ liệu
+
+def delete_all_data_list():
+    """Xóa tất cả dữ liệu từ bảng LIST."""
+    try:
+        mydb = mysql.connector.connect(
+            user="robot",
+            password="12345678",
+            host="127.0.0.1",
+            database="sql_rsr"
+        )
+        mycursor = mydb.cursor()
+    except mysql.connector.Error as err:
+        print(f"Lỗi kết nối cơ sở dữ liệu: {err}")
+        return False
+
+    try:
+        # Câu lệnh SQL để xóa tất cả dữ liệu từ bảng LIST
+        delete_query = "DELETE FROM LIST;"
+        mycursor.execute(delete_query)
+        mydb.commit()
+        print(f"Đã xóa thành công {mycursor.rowcount} bản ghi từ bảng LIST.")
+        return True
+    except mysql.connector.Error as err:
+        print(f"Lỗi khi xóa dữ liệu từ bảng LIST: {err}")
+        mydb.rollback()
+        return False
+    finally:
+        if mydb.is_connected():
+            mycursor.close()
+            mydb.close()

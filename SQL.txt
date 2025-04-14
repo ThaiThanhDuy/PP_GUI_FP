@@ -2,8 +2,8 @@
 - Mo Camera : + Checkin : Input Checkin.SQL 
 	      + Check Out : Input Checkout.SQL 
 
-CREATE TABLE dd(
-    ID INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE LIST(
+    ID INT;
     Name VARCHAR(255) NOT NULL,
     Room VARCHAR(100) NOT NULL,
     Checkin BOOLEAN DEFAULT FALSE,

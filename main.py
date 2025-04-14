@@ -19,6 +19,7 @@ import numpy as np
 import math
 from PIL import Image
 import keyboard
+from pyzbar.pyzbar import decode
 # import rospy
 import os
 import pygame
@@ -190,6 +191,10 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.setup_dv  = SetupDinhVi()
         self.DINH_VI_BTN()
 
+        # DIEM DANH
+        self.CHECK_LIST_BTN()
+        self.checkbox_checkin_2.stateChanged.connect(self.check_checkbox_state)
+
     def xu_ly_nhap_banphim(self, event):
         print("da nhap")
         try:
@@ -216,16 +221,15 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.bt_back_setup_ts_robot.clicked.connect(self.back_setup)
         self.bt_back_dan_duong.clicked.connect(self.back_setup)
         self.bt_back_setup_3.clicked.connect(self.back_setup)
+        self.bt_back_setup_4.clicked.connect(self.back_setup)
         self.bt_back_setup_2.clicked.connect(self.back_setup)
         self.bt_back_dinhvi.clicked.connect(self.back_setup)
-        ## diem danh button
-        
-       
+        self.bt_back_setup_5.clicked.connect(self.back_setup)
 
         #Setup button
         self.bt_setup.clicked.connect(self.show_page_setup)
         self.bt_setup_robot.clicked.connect(self.show_setup_ts_robot)
-        self.bt_di_chuyen.clicked.connect(self.show_dichuyen_robot)
+        self.bt_danhsach.clicked.connect(self.show_danhsach)
         self.btn_save_sql.clicked.connect(self.fcn_save_data_sql)
         self.btn_load_sql.clicked.connect(self.show_thong_so_robot)
         self.btn_resetall_sql.clicked.connect(self.fcn_resetall_sql)
@@ -313,6 +317,21 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.btn_test.clicked.connect(self.fcn_test_data)
         self.btn_dinh_vi.clicked.connect(self.show_page_dinhvi)
         self.btn_bd_dinhvi.clicked.connect(self.dinh_vi_fcn_1)
+
+    def CHECK_LIST_BTN(self):
+        
+        self.cap = None
+        self.timer = QtCore.QTimer()
+        self.timer.timeout.connect(self.update_frame)
+        self.chua_camera.setScaledContents(True)
+        self.chua_camera_3.setText("Chưa quét được mã QR")
+        self.btn_opencamera_2.setEnabled(False)
+        self.camera_running = False
+        self.bt_diem_danh.clicked.connect(self.show_check_list)
+
+        self.btn_opencamera_2.clicked.connect(self.toggle_camera)
+        self.btn_load_ds.clicked.connect(self.fcn_load_list)
+        self.btn_detele_all_ds.clicked.connect(self.fcn_delete_list_all)
     # Funtion Page
 ################### Page Setup ##################
 
@@ -344,6 +363,10 @@ class MainApp(QMainWindow,Ui_MainWindow):
     def show_page_dinhvi(self):
         self.stackedWidget.setCurrentWidget(self.page_dinhvi)
    
+    def show_check_list(self):
+        self.stackedWidget.setCurrentWidget(self.page_check_list)
+    def show_danhsach(self):
+        self.stackedWidget.setCurrentWidget(self.page_danhsach)
     # Funtion event 
     def toggleFullScreen(self):
         """ Bật hoặc tắt chế độ toàn màn hình """
@@ -1917,6 +1940,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
         
         print("Selected rows:", self.selected_rows)
         return self.selected_rows
+
     # HAM XOA DU LIEU
     def fcn_delete_data(self):
 
@@ -2027,6 +2051,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
 
     def close_finish_dinhvi(self):
         self.from_finish_dinhvi.close()
+        
 
     #========================== cac ham xu ly cua nut nhan DINH VI ========================================
     def dinh_vi_fcn_1(self): 
@@ -2216,9 +2241,9 @@ class MainApp(QMainWindow,Ui_MainWindow):
     
     def button_xn_pressed(self):
            if(self.id_voice==200):
-          #  self.stackedWidget.setCurrentWidget(self.page_main)
-            self.show_page_dinhvi()
-           # self.dinh_vi_fcn_1()
+            self.stackedWidget.setCurrentWidget(self.page_main)
+         #   self.show_page_dinhvi()
+        
            elif( self.id_voice==123):
             self.stackedWidget.setCurrentWidget(self.page_main)
            else:
@@ -2300,9 +2325,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
             self.ros2_handle.goal_publisher.send_goal(x_goal, y_goal, z_goal, w_goal)
 
             # B4 Xoa phan tu dau tien 
-            
-            
-            
+                     
     def man_hinh_dan_duong(self):
            
       #  if not self.arduino.batdau_sac:
@@ -2350,10 +2373,200 @@ class MainApp(QMainWindow,Ui_MainWindow):
       #  else:
           #  Uti.RobotSpeakWithPath('voice_hmi_new/toidangdisac.wav')
           #  print('toi dang di sac')
-            
+                   
+################## Checklist  ##################
+#Setup list
+   # HAM DUNG DE SET CHIEU RONG CUA COT
+    def set_column_widths_1(self):
+        self.tableWidget_2.setColumnWidth(0, 85)   # Cột checkbox
+        self.tableWidget_2.setColumnWidth(1, 100)  # Cột ID
+        self.tableWidget_2.setColumnWidth(2, 150)  # Cột NAME
+        self.tableWidget_2.setColumnWidth(3, 100)  # Cột ROOM
+        self.tableWidget_2.setColumnWidth(4, 150)  # Cột DateTime checkin
+        self.tableWidget_2.setColumnWidth(5, 150)  # Cột DateTIme checkout
+        self.tableWidget_2.setColumnWidth(6, 350)  # Cột image checkout
+        self.tableWidget_2.setColumnWidth(7, 350)  # Cột image checkout
+    # SET CHIEU CAO CUA HANG
+    def set_row_heights_1(self):
+        for row in range(self.tableWidget_2.rowCount()):
+            self.tableWidget_2.setRowHeight(row, 30)  # Chiều cao mỗi hàng là 30 pixel
 
-                 
+    # HAM LOAD DATA LEN BANG
+    def fcn_load_list(self):
+        data = sql.doc_du_lieu_list('readall')
+
+        if data is not None:
+            num_rows = len(data)
+            num_columns = 8  # 7 dữ liệu và 1 checkbox
+
+            self.tableWidget_2.clear()  # Xóa dữ liệu cũ trước khi tải lại
+            self.tableWidget_2.setRowCount(num_rows)
+            self.tableWidget_2.setColumnCount(num_columns)
+            self.tableWidget_2.setHorizontalHeaderLabels(['Select', 'ID', 'Name', 'Room', 'DateTime_Checkin', 'DateTime_CheckOut', 'Image_Checkin', ' Image_Checkout'])
+
+            if num_rows > 0:
+                for row_idx, row_data in enumerate(data):
+                    # Tạo checkbox cho từng hàng và căn giữa
+                    checkbox = QCheckBox()
+                    checkbox_widget = QWidget()
+                    layout = QHBoxLayout(checkbox_widget)
+                    layout.addWidget(checkbox)
+                    layout.setAlignment(Qt.AlignCenter)
+                    layout.setContentsMargins(0, 0, 0, 0)
+                    checkbox_widget.setLayout(layout)
+
+                    # Kết nối tín hiệu checkbox với hàm xử lý
+                    checkbox.stateChanged.connect(self.get_selected_rows)
+
+                    # Thêm widget checkbox vào bảng
+                    self.tableWidget_2.setCellWidget(row_idx, 0, checkbox_widget)
+
+                    # Thêm dữ liệu vào các cột còn lại và căn giữa
+                    for col_idx, item in enumerate(row_data):
+                        item_widget = QTableWidgetItem(str(item))
+                        item_widget.setTextAlignment(Qt.AlignCenter)
+                        self.tableWidget_2.setItem(row_idx, col_idx + 1, item_widget)
+
+                self.set_column_widths_1()
+                self.set_row_heights_1()
+
+            self.terminal_3.setPlainText("Data loaded successfully")
+        else:
+            self.tableWidget_2.clear()
+            self.tableWidget_2.setRowCount(0)
+            self.tableWidget_2.setColumnCount(8)  # Vẫn giữ số cột để hiển thị header
+            self.tableWidget_2.setHorizontalHeaderLabels(['Select', 'ID', 'Name', 'Room', 'DateTime_Checkin', 'DateTime_CheckOut', 'Image_Checkin', ' Image_Checkout'])
+            self.terminal_3.setPlainText("Failed to load data.")
+
+    # HAM CHON CHECKBOX
+
+    def get_selected_rows(self):
+        self.selected_rows = []
+        num_rows = self.tableWidget_2.rowCount()
+        for row in range(num_rows):
+            # Lấy widget checkbox từ ô
+            checkbox_widget = self.tableWidget_2.cellWidget(row, 0)
+            if checkbox_widget and isinstance(checkbox_widget, QWidget):
+                checkbox = checkbox_widget.findChild(QCheckBox)
+                if checkbox and checkbox.isChecked():
+                    # Thêm chỉ số hàng vào mảng, +1 để chỉ số bắt đầu từ 1
+                    self.selected_rows.append(row + 1)
+        
+        print("Selected rows:", self.selected_rows)
+        return self.selected_rows
+
+    # HAM XOA DU LIEU
+    def fcn_delete_list_all(self):
+            """Hiển thị hộp thoại xác nhận xóa tất cả dữ liệu và thực hiện xóa nếu người dùng đồng ý."""
+            reply = QMessageBox.question(
+                None,  # Hoặc widget cha nếu có
+                'Xác nhận xóa',
+                'Bạn có chắc chắn muốn xóa *tất cả* dữ liệu trong bảng LIST không?',
+                QMessageBox.Yes | QMessageBox.No,
+                QMessageBox.No  # Nút mặc định được chọn
+            )
+
+            if reply == QMessageBox.Yes:
+                sql.delete_all_data_list()
+                self.fcn_load_list()
+                self.terminal_3.setPlainText("Delete all data successfully")
+                
+            else:
+                self.terminal_3.setPlainText("Deletion cancelled by user.")
+        
+    def check_checkbox_state(self, state):
+        if state == Qt.Checked:
+            self.btn_opencamera_2.setEnabled(True)
+        else:
+            self.btn_opencamera_2.setEnabled(False)
+    def toggle_camera(self):
+        if self.camera_running:
+            self.close_camera()
+        else:
+            self.start_camera()
+    def close_camera(self):
+     
+        self.camera_running = False
+        self.cap.release()
+        self.cap = None
+        self.chua_camera.clear()
+
+    def start_camera(self):
+        self.camera_running = True
+        self.cap = cv2.VideoCapture(6)
+        if not self.cap or not self.cap.isOpened():
+            QtWidgets.QMessageBox.critical(self, "Lỗi", "Không mở được camera.")
+            return
+        self.timer.start(30)  
+
+    def update_frame(self):
+        if not self.cap or not self.cap.isOpened():
+            return
+
+        ret, frame = self.cap.read()
+        if not ret:
+            return
+
+        frame = self.process_qr(frame)
+
+        # Hiển thị ảnh camera
+        rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        h, w, ch = rgb_frame.shape
+        bytes_per_line = ch * w
+        qt_img = QtGui.QImage(rgb_frame.data, w, h, bytes_per_line, QtGui.QImage.Format_RGB888)
+        self.chua_camera.setPixmap(QtGui.QPixmap.fromImage(qt_img))
+
+    def process_qr(self, frame):
+        decoded_objects = decode(frame)
+        result_text = ""
+
+        for obj in decoded_objects:
+            # Giải mã dữ liệu
+            try:
+                qr_data = obj.data.decode('utf-8')
+            except UnicodeDecodeError:
+                qr_data = obj.data.hex()
+
+            # Tách từng dòng và gán biểu tượng tương ứng
+            lines = qr_data.strip().split('\n')
+            for line in lines:
+                if "Tên" in line:
+                    result_text += f"👤 {line}\n"
+                elif "ID" in line:
+                    result_text += f"🆔 {line}\n"
+                elif "Phòng" in line or "phòng" in line:
+                    result_text += f"🏢 {line}\n"
+                else:
+                    result_text += f"{line}\n"
+
+            # Vẽ khung quanh QR code
+            points = obj.polygon
+            if len(points) > 4:
+                hull = cv2.convexHull(np.array([p for p in points], dtype=np.float32))
+                hull = list(map(tuple, np.squeeze(hull)))
+            else:
+                hull = points
+
+            n = len(hull)
+            for j in range(n):
+                cv2.line(frame, hull[j], hull[(j + 1) % n], (0, 255, 0), 2)
+
+        # Cập nhật QLabel chứa kết quả
+        if result_text:
+            self.chua_camera_3.setText(result_text.strip())
+        else:
+            self.chua_camera_3.setText("🔍 Không tìm thấy mã QR")
+
+        return frame
     
+
+
+
+    def closeEvent(self, event):
+        if self.cap:
+            self.cap.release()
+        self.timer.stop()
+        event.accept()
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MainApp()

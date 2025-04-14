@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1906</width>
-    <height>1116</height>
+    <height>1113</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -53,7 +53,7 @@ qproperty-alignment: 'AlignCenter';</string>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>10</number>
+     <number>9</number>
     </property>
     <widget class="QWidget" name="page_main">
      <property name="styleSheet">
@@ -1018,7 +1018,7 @@ QPushButton#bt_dan_duong:pressed{
         </property>
         <property name="icon">
          <iconset>
-          <normaloff>../images/destination.png</normaloff>../images/destination.png</iconset>
+          <normaloff>../../../.designer/images/destination.png</normaloff>../../../.designer/images/destination.png</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -1063,7 +1063,7 @@ QPushButton#bt_diem_danh:pressed{
         </property>
         <property name="icon">
          <iconset>
-          <normaloff>../images/list_flation.png</normaloff>../images/list_flation.png</iconset>
+          <normaloff>../../../.designer/images/list_flation.png</normaloff>../../../.designer/images/list_flation.png</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -1108,7 +1108,7 @@ QPushButton#bt_tra_cuu:pressed{
         </property>
         <property name="icon">
          <iconset>
-          <normaloff>../images/magnifying-glass.png</normaloff>../images/magnifying-glass.png</iconset>
+          <normaloff>../../../.designer/images/magnifying-glass.png</normaloff>../../../.designer/images/magnifying-glass.png</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -1247,7 +1247,7 @@ QPushButton#bt_them:pressed{
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../images/plus.png</normaloff>../images/plus.png</iconset>
+           <normaloff>../../../.designer/images/plus.png</normaloff>../../../.designer/images/plus.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -1292,7 +1292,7 @@ QPushButton#bt_wifi:pressed{
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../images/wifi_setting.png</normaloff>../images/wifi_setting.png</iconset>
+           <normaloff>../../../.designer/images/wifi_setting.png</normaloff>../../../.designer/images/wifi_setting.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -1337,7 +1337,7 @@ QPushButton#bt_setup_cam:pressed{
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../images/setup_cam.png</normaloff>../images/setup_cam.png</iconset>
+           <normaloff>../../../.designer/images/setup_cam.png</normaloff>../../../.designer/images/setup_cam.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -1382,7 +1382,7 @@ QPushButton#bt_check_cam:pressed{
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../images/camera.png</normaloff>../images/camera.png</iconset>
+           <normaloff>../../../.designer/images/camera.png</normaloff>../../../.designer/images/camera.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -1454,7 +1454,7 @@ QPushButton#btn_dinh_vi:pressed{
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../images/gps.png</normaloff>../images/gps.png</iconset>
+           <normaloff>../../../.designer/images/gps.png</normaloff>../../../.designer/images/gps.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -1500,7 +1500,7 @@ QPushButton#bt_set_home:pressed{
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../images/back.png</normaloff>../images/back.png</iconset>
+           <normaloff>../../../.designer/images/back.png</normaloff>../../../.designer/images/back.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -1509,7 +1509,7 @@ QPushButton#bt_set_home:pressed{
           </size>
          </property>
         </widget>
-        <widget class="QPushButton" name="bt_di_chuyen">
+        <widget class="QPushButton" name="bt_danhsach">
          <property name="geometry">
           <rect>
            <x>100</x>
@@ -1519,7 +1519,7 @@ QPushButton#bt_set_home:pressed{
           </rect>
          </property>
          <property name="styleSheet">
-          <string notr="true">QPushButton#bt_di_chuyen{
+          <string notr="true">QPushButton#bt_danhsach{
 	background-color: rgb(255, 255, 128);
 
 color:rgba(0, 0, 0, 255);
@@ -1527,11 +1527,11 @@ border-radius:20px;
 	
 	font: 75 30pt &quot;MS Shell Dlg 2&quot;;
 }
-QPushButton#bt_di_chuyen:hover{
+QPushButton#bt_danhsach:hover{
 	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 255, 255, 255), stop:1 rgba(58, 192, 255, 255));
 
 }
-QPushButton#bt_di_chuyen:pressed{
+QPushButton#bt_danhsach:pressed{
 
  padding-left:5px;
  padding-top:5px;
@@ -1543,11 +1543,11 @@ QPushButton#bt_di_chuyen:pressed{
 </string>
          </property>
          <property name="text">
-          <string>Di Chuyển</string>
+          <string>Danh sách</string>
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../images/xoafont_dieukhien.png</normaloff>../images/xoafont_dieukhien.png</iconset>
+           <normaloff>../../../.designer/images/xoafont_dieukhien.png</normaloff>../../../.designer/images/xoafont_dieukhien.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -1594,7 +1594,7 @@ QPushButton#bt_setup:pressed{
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../images/xoafont_setting.png</normaloff>../images/xoafont_setting.png</iconset>
+           <normaloff>../../../.designer/images/xoafont_setting.png</normaloff>../../../.designer/images/xoafont_setting.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -1666,7 +1666,7 @@ QPushButton#btn_sac_auto:pressed{
         </property>
         <property name="icon">
          <iconset>
-          <normaloff>../../../lab/ROBOT_NH_V3/charging.png</normaloff>../../../lab/ROBOT_NH_V3/charging.png</iconset>
+          <normaloff>../../../../lab/ROBOT_NH_V3/charging.png</normaloff>../../../../lab/ROBOT_NH_V3/charging.png</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -1722,7 +1722,7 @@ padding-top :2px;
         </property>
         <property name="icon">
          <iconset>
-          <normaloff>../../../lab/ROBOT_NH_V3/huong_dan.png</normaloff>../../../lab/ROBOT_NH_V3/huong_dan.png</iconset>
+          <normaloff>../../../../lab/ROBOT_NH_V3/huong_dan.png</normaloff>../../../../lab/ROBOT_NH_V3/huong_dan.png</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -1803,7 +1803,7 @@ QPushButton#bt_mode_manual:pressed{
       </property>
       <property name="icon">
        <iconset>
-        <normaloff>../images/xoafont_dieukhien.png</normaloff>../images/xoafont_dieukhien.png</iconset>
+        <normaloff>../../../.designer/images/xoafont_dieukhien.png</normaloff>../../../.designer/images/xoafont_dieukhien.png</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -1848,7 +1848,7 @@ QPushButton#bt_mode_auto:pressed{
       </property>
       <property name="icon">
        <iconset>
-        <normaloff>../images/xoafont_auto.png</normaloff>../images/xoafont_auto.png</iconset>
+        <normaloff>../../../.designer/images/xoafont_auto.png</normaloff>../../../.designer/images/xoafont_auto.png</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -1893,7 +1893,7 @@ padding-top :2px;
       </property>
       <property name="icon">
        <iconset>
-        <normaloff>../images/quaylai_xoafont.png</normaloff>../images/quaylai_xoafont.png</iconset>
+        <normaloff>../../../.designer/images/quaylai_xoafont.png</normaloff>../../../.designer/images/quaylai_xoafont.png</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -1967,7 +1967,7 @@ QPushButton#bt_setup_robot:pressed{
       </property>
       <property name="icon">
        <iconset>
-        <normaloff>../images/th.jpg</normaloff>../images/th.jpg</iconset>
+        <normaloff>../../../.designer/images/th.jpg</normaloff>../../../.designer/images/th.jpg</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -2012,7 +2012,7 @@ QPushButton#bt_setup_dinh_vi:pressed{
       </property>
       <property name="icon">
        <iconset>
-        <normaloff>../images/dinhvi.jpg</normaloff>../images/dinhvi.jpg</iconset>
+        <normaloff>../../../.designer/images/dinhvi.jpg</normaloff>../../../.designer/images/dinhvi.jpg</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -2058,7 +2058,7 @@ QPushButton#bt_setup_tk:pressed{
       </property>
       <property name="icon">
        <iconset>
-        <normaloff>../images/account.png</normaloff>../images/account.png</iconset>
+        <normaloff>../../../.designer/images/account.png</normaloff>../../../.designer/images/account.png</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -2102,7 +2102,7 @@ padding-top :2px;
       </property>
       <property name="icon">
        <iconset>
-        <normaloff>../images/quaylai_xoafont.png</normaloff>../images/quaylai_xoafont.png</iconset>
+        <normaloff>../../../.designer/images/quaylai_xoafont.png</normaloff>../../../.designer/images/quaylai_xoafont.png</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -2152,7 +2152,7 @@ padding-top :2px;
 </string>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -2679,7 +2679,7 @@ padding-top :2px;
       </property>
       <property name="icon">
        <iconset>
-        <normaloff>../images/quaylai_xoafont.png</normaloff>../images/quaylai_xoafont.png</iconset>
+        <normaloff>../../../.designer/images/quaylai_xoafont.png</normaloff>../../../.designer/images/quaylai_xoafont.png</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -2746,7 +2746,7 @@ background-color: rgb(58, 192, 255);
        </property>
        <property name="icon">
         <iconset>
-         <normaloff>../images/list_flation.png</normaloff>../images/list_flation.png</iconset>
+         <normaloff>../../../.designer/images/list_flation.png</normaloff>../../../.designer/images/list_flation.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -2834,7 +2834,7 @@ background-color: rgb(58, 192, 255);
        </property>
        <property name="icon">
         <iconset>
-         <normaloff>../images/plus.png</normaloff>../images/plus.png</iconset>
+         <normaloff>../../../.designer/images/plus.png</normaloff>../../../.designer/images/plus.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -2941,7 +2941,7 @@ background-color: rgb(58, 192, 255);
        </property>
        <property name="icon">
         <iconset>
-         <normaloff>../images/map.png</normaloff>../images/map.png</iconset>
+         <normaloff>../../../.designer/images/map.png</normaloff>../../../.designer/images/map.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -3114,7 +3114,7 @@ border: 3px solid rgb(255, 255, 255);</string>
        <string/>
       </property>
       <property name="pixmap">
-       <pixmap>../../../lab/ROBOT_NH_V3/images/pic_robotleten-removebg-preview.png</pixmap>
+       <pixmap>../../../../lab/ROBOT_NH_V3/images/pic_robotleten-removebg-preview.png</pixmap>
       </property>
       <property name="scaledContents">
        <bool>true</bool>
@@ -3253,7 +3253,7 @@ background-color: rgb(255,0,0);
        </property>
        <property name="icon">
         <iconset>
-         <normaloff>../../../lab/ROBOT_NH_V3/images/back.png</normaloff>../../../lab/ROBOT_NH_V3/images/back.png</iconset>
+         <normaloff>../../../../lab/ROBOT_NH_V3/images/back.png</normaloff>../../../../lab/ROBOT_NH_V3/images/back.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -3320,7 +3320,7 @@ background-color: rgb(0, 230, 77);
        </property>
        <property name="icon">
         <iconset>
-         <normaloff>../images/checks.png</normaloff>../images/checks.png</iconset>
+         <normaloff>../../../.designer/images/checks.png</normaloff>../../../.designer/images/checks.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -4090,7 +4090,7 @@ padding-top :2px;
        </property>
        <property name="icon">
         <iconset>
-         <normaloff>../images/quaylai_xoafont.png</normaloff>../images/quaylai_xoafont.png</iconset>
+         <normaloff>../../../.designer/images/quaylai_xoafont.png</normaloff>../../../.designer/images/quaylai_xoafont.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -4168,7 +4168,7 @@ padding-top :5px;
        </property>
        <property name="icon">
         <iconset>
-         <normaloff>../../../lab/ROBOT_NH_V3/images/phai_20_09.png</normaloff>../../../lab/ROBOT_NH_V3/images/phai_20_09.png</iconset>
+         <normaloff>../../../../lab/ROBOT_NH_V3/images/phai_20_09.png</normaloff>../../../../lab/ROBOT_NH_V3/images/phai_20_09.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -4225,7 +4225,7 @@ background-color: rgb(58, 192, 255);
        </property>
        <property name="icon">
         <iconset>
-         <normaloff>../images/muitenlen_20_09.png</normaloff>../images/muitenlen_20_09.png</iconset>
+         <normaloff>../../../.designer/images/muitenlen_20_09.png</normaloff>../../../.designer/images/muitenlen_20_09.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -4280,7 +4280,7 @@ padding-top :5px;
        </property>
        <property name="icon">
         <iconset>
-         <normaloff>../../../lab/ROBOT_NH_V3/images/pnd_down_21_09.png</normaloff>../../../lab/ROBOT_NH_V3/images/pnd_down_21_09.png</iconset>
+         <normaloff>../../../../lab/ROBOT_NH_V3/images/pnd_down_21_09.png</normaloff>../../../../lab/ROBOT_NH_V3/images/pnd_down_21_09.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -4335,7 +4335,7 @@ padding-top :5px;
        </property>
        <property name="icon">
         <iconset>
-         <normaloff>../../../lab/ROBOT_NH_V3/images/circle_21_09.png</normaloff>../../../lab/ROBOT_NH_V3/images/circle_21_09.png</iconset>
+         <normaloff>../../../../lab/ROBOT_NH_V3/images/circle_21_09.png</normaloff>../../../../lab/ROBOT_NH_V3/images/circle_21_09.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -4390,7 +4390,7 @@ padding-top :5px;
        </property>
        <property name="icon">
         <iconset>
-         <normaloff>../../../lab/ROBOT_NH_V3/images/trai_20_09.png</normaloff>../../../lab/ROBOT_NH_V3/images/trai_20_09.png</iconset>
+         <normaloff>../../../../lab/ROBOT_NH_V3/images/trai_20_09.png</normaloff>../../../../lab/ROBOT_NH_V3/images/trai_20_09.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -4448,7 +4448,7 @@ border:none;</string>
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>../../../lab/ROBOT_NH_V3/images/xoafotn_velocyty.png</pixmap>
+        <pixmap>../../../../lab/ROBOT_NH_V3/images/xoafotn_velocyty.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>true</bool>
@@ -4531,7 +4531,7 @@ padding-top :2px;
       </property>
       <property name="icon">
        <iconset>
-        <normaloff>../images/quaylai_xoafont.png</normaloff>../images/quaylai_xoafont.png</iconset>
+        <normaloff>../../../.designer/images/quaylai_xoafont.png</normaloff>../../../.designer/images/quaylai_xoafont.png</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -4882,7 +4882,7 @@ background-color: rgb(58, 192, 255);
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../../../lab/ROBOT_NH_V3/images/xoa_iconcapnhat.png</normaloff>../../../lab/ROBOT_NH_V3/images/xoa_iconcapnhat.png</iconset>
+           <normaloff>../../../../lab/ROBOT_NH_V3/images/xoa_iconcapnhat.png</normaloff>../../../../lab/ROBOT_NH_V3/images/xoa_iconcapnhat.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -4944,7 +4944,7 @@ background-color: rgb(58, 192, 255);
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../../../lab/ROBOT_NH_V3/images/xoafont_truicon.png</normaloff>../../../lab/ROBOT_NH_V3/images/xoafont_truicon.png</iconset>
+           <normaloff>../../../../lab/ROBOT_NH_V3/images/xoafont_truicon.png</normaloff>../../../../lab/ROBOT_NH_V3/images/xoafont_truicon.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -5003,7 +5003,7 @@ background-color: rgb(58, 192, 255);
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../../../lab/ROBOT_NH_V3/images/xoafont_save.png</normaloff>../../../lab/ROBOT_NH_V3/images/xoafont_save.png</iconset>
+           <normaloff>../../../../lab/ROBOT_NH_V3/images/xoafont_save.png</normaloff>../../../../lab/ROBOT_NH_V3/images/xoafont_save.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -5062,7 +5062,7 @@ background-color: rgb(58, 192, 255);
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../../../lab/ROBOT_NH_V3/images/xoafont_refesh.png</normaloff>../../../lab/ROBOT_NH_V3/images/xoafont_refesh.png</iconset>
+           <normaloff>../../../../lab/ROBOT_NH_V3/images/xoafont_refesh.png</normaloff>../../../../lab/ROBOT_NH_V3/images/xoafont_refesh.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -5112,7 +5112,7 @@ background-color: rgb(58, 192, 255);
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../../../lab/ROBOT_NH_V3/images/xoafont_congion.png</normaloff>../../../lab/ROBOT_NH_V3/images/xoafont_congion.png</iconset>
+           <normaloff>../../../../lab/ROBOT_NH_V3/images/xoafont_congion.png</normaloff>../../../../lab/ROBOT_NH_V3/images/xoafont_congion.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -5820,7 +5820,7 @@ padding-top :2px;
        </property>
        <property name="icon">
         <iconset>
-         <normaloff>../images/quaylai_xoafont.png</normaloff>../images/quaylai_xoafont.png</iconset>
+         <normaloff>../../../.designer/images/quaylai_xoafont.png</normaloff>../../../.designer/images/quaylai_xoafont.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -5831,7 +5831,7 @@ padding-top :2px;
       </widget>
      </widget>
     </widget>
-    <widget class="QWidget" name="page_check_cam">
+    <widget class="QWidget" name="page_check_list">
      <widget class="QFrame" name="frame_11">
       <property name="geometry">
        <rect>
@@ -5886,10 +5886,623 @@ border-radius: 20px;
 </string>
        </property>
        <property name="text">
-        <string>CHECK CAMERA</string>
+        <string>Điểm danh</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QLabel" name="chua_camera">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>250</y>
+         <width>661</width>
+         <height>621</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>500</width>
+         <height>500</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>900</width>
+         <height>900</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border: 3px solid rgb(215, 215, 215);
+background-color: rgb(255, 255, 255);
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="chua_camera_3">
+       <property name="geometry">
+        <rect>
+         <x>920</x>
+         <y>150</y>
+         <width>720</width>
+         <height>781</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>500</width>
+         <height>500</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>900</width>
+         <height>900</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border: 3px solid rgb(215, 215, 215);
+background-color: rgb(255, 255, 255);
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btn_opencamera_2">
+       <property name="geometry">
+        <rect>
+         <x>720</x>
+         <y>250</y>
+         <width>181</width>
+         <height>50</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>MS Shell Dlg 2</family>
+         <pointsize>17</pointsize>
+         <weight>9</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton#btn_opencamera_2{
+   	border-radius: 15px;
+	font: 75 17pt &quot;MS Shell Dlg 2&quot;;
+	
+	/*border: 3px solid rgb(230, 230, 230);*/
+	background-color: rgb(58,192,240);
+	
+}
+QPushButton#btn_opencamera_2:pressed{
+   	border-radius: 15px;
+	font: 75 17pt &quot;MS Shell Dlg 2&quot;;
+	
+	/*border: 3px solid rgb(230, 230, 230);*/
+	
+	
+	background-color: rgb(0, 255, 0);
+  color: white;           
+   padding-left: 4px;       
+  padding-top: 4px;
+	
+}</string>
+       </property>
+       <property name="text">
+        <string>Camera</string>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>50</width>
+         <height>50</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btn_diemdanh_2">
+       <property name="geometry">
+        <rect>
+         <x>720</x>
+         <y>410</y>
+         <width>181</width>
+         <height>50</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>MS Shell Dlg 2</family>
+         <pointsize>17</pointsize>
+         <weight>9</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton#btn_diemdanh_2{
+   	border-radius: 15px;
+	font: 75 17pt &quot;MS Shell Dlg 2&quot;;
+	
+	/*border: 3px solid rgb(230, 230, 230);*/
+	
+	background-color: rgb(237, 104, 104);
+	
+}
+QPushButton#btn_diemdanh_2:pressed{
+   	border-radius: 15px;
+	font: 75 17pt &quot;MS Shell Dlg 2&quot;;
+	
+	/*border: 3px solid rgb(230, 230, 230);*/
+	
+	background-color: rgb(0, 255, 0);
+  color: white;           
+   padding-left: 4px;       
+  padding-top: 4px;
+	
+}</string>
+       </property>
+       <property name="text">
+        <string>Điểm danh</string>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>50</width>
+         <height>50</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QFrame" name="frame_21">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>150</y>
+         <width>361</width>
+         <height>80</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(230,230,230);
+  border-radius: 20px;</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <widget class="QCheckBox" name="checkbox_checkin_2">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>10</y>
+          <width>181</width>
+          <height>60</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QCheckBox{
+	background-color: rgb(230,230,230);
+	border-radius: 15px;
+font: 75 17pt &quot;MS Shell Dlg 2&quot;;
+}
+QCheckBox:hover{
+padding-left :2px;
+padding-top :2px;
+
+}
+QCheckBox::indicator {
+    
+    border-radius: 10px; /* Đặt độ cong cho ô tích */
+    width: 40px; /* Đặt chiều rộng của ô tích */
+    height: 40px; /* Đặt chiều cao của ô tích */
+	border: 2px solid rgb(0, 0, 0);
+	position: absolute; /* Sử dụng position để định vị */
+    top: 0; /* Di chuyển indicator lên phía trên */
+left:10;
+}
+
+QCheckBox::indicator:unchecked{
+	background-color: rgb(255, 255, 255);
+
+}
+QCheckBox::indicator:checked{
+	
+	
+background-color: rgb(106, 255, 153);
+
+}
+
+
+</string>
+        </property>
+        <property name="text">
+         <string>Check-in</string>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="checkbox_checkout_2">
+        <property name="geometry">
+         <rect>
+          <x>169</x>
+          <y>10</y>
+          <width>191</width>
+          <height>60</height>
+         </rect>
+        </property>
+        <property name="layoutDirection">
+         <enum>Qt::LeftToRight</enum>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QCheckBox{
+	background-color: rgb(230,230,230);
+	border-radius: 15px;
+font: 75 17pt &quot;MS Shell Dlg 2&quot;;
+}
+QCheckBox:hover{
+padding-left :2px;
+padding-top :2px;
+
+}
+QCheckBox::indicator {
+    
+    border-radius: 10px; /* Đặt độ cong cho ô tích */
+    width: 40px; /* Đặt chiều rộng của ô tích */
+    height: 40px; /* Đặt chiều cao của ô tích */
+	border: 2px solid rgb(0, 0, 0);
+	position: absolute; /* Sử dụng position để định vị */
+    top: 0; /* Di chuyển indicator lên phía trên */
+left:10;
+}
+
+QCheckBox::indicator:unchecked{
+	background-color: rgb(255, 255, 255);
+
+}
+QCheckBox::indicator:checked{
+	
+	
+background-color: rgb(106, 255, 153);
+
+}
+
+
+</string>
+        </property>
+        <property name="text">
+         <string>Check-out</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QPushButton" name="bt_back_setup_4">
+       <property name="geometry">
+        <rect>
+         <x>1510</x>
+         <y>50</y>
+         <width>171</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton#bt_back_setup_4{
+   	border-bottom-right-radius :20px;
+	font: 75 18pt &quot;MS Shell Dlg 2&quot;;
+	
+	/*border: 3px solid rgb(230, 230, 230);*/
+	color: rgb(0, 0, 0);
+	
+	background-color: rgb(220, 220, 220);
+	background-color: rgb(255, 255, 255);
+
+}
+
+QPushButton#bt_back_setup_4:pressed{
+padding-left :2px;
+padding-top :2px;
+
+	background-color: rgb(50, 192, 240);
+}
+</string>
+       </property>
+       <property name="text">
+        <string>Quay Lại</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>../../../.designer/images/quaylai_xoafont.png</normaloff>../../../.designer/images/quaylai_xoafont.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>60</width>
+         <height>60</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btn_showlist_2">
+       <property name="geometry">
+        <rect>
+         <x>720</x>
+         <y>330</y>
+         <width>181</width>
+         <height>50</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>MS Shell Dlg 2</family>
+         <pointsize>17</pointsize>
+         <weight>9</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton#btn_showlist_2{
+   	border-radius: 15px;
+	font: 75 17pt &quot;MS Shell Dlg 2&quot;;
+	
+	/*border: 3px solid rgb(230, 230, 230);*/
+	background-color: rgb(58,192,240);
+	
+}
+QPushButton#btn_showlist_2:pressed{
+   	border-radius: 15px;
+	font: 75 17pt &quot;MS Shell Dlg 2&quot;;
+	
+	/*border: 3px solid rgb(230, 230, 230);*/
+	
+	
+	background-color: rgb(0, 255, 0);
+  color: white;           
+   padding-left: 4px;       
+  padding-top: 4px;
+	
+}</string>
+       </property>
+       <property name="text">
+        <string>Danh sách</string>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>50</width>
+         <height>50</height>
+        </size>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_danhsach">
+     <widget class="QFrame" name="frame_12">
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>0</y>
+        <width>1700</width>
+        <height>1000</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(220, 220, 220);
+  border-radius: 20px;</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QLabel" name="label_caidat_cam_3">
+       <property name="geometry">
+        <rect>
+         <x>580</x>
+         <y>40</y>
+         <width>550</width>
+         <height>60</height>
+        </rect>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>800</width>
+         <height>200</height>
+        </size>
+       </property>
+       <property name="sizeIncrement">
+        <size>
+         <width>800</width>
+         <height>200</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>20</pointsize>
+         <weight>50</weight>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">
+background-color: rgb(58,192,240);
+border-radius: 20px;
+</string>
+       </property>
+       <property name="text">
+        <string>Danh sách</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="bt_back_setup_5">
+       <property name="geometry">
+        <rect>
+         <x>1510</x>
+         <y>50</y>
+         <width>171</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton#bt_back_setup_5{
+   	border-bottom-right-radius :20px;
+	font: 75 18pt &quot;MS Shell Dlg 2&quot;;
+	
+	/*border: 3px solid rgb(230, 230, 230);*/
+	color: rgb(0, 0, 0);
+	
+	background-color: rgb(220, 220, 220);
+	background-color: rgb(255, 255, 255);
+
+}
+
+QPushButton#bt_back_setup_5:pressed{
+padding-left :2px;
+padding-top :2px;
+
+	background-color: rgb(50, 192, 240);
+}
+</string>
+       </property>
+       <property name="text">
+        <string>Quay Lại</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>../../../.designer/images/quaylai_xoafont.png</normaloff>../../../.designer/images/quaylai_xoafont.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>60</width>
+         <height>60</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btn_export">
+       <property name="geometry">
+        <rect>
+         <x>1460</x>
+         <y>150</y>
+         <width>211</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton#btn_export{
+ 
+	border-radius: 15px;
+	background-color: rgb(58,192,240);
+	font: 75 17pt &quot;MS Shell Dlg 2&quot;;
+	
+}
+
+QPushButton#btn_export:pressed{
+padding-left :3px;
+padding-top :3px;
+border-radius: 15px;
+font: 75 17pt &quot;MS Shell Dlg 2&quot;;
+
+	background-color: rgb(0, 255, 0);
+}
+</string>
+       </property>
+       <property name="text">
+        <string>Export</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btn_load_ds">
+       <property name="geometry">
+        <rect>
+         <x>1460</x>
+         <y>240</y>
+         <width>211</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton#btn_load_ds{
+ 
+	border-radius: 15px;
+	background-color: rgb(58,192,240);
+	font: 75 17pt &quot;MS Shell Dlg 2&quot;;
+	
+}
+
+QPushButton#btn_load_ds:pressed{
+padding-left :3px;
+padding-top :3px;
+border-radius: 15px;
+font: 75 17pt &quot;MS Shell Dlg 2&quot;;
+
+	background-color: rgb(0, 255, 0);
+}
+</string>
+       </property>
+       <property name="text">
+        <string>Load</string>
+       </property>
+      </widget>
+      <widget class="QPlainTextEdit" name="terminal_3">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>840</y>
+         <width>1391</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>20</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background: white;
+boder-radius:15p;</string>
+       </property>
+      </widget>
+      <widget class="QTableWidget" name="tableWidget_2">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>150</y>
+         <width>1391</width>
+         <height>661</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background: white</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btn_detele_all_ds">
+       <property name="geometry">
+        <rect>
+         <x>1460</x>
+         <y>330</y>
+         <width>211</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton#btn_detele_all_ds{
+ 
+	border-radius: 15px;
+	background-color: rgb(58,192,240);
+	font: 75 17pt &quot;MS Shell Dlg 2&quot;;
+	
+}
+
+QPushButton#btn_detele_all_ds:pressed{
+padding-left :3px;
+padding-top :3px;
+border-radius: 15px;
+font: 75 17pt &quot;MS Shell Dlg 2&quot;;
+
+	background-color: rgb(0, 255, 0);
+}
+</string>
+       </property>
+       <property name="text">
+        <string>Delete all</string>
        </property>
       </widget>
      </widget>
@@ -6542,7 +7155,7 @@ padding-top :2px;
        </property>
        <property name="icon">
         <iconset>
-         <normaloff>../images/quaylai_xoafont.png</normaloff>../images/quaylai_xoafont.png</iconset>
+         <normaloff>../../../.designer/images/quaylai_xoafont.png</normaloff>../../../.designer/images/quaylai_xoafont.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -6699,7 +7312,7 @@ padding-top :2px;
        </property>
        <property name="icon">
         <iconset>
-         <normaloff>../images/quaylai_xoafont.png</normaloff>../images/quaylai_xoafont.png</iconset>
+         <normaloff>../../../.designer/images/quaylai_xoafont.png</normaloff>../../../.designer/images/quaylai_xoafont.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -6725,7 +7338,7 @@ padding-top :2px;
     </property>
     <property name="icon">
      <iconset>
-      <normaloff>../images/close_screen.png</normaloff>../images/close_screen.png</iconset>
+      <normaloff>../../../.designer/images/close_screen.png</normaloff>../../../.designer/images/close_screen.png</iconset>
     </property>
    </widget>
    <widget class="QPushButton" name="bt_thu_phong">
@@ -6742,7 +7355,7 @@ padding-top :2px;
     </property>
     <property name="icon">
      <iconset>
-      <normaloff>../images/minimize_flaticon.png</normaloff>../images/minimize_flaticon.png</iconset>
+      <normaloff>../../../.designer/images/minimize_flaticon.png</normaloff>../../../.designer/images/minimize_flaticon.png</iconset>
     </property>
    </widget>
    <widget class="QPushButton" name="bt_thu_nho">
@@ -6759,7 +7372,7 @@ padding-top :2px;
     </property>
     <property name="icon">
      <iconset>
-      <normaloff>../images/mimiiii_flaticon.png</normaloff>../images/mimiiii_flaticon.png</iconset>
+      <normaloff>../../../.designer/images/mimiiii_flaticon.png</normaloff>../../../.designer/images/mimiiii_flaticon.png</iconset>
     </property>
    </widget>
    <widget class="QPushButton" name="check_pin">
@@ -6820,7 +7433,7 @@ padding-top :6px;
     </property>
     <property name="icon">
      <iconset>
-      <normaloff>../../../lab/ROBOT_NH_V3/images/charging_pin.png</normaloff>../../../lab/ROBOT_NH_V3/images/charging_pin.png</iconset>
+      <normaloff>../../../../lab/ROBOT_NH_V3/images/charging_pin.png</normaloff>../../../../lab/ROBOT_NH_V3/images/charging_pin.png</iconset>
     </property>
     <property name="iconSize">
      <size>
@@ -6863,7 +7476,7 @@ padding-top :6px;
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>../images/logo_optimass.png</pixmap>
+     <pixmap>../../../.designer/images/logo_optimass.png</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
