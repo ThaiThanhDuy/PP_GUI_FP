@@ -354,10 +354,10 @@ class NavigationThread(QThread):
         print(f'publish goal, id: {self.id}')
 
     ##--------------------HAM CHO PHEP SET POSE CHO ROBOT--------------
-    def user_set_PoseXY(self, xP = 0, yP = 0):
-        os.system('rosservice call /move_base/clear_costmaps')
+    def user_set_PoseXY(self, xP = 0, yP = 0,yaw=0):
+        os.system('rosservice call /move_base/clear_costmaps')# ROS1
         # setpose
-        self.publish_pose(xP,yP,self.data_odom[2],self.data_odom[3])
+        self.publish_pose(xP,yP,0.0,yaw)
 
 
         # pub = rospy.Publisher('/slamware_ros_sdk_server_node/set_pose', Pose, queue_size=10)

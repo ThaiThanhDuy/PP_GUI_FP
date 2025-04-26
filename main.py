@@ -3,7 +3,8 @@
 import os
 import traceback
 import tensorflow as tf
-
+from openpyxl import Workbook
+from datetime import datetime
 
 import numpy as np
 import serial
@@ -20,6 +21,7 @@ import math
 from PIL import Image
 import keyboard
 from pyzbar.pyzbar import decode
+import platform
 # import rospy
 import os
 import pygame
@@ -47,7 +49,15 @@ import mysql.connector
 # File Python 
 import Utilities as Uti
 import RobotConfig as RobConf
-
+# TRA CUU
+import pandas as pd
+import pyttsx3
+import textwrap
+import openpyxl
+import google.generativeai as genai
+from gtts import gTTS 
+import speech_recognition as sr
+from playsound3 import playsound  # Thay đổi import ở đây
 #UI
 import keyyyyy
 from FILE_QT.QT_main import Ui_MainWindow 
@@ -69,11 +79,16 @@ from FILE_QT.from_finish_setup_cam import Ui_Form_finish_setup_cam
 from FILE_QT.from_dinhvi import Ui_Form_dang_dinhvi
 from FILE_QT.from_error_dinhvi import Ui_Form_error_dinhvi
 from FILE_QT.from_finish_dinhvi import Ui_Form_finish_dinhvi
+from FILE_QT.from_xn_chuphinh import Ui_Form_xn_chupanh
+from FILE_QT.from_tinh_trang_pin import Ui_Form_status_pin
+from FILE_QT.from_trang_toa_do import Ui_Form_show_toado
+from FILE_QT.form_dv import Ui_Form_ui_dv
 # FILE CUSTOM
 from navigation_thread import NavigationThread
 from arduino_connection import ReadArduinoPin, arduino
 from ros2_handle import ROS2Handle
 import ros2_handle as ros2_handle
+from ros2_custom_nodes import GoalPosePublisher
 import SQL as sql
 from ModuleSetupDinhVi import SetupDinhVi
 # Library GUI
@@ -107,6 +122,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.setupUi(self) 
         self.ros2_handle = ROS2Handle()
         self.status_popup = StatusPopup()
+            
         self.initialize_ros2_manager()
         
         
@@ -171,7 +187,8 @@ class MainApp(QMainWindow,Ui_MainWindow):
      
         self.sac_pin_tu_dong =False
         self.arduino = arduino()
-        
+        self.value_pin =0.0
+        self.phantram_pin = 0
         # Kiemtra robot co dang du chuyen ko 
         if(self.navigation_thread.robot_dang_di_chuyen==True):
             self.bt_mode_auto.setEnabled(False)
@@ -185,7 +202,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
         # DINH VI
     
         values = [200,100, 123, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-        values_yaw = [0,45, 90, 135, 180, -45, -90, -135]
+        values_yaw = [0,45, 90, 135, 180, 225, 270, 315]
         self.id_vitri.addItems([str(i) for i in values])
         self.toado_z.addItems([str(i) for i in values_yaw])
         self.setup_dv  = SetupDinhVi()
@@ -194,7 +211,24 @@ class MainApp(QMainWindow,Ui_MainWindow):
         # DIEM DANH
         self.CHECK_LIST_BTN()
         self.checkbox_checkin_2.stateChanged.connect(self.check_checkbox_state)
+        self.checkbox_checkout_2.stateChanged.connect(self.check_checkbox_state)
 
+        #Tra cuu
+        GOOGLE_API_KEY = "AIzaSyCxp0wD3-6nZOKaRn_WUkvzwlHOKfw-hJw"
+        if not GOOGLE_API_KEY:
+            print("Lỗi: Vui lòng thiết lập API Key.")
+            exit()
+        genai.configure(api_key=GOOGLE_API_KEY)
+        self.model = genai.GenerativeModel('gemini-1.5-flash')
+        self.tc_nha_truong_2.clear()  # Reset danh sách câu hỏi
+        self.label_cau_hoi_ai_2.clear()
+        self.label_tra_loi_ai_2.clear()
+        self.tra_loi_tc_nha_truong_4.clear()  # Reset chỗ hiển thị câu trả lời
+        #gan su kien 
+        self.TRA_CUU_BTN()
+        # trang thai ai 
+        self.ai_dang_chay = False
+        self.di_dendiem_DV = False
     def xu_ly_nhap_banphim(self, event):
         print("da nhap")
         try:
@@ -210,11 +244,11 @@ class MainApp(QMainWindow,Ui_MainWindow):
 ################### Button event ##################
     def setupSingal(self):
     
-        
         self.bt_thoat.clicked.connect(self.close) 
         self.bt_thu_phong.clicked.connect(self.toggleFullScreen)
         self.bt_thu_nho.clicked.connect(self.showMinimized)
         self.bt_thoat.clicked.connect(self.ros2_handle.stop) 
+        self.check_pin.clicked.connect(self.show_data_pin)
         ## Back button
         self.bt_back_setup.clicked.connect(self.back_setup)
         self.bt_back_dichuyen_robot.clicked.connect(self.back_setup)
@@ -225,7 +259,10 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.bt_back_setup_2.clicked.connect(self.back_setup)
         self.bt_back_dinhvi.clicked.connect(self.back_setup)
         self.bt_back_setup_5.clicked.connect(self.back_setup)
-
+        self.bt_back_wifi.clicked.connect(self.back_setup)
+        self.bt_back_setup_ts_robot_2.clicked.connect(self.back_setup)
+        self.bt_back_tc_ai_2.clicked.connect(self.back_setup)
+        self.bt_back_tc_nha_truong_4.clicked.connect(self.back_setup)
         #Setup button
         self.bt_setup.clicked.connect(self.show_page_setup)
         self.bt_setup_robot.clicked.connect(self.show_setup_ts_robot)
@@ -233,9 +270,20 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.btn_save_sql.clicked.connect(self.fcn_save_data_sql)
         self.btn_load_sql.clicked.connect(self.show_thong_so_robot)
         self.btn_resetall_sql.clicked.connect(self.fcn_resetall_sql)
-        self.btn_sac_auto.clicked.connect(self.che_do_sac)
+        
+        self.btn_save_sql_2.clicked.connect(self.fcn_save_data_sql)
+        self.btn_load_sql_2.clicked.connect(self.show_thong_so_robot)
+        self.btn_resetall_sql_2.clicked.connect(self.fcn_resetall_sql)
         
         self.bt_setup_dinh_vi.clicked.connect(self.show_page_setup_dinhvi)
+        self.bt_wifi.clicked.connect(self.show_page_wifi)
+        self.btn_kt_wifi.clicked.connect(self.kiem_tra_wifi)
+        self.btn_ketnoi_mobile.clicked.connect(self.status_ketnoi_mobile)
+        self.bt_set_home.clicked.connect(self.show_dichuyen_robot)
+        self.btn_reset_pw.clicked.connect(self.fcn_reset_password)
+        self.btn_save_pw.clicked.connect(self.fcn_save_password)
+
+        self.bt_setup_tk.clicked.connect(self.show_page_setup_tk)
         #Camera
         self.bt_setup_cam.clicked.connect(self.show_page_setup_cam)
         self.bt_check_cam.clicked.connect(self.dang_nd_cam)
@@ -281,8 +329,8 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.Button_lammoi.clicked.connect(self.xoatoanbo_mysql)
         self.Button_add.clicked.connect(self.manhinh_them)
         self.Button_xoa.clicked.connect(self.xoa_tungthanhphan)
-        self.Button_toado.clicked.connect(self.save_map)
-
+    
+        self.Button_toado.clicked.connect(self.show_toado)
     def control_auto(self):
         self.btn_phong1.clicked.connect(lambda: self.toggle_item(1))
         self.btn_phong2.clicked.connect(lambda: self.toggle_item(2))
@@ -307,7 +355,10 @@ class MainApp(QMainWindow,Ui_MainWindow):
     
         self.btn_ban_do.clicked.connect(self.show_map)
         self.btn_batdau_danduong.clicked.connect(self.dan_duong)
+
+        self.btn_ve_home_khancap.clicked.connect(self.ve_home_khan_cap)
     def DINH_VI_BTN(self):
+        self.ht_chutrinh_dv = True
         self.btn_enable.clicked.connect(self.fcn_enable_type)
         self.btn_toado_td.clicked.connect(self.fcn_nhap_toado_td)
         self.btn_save_data.clicked.connect(self.fcn_save_vitri)
@@ -327,17 +378,44 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.chua_camera_3.setText("Chưa quét được mã QR")
         self.btn_opencamera_2.setEnabled(False)
         self.camera_running = False
+        self.qr_data_buffer = None  # Biến để lưu trữ dữ liệu QR đã quét
+        self.last_qr_text = "Không tìm thấy mã QR" # Lưu trữ text QR cuối cùn
+        self.chup_hinh = None
+        self.ui20 = None
+        self.image_save_path = None # Lưu đường dẫn ảnh sau khi chụp
+        self.checkin_active = False
+        self.checkout_active = False
+        self.is_checkin_processed = False
+        self.is_checkout_processed = False
         self.bt_diem_danh.clicked.connect(self.show_check_list)
 
         self.btn_opencamera_2.clicked.connect(self.toggle_camera)
         self.btn_load_ds.clicked.connect(self.fcn_load_list)
         self.btn_detele_all_ds.clicked.connect(self.fcn_delete_list_all)
+        self.btn_export.clicked.connect(self.export_to_excel)
+        self.btn_diemdanh_2.clicked.connect(self.process_and_add_qr_data)
+        self.checkbox_checkin_2.toggled.connect(self.uncheck_checkout)
+        self.checkbox_checkout_2.toggled.connect(self.uncheck_checkin)
+        self.checkbox_checkin_2.toggled.connect(self.update_checkin_state)
+        self.checkbox_checkout_2.toggled.connect(self.update_checkout_state)
+        self.btn_showlist_2.clicked.connect(self.fcn_load_list_1)
+    
+    def TRA_CUU_BTN(self):
+        self.bt_tra_cuu.clicked.connect(self.show_page_tracuu)
+        self.tc_nha_truong_2.itemClicked.connect(self.on_question_clicked)
+        self.bt_tc_cap_nhat_4.clicked.connect(self.load_excel)
+        self.btn_bat_dau_ai_2.clicked.connect(self.toggle_start_ai)
+        self.btn_tich_hoi_ai_2.clicked.connect(self.xac_nhan_cau_hoi_ai)
+        self.btn_huy_hoi_ai_2.clicked.connect(self.huy_cau_hoi_ai)
+ 
     # Funtion Page
 ################### Page Setup ##################
 
     def back_setup(self):
         self.stackedWidget.setCurrentWidget(self.page_main)
-
+    def Go_to_main(self):
+        self.tabWidget_main = self.findChild(QTabWidget, "tab_main")
+        
     def show_setup_ts_robot(self):
         self.stackedWidget.setCurrentWidget(self.page_setup_ts_robot)
     def show_dichuyen_robot(self):
@@ -346,11 +424,14 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.stackedWidget.setCurrentWidget(self.page_setup_cam)
     def show_page_setup_dinhvi(self):
         self.stackedWidget.setCurrentWidget(self.page_setup_dinhvi)
+    def show_page_setup_tk(self):
+        self.stackedWidget.setCurrentWidget(self.page_setup_tk)
     #Page ros
     def show_page_mode(self):
         self.stackedWidget.setCurrentWidget(self.page_mode)
     def show_dan_duong(self):
         self.stackedWidget.setCurrentWidget(self.page_dan_duong)
+        self.fcn_load_list_0()
     
     def show_page_setup(self):
         self.stackedWidget.setCurrentWidget(self.page_setup)
@@ -361,12 +442,17 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.stackedWidget.setCurrentWidget(self.page_robot_dichuyen)
         self.man_hinh_dan_duong()
     def show_page_dinhvi(self):
+        
         self.stackedWidget.setCurrentWidget(self.page_dinhvi)
-   
     def show_check_list(self):
         self.stackedWidget.setCurrentWidget(self.page_check_list)
     def show_danhsach(self):
         self.stackedWidget.setCurrentWidget(self.page_danhsach)
+
+    def show_page_wifi(self):
+        self.stackedWidget.setCurrentWidget(self.page_wifi)
+    def show_page_tracuu(self):
+        self.stackedWidget.setCurrentWidget(self.page_tra_cuu)
     # Funtion event 
     def toggleFullScreen(self):
         """ Bật hoặc tắt chế độ toàn màn hình """
@@ -374,6 +460,35 @@ class MainApp(QMainWindow,Ui_MainWindow):
             self.showNormal()  # Thoát toàn màn hình
         else:
             self.showFullScreen()  # Bật toàn màn hình
+    def show_data_pin(self):
+        self.UI_xn_pin()
+    def UI_xn_pin(self):
+        self.tinhtrang_pin = QMainWindow()
+        self.ui21 = Ui_Form_status_pin()
+        self.ui21.setupUi(self.tinhtrang_pin)
+        self.ui21.btn_xn_pin.clicked.connect(self.close_ui_pin)
+        self.ui21.btn_sac_auto.clicked.connect(self.che_do_sac)
+        self.ui21.btn_sac_auto.clicked.connect(self.close_ui_pin)
+        self.tinhtrang_pin.show()
+        self.show_pin()
+    def close_ui_pin(self):
+        self.tinhtrang_pin.close()
+    def show_pin(self):
+        self.read_arduino.start()
+        self.read_arduino.doc_pin.connect(self.trangthai_pin)
+
+
+        print(f"{self.value_pin}")
+        if self.value_pin  < 10.6:
+            self.ui21.label_thongbao_pin.setText("Pin yếu vui lòng sạc robot")
+            self.ui21.btn_xn_pin.setIcon(QIcon("/home/robot/ROBOT_HD/images/low-battery_12193220.png"))
+        else :
+            self.ui21.label_thongbao_pin.setText("Pin đủ cho robot")
+            self.ui21.btn_xn_pin.setIcon(QIcon("/home/robot/ROBOT_HD/images/full-battery_12193313.png"))
+        self.phantram_pin = max(0, min(100, int((self.value_pin - 10.3) / 2.0 * 100)))
+
+        self.ui21.label_phantram_pin.setText(f"Percent:{self.phantram_pin}% \nVoltage:{self.value_pin}")
+
     def display_thanhcong(self, text):
         msg = QMessageBox(self)
         msg.setIconPixmap(QIcon(Uti.image_path("check.png")).pixmap(40, 40))  # Đặt biểu tượng tùy chỉnh
@@ -406,6 +521,88 @@ class MainApp(QMainWindow,Ui_MainWindow):
          """)
         msg.resize(650, 450)
         msg.exec_()
+    def kiem_tra_wifi(self):
+        """Kiểm tra trạng thái kết nối WiFi và tên mạng (SSID)."""
+
+        os_name = platform.system()
+
+        if os_name == "Windows":
+            try:
+                output = subprocess.check_output(["netsh", "wlan", "show", "interfaces"], text=True, encoding='utf-8')
+                for line in output.splitlines():
+                    if "State" in line and "Connected" in line:
+                        print("Trạng thái kết nối: Đang kết nối")
+                        for sub_line in output.splitlines():
+                            if "SSID" in sub_line:
+                                ssid = sub_line.split(":")[1].strip()
+                                print(f"Tên WiFi: {ssid}")
+                                return
+                print("Trạng thái kết nối: Không kết nối")
+            except subprocess.CalledProcessError:
+                print("Lỗi khi kiểm tra thông tin WiFi (Windows).")
+                print("Đảm bảo bạn chạy script với quyền quản trị viên.")
+            except FileNotFoundError:
+                print("Lệnh 'netsh' không tìm thấy (Windows).")
+
+        elif os_name == "Linux":
+            try:
+                output = subprocess.check_output(["iwgetid", "-r"], text=True, encoding='utf-8').strip()
+                if output:
+                    print("Trạng thái kết nối: Đang kết nối")
+                    print(f"Tên WiFi: {output}")
+                    self.label_status_2.setText(f"Trạng thái kết nối: Đang kết nối\nTên WiFi: {output}")
+                else:
+                    print("Trạng thái kết nối: Không kết nối")
+                    self.label_status_2.setText("Trạng thái kết nối: Không kết nối")
+            except subprocess.CalledProcessError:
+                print("Trạng thái kết nối: Không kết nối")
+                self.label_status_2.setText("Trạng thái kết nối: Không kết nối")
+            except FileNotFoundError:
+                print("Lệnh 'iwgetid' không tìm thấy (Linux).")
+                print("Hãy đảm bảo bạn đã cài đặt 'wireless-tools'.")
+                self.label_status_2.setText("Lệnh 'iwgetid' không tìm thấy (Linux). \n Hãy đảm bảo bạn đã cài đặt 'wireless-tools'. ")
+
+            # Thử cách khác cho Linux (có thể cần điều chỉnh interface)
+           
+           # try:
+            #    output = subprocess.check_output(["nmcli", "c", "show", "--active"], text=True, encoding='utf-8')
+             #   lines = output.splitlines()
+              #  if len(lines) > 1:
+               #     ssid_line = lines[1].split()[0]
+                #    if ssid_line != "--":
+                #        print("Trạng thái kết nối: Đang kết nối")
+                #        print(f"Tên WiFi: {ssid_line}")
+                #        return
+              #  print("Trạng thái kết nối: Không kết nối")
+            #except subprocess.CalledProcessError:
+             #   print("Lỗi khi kiểm tra thông tin WiFi bằng 'nmcli' (Linux).")
+            #except FileNotFoundError:
+             #   print("Lệnh 'nmcli' không tìm thấy (Linux).")
+              #  print("Hãy đảm bảo bạn đã cài đặt 'network-manager'.")
+
+        elif os_name == "Darwin": # macOS
+            try:
+                output = subprocess.check_output(["/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport", "-I"], text=True, encoding='utf-8')
+                ssid = None
+                state = "Không kết nối"
+                for line in output.splitlines():
+                    if "SSID:" in line:
+                        ssid = line.split(":")[1].strip()
+                        state = "Đang kết nối"
+                        break
+                print(f"Trạng thái kết nối: {state}")
+                if ssid:
+                    print(f"Tên WiFi: {ssid}")
+            except subprocess.CalledProcessError:
+                print("Lỗi khi kiểm tra thông tin WiFi (macOS).")
+            except FileNotFoundError:
+                print("Lệnh 'airport' không tìm thấy (macOS).")
+
+        else:
+            print(f"Hệ điều hành '{os_name}' không được hỗ trợ.")
+    def status_ketnoi_mobile(self):
+        print("ket noi mobile thanh cong")
+        self.label_status_2.setText("ket noi mobile thanh cong")
 ################## Setup ##################
 ################## CAI DAT THONG SO ROBOT ##################
     def show_thong_so_robot(self):
@@ -419,6 +616,124 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.textbox_ccdl.setPlainText(str(RobConf.chieu_cao_led))
         self.textbox_pin_sac_auto.setPlainText(str(RobConf.MUC_DIEN_AP_SAC))
         self.textbox_delay_time.setPlainText(str(RobConf.DELAY_TIME))
+        self.textbox_confirm_pw.setEnabled(False)
+        self.textbox_password.setEnabled(False)
+        self.textbox_username.setEnabled(False)
+        self.textbox_username.setStyleSheet("background-color: rgb(235, 235, 235);")  # Màu xám
+        self.textbox_confirm_pw.setStyleSheet("background-color: rgb(235, 235, 235);")  #Màu xám
+        self.textbox_password.setStyleSheet("background-color: rgb(235, 235, 235);")  #caidatrobot
+    def fcn_reset_password(self):
+        # Define the correct password
+
+        correct_password = self.password_global
+        max_attempts = 3
+        attempts = 0
+        
+        while attempts < max_attempts:
+            # Open an input dialog to get the current password from the user
+            input_dialog = QInputDialog(self)
+            input_dialog.setWindowTitle("Reset Password")
+            input_dialog.setLabelText("Enter current password:")
+            input_dialog.setModal(True)  # Make the dialog modal so it blocks interaction with other windows
+            input_dialog.setFixedSize(500, 300)  # Set the size of the dialog
+            
+            if input_dialog.exec_() == QDialog.Accepted:
+                text = input_dialog.textValue()
+                # Check if the entered password is correct
+                if text == correct_password:
+                    #QMessageBox.information(self, "Success", "Password is correct.")
+                    self.display_thanhcong("Mật khẩu chính xác")
+                    # Enable the desired UI elements
+                    self.textbox_confirm_pw.setEnabled(True)
+                    self.textbox_password.setEnabled(True)
+                    self.textbox_username.setEnabled(True)
+                    self.textbox_username.setStyleSheet("background-color: rgb(255, 255, 255);")  # Màu xám
+                    self.textbox_confirm_pw.setStyleSheet("background-color: rgb(255, 255, 255);")  # Màu xám
+                    self.textbox_password.setStyleSheet("background-color: rgb(255, 255, 255);")  # Màu xám
+                    return True
+                else:
+                    attempts += 1
+                    remaining_attempts = max_attempts - attempts
+                    if remaining_attempts > 0:
+                        QMessageBox.warning(self, "Error", f"Mật khẩu không đúng. Bạn còn {remaining_attempts} lần")
+                    else:
+                        QMessageBox.warning(self, "Error", "Bạn đã vượt quá số lần thử")
+                        return False
+            else:
+                # Handle the case where the user cancels or closes the dialog
+                QMessageBox.warning(self, "Error", "Password reset was cancelled.")
+                return False
+        
+        return False
+    def fcn_save_password(self):
+        try:
+            username_temp = self.textbox_username.toPlainText().strip()
+            
+            # Kiểm tra xem username có chứa text hay không
+            if not username_temp:
+                raise ValueError("Username is empty")  # Tạo lỗi nếu username rỗng
+
+        except ValueError as e:
+            self.display_thatbai("Error!")
+            return
+
+        try:
+            password_temp = self.textbox_password.toPlainText()
+        # Kiểm tra xem username có chứa text hay không
+            if not password_temp:
+                raise ValueError("New password is empty.")  # Tạo lỗi nếu username rỗng
+
+        except ValueError as e:
+            self.display_thatbai(e)
+            return
+        
+        try:
+            confirm_pw = self.textbox_confirm_pw.toPlainText()
+            if not confirm_pw:
+                raise ValueError("Confirm password is empty.")  # Tạo lỗi nếu username rỗng
+
+        except ValueError as e:
+            self.display_thatbai(e)
+            return
+
+        if password_temp == confirm_pw:
+            
+            self.username_global = username_temp
+            self.password_global = password_temp
+
+            Uti.setupRobot_sql_save(
+                self.VX_AUTO_MAX, 
+                self.VW_AUTO_MAX, 
+                self.VX_MANUAL_MAX, 
+                self.VW_MANUAL_MAX, 
+                self.DUNG_SAI_DIEM_DEN_VITRI, 
+                self.DUNG_SAI_DIEM_DEN_GOC, 
+                self.CHIEU_CAO_LED, 
+                self.username_global, 
+                self.password_global, 
+                self.MUC_DIEN_AP_SAC_PIN,
+                self.port_backcamera,
+                self.port_headcamera,
+                self.port_front_L,
+                self.port_front_R,
+            )
+
+            # Đối với QPlainTextEdit
+            self.textbox_username.setStyleSheet("background-color: rgb(235, 235, 235);")  # Màu xám
+            self.textbox_confirm_pw.setStyleSheet("background-color: rgb(235, 235, 235);")  # Màu xám
+            self.textbox_password.setStyleSheet("background-color: rgb(235, 235, 235);")  # Màu xám
+            self.textbox_username.clear()
+            self.textbox_password.clear()
+            self.textbox_confirm_pw.clear()
+            self.textbox_confirm_pw.setEnabled(False)
+            self.textbox_password.setEnabled(False)
+            self.textbox_username.setEnabled(False)
+            self.display_thanhcong("Mật khẩu đã được cập nhật")
+
+
+        else:
+          
+            self.display_thatbai("Error: mật khẩu xác nhận sai")
 
     def validate_input(self, value, min_value, max_value, error_message):
         if value is None:  # Kiểm tra xem giá trị có phải là None không
@@ -427,7 +742,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
             raise ValueError(f"{error_message} is a number")
         if value < min_value or value > max_value:
             raise ValueError(f"{error_message} (giá trị hợp lệ: {min_value} đến {max_value})")
-
+    
     def fcn_save_data_sql(self):
         try:
         # Kiểm tra từng giá trị từ textbox
@@ -478,13 +793,13 @@ class MainApp(QMainWindow,Ui_MainWindow):
             self.DUNG_SAI_DIEM_DEN_VITRI,
             self.DUNG_SAI_DIEM_DEN_GOC,
             self.CHIEU_CAO_LED,
-            self.username_global,
-            self.password_global,
             self.MUC_DIEN_AP_SAC_PIN,
             self.port_backcamera,
             self.port_headcamera,
             self.port_front_L,
             self.port_front_R,
+            self.username_global,
+            self.password_global,
         )
             if success:
                 self.display_thanhcong("Dữ Liệu Đã Lưu Thành Công")
@@ -514,6 +829,8 @@ class MainApp(QMainWindow,Ui_MainWindow):
             self.DUNG_SAI_DIEM_DEN_GOC = RobConf.DUNG_SAI_GOC_DF
             self.CHIEU_CAO_LED = RobConf.CHIEU_CAO_LED_DF
             self.MUC_DIEN_AP_SAC_PIN = RobConf.MUC_DIEN_AP_DF 
+            self.username_global = RobConf.USERNAME_DF 
+            self.password_global = RobConf.PASSWORD_DF 
             
             sql.setupRobot_sql_save(
                 self.VX_AUTO_MAX,
@@ -1410,6 +1727,67 @@ class MainApp(QMainWindow,Ui_MainWindow):
             f'gnome-terminal -- bash -c "cd {map_folder_path} && rosrun map_server map_saver -f mymap2"')
         # time.sleep(3)
         print("1234556789")
+
+    def show_toado(self):
+        self.UI_page_toado()
+    def UI_page_toado(self):
+        self.load_toado = QMainWindow()
+        self.ui22 = Ui_Form_show_toado()
+        self.ui22.setupUi(self.load_toado)
+        self.ui22.btn_close_toado.clicked.connect(self.close_ui_toado)
+        self.load_toado.show()
+        self.load_toado_sql()
+    def close_ui_toado(self):
+        self.load_toado.close()
+    def load_toado_sql(self):
+        self.fcn_load_toado()
+
+    # HAM DUNG DE SET CHIEU RONG CUA COT
+   # SET CHIEU RONG CUA COT
+    def set_column_widths_3(self):
+        self.ui22.tableWidget_toado.setColumnWidth(0, 200)  # Cột toadoX
+        self.ui22.tableWidget_toado.setColumnWidth(1, 200)  # Cột toadoY
+        self.ui22.tableWidget_toado.setColumnWidth(2, 200)  # Cột toadoZ
+        self.ui22.tableWidget_toado.setColumnWidth(3, 200)  # Cột toadoW
+        self.ui22.tableWidget_toado.setColumnWidth(4, 200)  # Cột IDban
+    # SET CHIEU CAO CUA HANG
+    def set_row_heights_3(self):
+        for row in range(self.ui22.tableWidget_toado.rowCount()):
+            self.ui22.tableWidget_toado.setRowHeight(row, 30)  # Chiều cao mỗi hàng là 30 pixel
+
+    # HAM LOAD DATA LEN BANG
+    def fcn_load_toado(self):
+        data = sql.doc_du_lieu_toado('readall')
+
+        if data is not None:
+            num_rows = len(data)
+            num_columns = 5  # 5 cột dữ liệu
+
+            self.ui22.tableWidget_toado.clear()  # Xóa dữ liệu cũ trước khi tải lại
+            self.ui22.tableWidget_toado.setRowCount(num_rows)
+            self.ui22.tableWidget_toado.setColumnCount(num_columns)
+            self.ui22.tableWidget_toado.setHorizontalHeaderLabels(['toadoX', 'toadoY', 'toadoZ', 'toadoW', 'IDban'])
+
+            if num_rows > 0:
+                for row_idx, row_data in enumerate(data):
+                    # Thêm dữ liệu vào các cột và căn giữa
+                    for col_idx, item in enumerate(row_data):
+                        item_widget = QTableWidgetItem(str(item))
+                        item_widget.setTextAlignment(Qt.AlignCenter)
+                        self.ui22.tableWidget_toado.setItem(row_idx, col_idx, item_widget)
+
+                self.set_column_widths_3()
+                self.set_row_heights_3()
+
+            self.ui22.terminal_toado.setPlainText("Data loaded successfully")
+        else:
+            self.ui22.tableWidget_toado.clear()
+            self.ui22.tableWidget_toado.setRowCount(0)
+            self.ui22.tableWidget_toado.setColumnCount(7)  # Cập nhật số cột header
+            self.ui22.tableWidget_toado.setHorizontalHeaderLabels(['toadoX', 'toadoY', 'toadoZ', 'toadoW', 'IDban'])
+            self.ui22.terminal_toado.setPlainText("Failed to load data.")
+    # HAM CHON CHECKBOX
+    
 ################## GIAO DIEN THEM PHONG DE CHAY ##################
     def hien_thi_nut_theo_id(self):
         nut_dict = {
@@ -1480,8 +1858,120 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.listWidget_ds.clear()
         for item in items:
             self.listWidget_ds.addItem(item)
-        
+################## GIAO DIEN  CHAY DANH SACH ##################
+    # SET CHIEU CAO CUA HANG
+    def set_column_widths_0(self):
+        self.tableWidget_4.setColumnWidth(0, 85)    # Cột checkbox
+        self.tableWidget_4.setColumnWidth(1, 220)   # Cột ID
+        self.tableWidget_4.setColumnWidth(2, 320)   # Cột NAME
+        self.tableWidget_4.setColumnWidth(3, 200)   # Cột ROOM
+    def set_row_heights_0(self):
+        for row in range(self.tableWidget_4.rowCount()):
+            self.tableWidget_4.setRowHeight(row, 50)    # Chiều cao mỗi hàng là 50 pixel
 
+    # HAM LOAD DATA LEN BANG
+    def set_column_widths_0(self):
+        self.tableWidget_4.setColumnWidth(0, 85)     # Cột checkbox
+        self.tableWidget_4.setColumnWidth(1, 220)    # Cột ID
+        self.tableWidget_4.setColumnWidth(2, 320)    # Cột NAME
+        self.tableWidget_4.setColumnWidth(3, 200)    # Cột ROOM
+    def set_row_heights_0(self):
+        for row in range(self.tableWidget_4.rowCount()):
+            self.tableWidget_4.setRowHeight(row, 50)     # Chiều cao mỗi hàng là 50 pixel
+
+ # HAM LOAD DATA LEN BANG
+    def fcn_load_list_0(self):
+        data = sql.doc_du_lieu_list('readall')
+
+        if data is not None:
+            num_rows = len(data)
+            num_columns = 4    # Đúng số cột dữ liệu
+
+            self.tableWidget_4.clear()     # Xóa dữ liệu cũ trước khi tải lại
+            self.tableWidget_4.setRowCount(num_rows)
+            self.tableWidget_4.setColumnCount(num_columns)
+            self.tableWidget_4.setHorizontalHeaderLabels(['Select','ID', 'Name', 'Room'])
+
+            if num_rows > 0:
+                for row_idx, row_data in enumerate(data):
+                    # Tạo checkbox cho từng hàng và căn giữa
+                    checkbox = QCheckBox()
+                    checkbox_widget = QWidget()
+                    layout = QHBoxLayout(checkbox_widget)
+                    layout.addWidget(checkbox)
+                    layout.setAlignment(Qt.AlignCenter)
+                    layout.setContentsMargins(0, 0, 0, 0)
+                    checkbox_widget.setLayout(layout)
+
+                    # Kết nối tín hiệu checkbox với hàm xử lý
+                    # Truyền thêm row_idx vào hàm get_selected_rows_0
+                    checkbox.stateChanged.connect(lambda state, row=row_idx: self.handle_checkbox_change_0(state, row))
+
+                    # Thêm widget checkbox vào bảng
+                    self.tableWidget_4.setCellWidget(row_idx, 0, checkbox_widget)
+
+                    # Thêm dữ liệu vào các cột còn lại và căn giữa
+                    for col_idx, item in enumerate(row_data):
+                        item_widget = QTableWidgetItem(str(item))
+                        item_widget.setTextAlignment(Qt.AlignCenter)
+                        self.tableWidget_4.setItem(row_idx, col_idx + 1, item_widget)
+
+                self.set_column_widths_0()
+                self.set_row_heights_0()
+
+            else:
+                self.tableWidget_4.clear()
+                self.tableWidget_4.setRowCount(0)
+                self.tableWidget_4.setColumnCount(4)     # Đúng số cột dữ liệu
+                self.tableWidget_4.setHorizontalHeaderLabels(['Select','ID', 'Name', 'Room'])
+
+    def handle_checkbox_change_0(self, state, row):
+        # Lấy dữ liệu của hàng được chọn
+        room_number = self.tableWidget_4.item(row, 3).text() # Cột 'Room' có index là 3
+
+        if state == Qt.Checked:
+            # Nếu checkbox được chọn, kiểm tra trùng lặp trước khi thêm
+            found = False
+            for i in range(self.listWidget_ds.count()):
+                if self.listWidget_ds.item(i).text() == room_number:
+                    found = True
+                    break
+            if not found:
+                self.listWidget_ds.addItem(room_number)
+                print(f"Đã chọn hàng {row + 1}, thêm phòng: {room_number}")
+                self.kiem_tra_du_dieu_khien_chay()
+                self.sort_items() # Add this line to sort items after each toggle
+            else:
+                print(f"Phòng {room_number} đã tồn tại trong danh sách.")
+                # Nếu đã tồn tại, có thể bỏ chọn lại checkbox (tùy vào logic bạn muốn)
+                checkbox_widget = self.tableWidget_4.cellWidget(row, 0)
+                if checkbox_widget and isinstance(checkbox_widget, QWidget):
+                    checkbox = checkbox_widget.findChild(QCheckBox)
+                    if checkbox:
+                        checkbox.setChecked(False)
+
+        else:
+            # Nếu checkbox bị bỏ chọn, tìm và xóa số phòng khỏi listWidget_ds
+            for i in range(self.listWidget_ds.count()):
+                if self.listWidget_ds.item(i).text() == room_number:
+                    self.listWidget_ds.takeItem(i)
+                    print(f"Đã bỏ chọn hàng {row + 1}, xóa phòng: {room_number}")
+                    break
+
+    def get_selected_rows_0(self):
+        # Hàm này bây giờ có thể không cần thiết nếu bạn xử lý việc thêm/xóa trực tiếp
+        # trong handle_checkbox_change_0, nhưng vẫn giữ lại nếu bạn có logic khác
+        self.selected_rows_0 = []
+        num_rows = self.tableWidget_4.rowCount()
+        for row in range(num_rows):
+            checkbox_widget = self.tableWidget_4.cellWidget(row, 0)
+            if checkbox_widget and isinstance(checkbox_widget, QWidget):
+                checkbox = checkbox_widget.findChild(QCheckBox)
+                if checkbox and checkbox.isChecked():
+                    self.selected_rows_0.append(row + 1)
+
+        print("Selected rows:", self.selected_rows_0)
+        return self.selected_rows_0
     ################## SHOW MAP  ##################
     def show_map(self):
         self.mymap = QMainWindow()
@@ -1703,7 +2193,6 @@ class MainApp(QMainWindow,Ui_MainWindow):
         label.setStyleSheet(csshome)
         label.setAlignment(Qt.AlignCenter)
         self.view.scene().addWidget(label)
-
 ################## PIN ##################
 
     def trangthai_pin(self, status):
@@ -1716,8 +2205,8 @@ class MainApp(QMainWindow,Ui_MainWindow):
                     if status != "B":
                         try:
                             parts = status.split()  # Tách chuỗi thành danh sách các phần tử
-                            value = float(parts[0])  # Lấy phần tử đầu tiên và chuyển đổi
-                            if value < 10.6:
+                            self.value_pin  = float(parts[0])  # Lấy phần tử đầu tiên và chuyển đổi
+                            if self.value_pin  < 10.6:
                                 print("Giá trị điện áp nhỏ hơn 10.8 :", value)
                              
                                 print("Thiếu điện")
@@ -1729,8 +2218,8 @@ class MainApp(QMainWindow,Ui_MainWindow):
                            #     Uti.RobotSpeakWithPath('voice_hmi_new/batdau_quatrinh_sac.wav')
                                 time.sleep(2)
                              #   self.Auto_charing()
-                            elif value > 10.6:
-                                print("Giá trị điện áp lớn hơn 10.8 :", value)
+                            elif self.value_pin  > 10.6:
+                                print("Giá trị điện áp lớn hơn 10.8 :", self.value_pin )
                                 print("Đủ điện")
                                 time.sleep(2)
                             #    Uti.RobotSpeakWithPath('voice_hmi_new/thongbao_pin_day.wav')
@@ -1739,7 +2228,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
                                 self.read_arduino.stop()
                              #   self.ve_home_trong_chu_trinh()
                             else:
-                                print("Giá trị điện áp bình thường :", value)
+                                print("Giá trị điện áp bình thường :", self.value_pin )
                                 self.read_arduino.doc_pin.disconnect(self.trangthai_pin)
                                 self.read_arduino.stop()
                         except (ValueError, IndexError): #Thêm IndexError đề phòng trường hợp parts không có index 0
@@ -1750,17 +2239,19 @@ class MainApp(QMainWindow,Ui_MainWindow):
     def che_do_sac(self):
         self.on_off_sac_tu_dong = not self.on_off_sac_tu_dong
         if self.on_off_sac_tu_dong:
-            self.btn_sac_auto.setStyleSheet("background-color: rgb(0,255,0);border-radius:20px;")
+            self.ui21.btn_sac_auto.setStyleSheet("background-color: rgb(0,255,0);border-radius:20px;")
             Uti.RobotSpeakWithPath('voice_hmi_new/bat_chedosac.wav')
              # time.sleep(1)
            
         else:
-            self.btn_sac_auto.setStyleSheet("background-color: rgb(255,255,255);border-radius:20px;")
+    
+            self.ui21.btn_sac_auto.setStyleSheet("background-color: rgb(255,255,255);border-radius:20px;")
             Uti.RobotSpeakWithPath('voice_hmi_new/tat_chedosac.wav')
             #time.sleep(1)
         print("---- dao trang thai che do sac -----") 
         
         self.ham_chay_sac_tu_dong()
+
     def ham_chay_sac_tu_dong(self):
         if(self.on_off_sac_tu_dong == True):
               self.read_arduino.start()
@@ -1963,7 +2454,6 @@ class MainApp(QMainWindow,Ui_MainWindow):
    
     
      # HAM TEST
-
     def fcn_test_data(self):
         start_time = time.time()
         self.terminal_2.setPlainText("Testing ...")
@@ -1998,90 +2488,69 @@ class MainApp(QMainWindow,Ui_MainWindow):
 
         self.terminal_2.setPlainText("time: "+str(round(end_time,3))+"s"+ " - yaw: "+str(yawdeg))
 
-
  # Chay DINH VI
     def dongThongbaoKTSetup(self, flag):
             print("done file:   ",flag)
             if flag == 1:
-                self.from_setup_cam.close()
+               # self.from_setup_cam.close()
                 Uti.RobotSpeakWithPath('voice_hmi_new/finish_setup_cam.wav')
-                self.finish_setup_cam()
+              #  self.finish_setup_cam()
             elif flag == 2:
                 print("=============DONE DINH VI ==============")
             #   self.from_dang_dinhvi.close()
                 Uti.RobotSpeakWithPath('voice_hmi_new/finish_dinhvi.wav')
-                self.finish_dinhvi()
+             #   self.finish_dinhvi()
             elif flag == 10:
-                self.error_setup_cam()
+              #  self.error_setup_cam()
+                pass
             else:
                 pass
     #======================== ham cua nut nhan DINH VI =======================
      #========================== cac ham GUI nut nhan DINH VI ========================================
-    def dang_dinhvi(self):
-        self.from_dang_dinhvi = QMainWindow()
-        self.uic15 = Ui_Form_dang_dinhvi()
-        self.uic15.setupUi(self.from_dang_dinhvi)
-        self.from_dang_dinhvi.setGeometry(680, 240, 550, 250)
-        self.from_dang_dinhvi.setStyleSheet("background-color:rgb(255, 255, 255);")
-        self.from_dang_dinhvi.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint)
-        self.from_dang_dinhvi.show()
+    def show_ui_dv(self):
+        self.UI_DV()
+    def UI_DV(self):
+        self.dv = QMainWindow()
+        self.ui25 = Ui_Form_ui_dv()
+        self.ui25.setupUi(self.dv)
 
-    def error_dinhvi(self):
-        self.from_error_dinhvi = QMainWindow()
-        self.uic16 = Ui_Form_error_dinhvi()
-        self.uic16.setupUi(self.from_error_dinhvi)
-        self.from_error_dinhvi.setGeometry(680, 240, 550, 250)
-        self.from_error_dinhvi.setStyleSheet("background-color:rgb(255, 255, 255);")
-        self.from_error_dinhvi.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint)
-        self.from_error_dinhvi.show()
-        self.uic16.btn_error_gps.clicked.connect(self.close_error_dinhvi)
-
-    def close_error_dinhvi(self):
-        self.from_error_dinhvi.close()
-
-    def finish_dinhvi(self):
-        self.from_finish_dinhvi = QMainWindow()
-        self.uic17 = Ui_Form_finish_dinhvi()
-        self.uic17.setupUi(self.from_finish_dinhvi)
-        self.from_finish_dinhvi.setGeometry(680, 240, 550, 250)
-        self.from_finish_dinhvi.setStyleSheet("background-color:rgb(255, 255, 255);")
-        self.from_finish_dinhvi.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint)
-        self.from_finish_dinhvi.show()
-        self.uic17.btn_finish_gps.clicked.connect(self.close_finish_dinhvi)
-
-    def close_finish_dinhvi(self):
-        self.from_finish_dinhvi.close()
-        
+        self.ui25.Btn_ui_xn_dv.clicked.connect(self.close_ui_dv)
+        self.ui25.Btn_ui_xn_dv.setEnabled(False)
+        self.dv.show()
+    def close_ui_dv(self):
+        self.dv.close()
 
     #========================== cac ham xu ly cua nut nhan DINH VI ========================================
     def dinh_vi_fcn_1(self): 
+            self.UI_DV()
             self.check_and_opencamera()       
           #  Uti.RobotSpeakWithPath('voice_hmi_new/dinhvi.wav')
-           
-            print('[dinh_vi_fcn_1]Dang dinh vi ')
             
+            print('[dinh_vi_fcn_1]Dang dinh vi ')
+      
             if self.dinh_vi_fcn():
                 self.dongThongbaoKTSetup(2)
-                self.from_dang_dinhvi.close()
+                self.ve_home_khan_cap()            
+                self.back_setup()
             else:
-                print('[dinh_vi_fcn_1]Dinh vi that bai')
-                Uti.RobotSpeakWithPath('voice_hmi_new/dinh_vi_that_bai.mp3')
-    
-    def quaternion_to_euler(self,x, y, z, w):  
+              print('[dinh_vi_fcn_1]Dinh vi that bai')
+              Uti.RobotSpeakWithPath('voice_hmi_new/dinh_vi_that_bai.mp3')
+    def quaternion_to_euler(self, x, y, z, w):
+
         t0 = +2.0 * (w * x + y * z)
         t1 = +1.0 - 2.0 * (x * x + y * y)
-        X = math.degrees(math.atan2(t0, t1))
+        roll_deg = math.degrees(math.atan2(t0, t1))
 
         t2 = +2.0 * (w * y - z * x)
         t2 = +1.0 if t2 > +1.0 else t2
         t2 = -1.0 if t2 < -1.0 else t2
-        Y = math.degrees(math.asin(t2))
+        pitch_deg = math.degrees(math.asin(t2))
 
         t3 = +2.0 * (w * z + x * y)
         t4 = +1.0 - 2.0 * (y * y + z * z)
-        Z = math.degrees(math.atan2(t3, t4))
+        yaw_deg = math.degrees(math.atan2(t3, t4))
 
-        return (X, Y, Z)
+        return (roll_deg, pitch_deg, yaw_deg)
 
     def euler_to_quaternion(self,yaw = 0, pitch = 0, roll = 0):
         qx = np.sin(roll/2) * np.cos(pitch/2) * np.cos(yaw/2) - np.cos(roll/2) * np.sin(pitch/2) * np.sin(yaw/2)
@@ -2092,22 +2561,15 @@ class MainApp(QMainWindow,Ui_MainWindow):
         return (qx, qy, qz, qw)
         
     def dinh_vi_fcn(self):
+        self.fcn_load_data()
+    
         self.navigation_thread.dang_dinhvi_status = True
         self.dang_dinhvi_cnt = 0
         Uti.RobotSpeakWithPath('voice_hmi_new/dinhvi.wav')
-        
-        #self.dang_dinhvi()
-         # Tạo cửa sổ thông báo
-        '''msg_box = QMessageBox()
-        msg_box.setWindowTitle("Thông báo")
-        msg_box.setText("Đang định vị robot...")
-        msg_box.setStandardButtons(QMessageBox.NoButton)  # Không có nút bấm nào
 
-        # Hiện cửa sổ thông báo
-        msg_box.show()'''
         
      
-    
+        self.id_voice = 1000    
         #self.run_file_code_thread.duongdan = 2
         print('[dinh_vi_fcn]---------------------------BAT DAU QUA TRINH DINH VI------------------------')
 
@@ -2122,33 +2584,42 @@ class MainApp(QMainWindow,Ui_MainWindow):
         yaw_index = 0
         yaw_current = 0
        # yaw_list = [0, 45, 90, 135, 180, -135, -90, -45]
-        yaw_list = [0, 45, 90, 135, 180, 225, 270, 315]
+        yaw_list = [ 45,  225]
         result = False
+
         while (not result) and (counterMove < timeReadcame): # quay lai qua trinh doc came
             #if self.navigation_thread.quatrinh_move == False:
                             #time.sleep(2)
-            rdeg, pdeg, yawdeg = self.quaternion_to_euler(self.ros2_handle.odom_listener.data_odom[0],self.ros2_handle.odom_listener.data_odom[1],
-             0,self.ros2_handle.odom_listener.data_odom[3])
+        
+            yawdeg  =round((self.ros2_handle.odom_listener.data_odom[3]*180.0)/math.pi,3)
+            print(f"[DEBUG] Góc yaw đầu vào: {yawdeg} độ")
         #self.sub_win1.uic.terminal_2.setPlainText(str(yawdeg))
        # print("GOC YAWdeg now: ", yawdeg)
-            
-            result  = self.setup_dv.test_image(200, yawdeg, self.capC, self.cap_qr)
-            
+            print(f"X:{self.ros2_handle.odom_listener.data_odom[0]}")
+            print(f"Y:{self.ros2_handle.odom_listener.data_odom[1]}")
+            print(f"Z:{self.ros2_handle.odom_listener.data_odom[2]}")
+            print(f"W:{self.ros2_handle.odom_listener.data_odom[3]}")
+            result = self.setup_dv.test_image(200, yawdeg, self.capC,  self.cap_qr)
+            print(f"Result:{result}")
             result_simlar = 0
             x_best, y_best, yaw_best = 0,0,0
+    
+            result_text = ""
             for idx, (coords, similarity) in enumerate(result[:1]):
-                x_best, y_best, yaw_best, result_simlar = coords[0], coords[1], coords[2],similarity
-                # result_text += f"({coords[0]}, {coords[1]}, {coords[2]}, {coords[3]}) "
-                # result_text += f"{similarity:.6f} \n"
-
+                    result_text += f"({coords[0]}, {coords[1]}, {coords[2]}, {coords[3]}) "
+                    result_text += f"{similarity:.6f} \n"
+                    x_best, y_best, yaw_best, result_simlar = coords[0], coords[1], coords[2],similarity
+                    print(result_text)
+                
 
             # rdeg, pdeg, yawdeg = Uti.quaternion_to_euler(self.ros2_handle.odom_listener.data_odom[0],self.ros2_handle.odom_listener.data_odom[1], self.ros2_handle.odom_listener.data_odom[2], self.ros2_handle.odom_listener.data_odom[3])
             # yess, cx, cy, radius = Uti.dieuchinhvaTimduongtron(camID=headCamera, yaw_ros= yawdeg)
             if result_simlar > RobConf.DO_TUONG_DONG_CAM_DINHVIN:
                 yess = True
+
             else:
                 yess = False
-
+                result = False
             if yess:
                 # Tinh duoc vi tri hinhtron                    
                 cricle_yes = True
@@ -2157,8 +2628,8 @@ class MainApp(QMainWindow,Ui_MainWindow):
                     # Đọc các giá trị từ tệp văn bản
                 xx, yy = x_best,y_best
            
-                print(f'[dinh_vi_fcn]Vi tri Diem hien tai cho x: {xx}, y = {yy}.')
-                self.navigation_thread.user_set_PoseXY(xx, yy)
+                print(f'[dinh_vi_fcn]Vi tri Diem hien tai cho x: {xx}, y = {yy}, yaw ={yaw_best}.')
+                self.navigation_thread.user_set_PoseXY(xx, yy,yaw_best)
                 result = True
                 # print(f"x_dinhvi: {xx};  y_dinhvi: {yy}")
                 # THONG BAO TAT CAC POPUP
@@ -2167,25 +2638,14 @@ class MainApp(QMainWindow,Ui_MainWindow):
                 
                 print('[dinh_vi_fcn]------------------- ĐÃ LẤY XONG TỌA ĐỘ ---------------------')
                 # time.sleep(3)
-                Uti.writePose2File(filePath = file_path_pose_data,x=xx,y=yy,z=self.ros2_handle.odom_listener.data_odom[2],w=self.ros2_handle.odom_listener.data_odom[3])
+              #  Uti.writePose2File(filePath = file_path_pose_data,x=xx,y=yy,z=self.ros2_handle.odom_listener.data_odom[2],w=self.ros2_handle.odom_listener.data_odom[3])
                 #with open('file_text_odom/odom_data.txt', 'w') as file:
                 #    file.write(f'x: {xx}, y: {yy}, z: {self.ros2_handle.odom_listener.data_odom[2]}, w: {self.ros2_handle.odom_listener.data_odom[3]}\n')
                 print(f'[dinh_vi_fcn] x: {xx}, y: {yy}, z: {self.ros2_handle.odom_listener.data_odom[2]}, w: {self.ros2_handle.odom_listener.data_odom[3]}','-pose cam')
                 print("[dinh_vi_fcn]DINH VI XONG!!!!!")
                 break
-            else: #NEU KHONG CO DUOI N LAN THI QUA B2: GOI LENH DI CHUYEN ROBOT DEN VI TRI MONG MUON, CHO HE THONG DUNG, TIM HINH TRON MAU VANG
-                # goi lenh di chuyen robot den vi tri moi
-                # di chuyen den vi tri mong muon
-                # tinh x, y mong muon   
-                # cho he thong dung
-                #kiem tra robot da toi diem mong muon chua:                    
-              #  yaw_current = yaw_current +  yaw_step
+            else: 
                 yaw_current = yaw_list[yaw_index]
-               # if(yaw_current >= 360):
-               #     radius_current = radius_current+radius_step
-              #      yaw_current = (yaw_current + yaw_step) % 360
-                   # yaw_current = 0
-             
                 
                 x_desired = radius_current*np.cos(math.radians(yaw_current))
                 y_desired = radius_current*np.sin(math.radians(yaw_current))
@@ -2198,8 +2658,8 @@ class MainApp(QMainWindow,Ui_MainWindow):
                 #self.desired_move(x_desired=x_desired, y_desired=y_desired, z_desired=qz, w_desired=qw,id_desired=200)      
                 self.ros2_handle.goal_publisher.send_goal( x = x_desired, y = y_desired, z = z_desired, w = w_desired)
                 print('[dinh_vi_fcn]CHO ROBOT TOI DIEM MOI XONG')
-                time.sleep(5)
-                counterMove += 1
+
+            
                 # Cập nhật vòng lặp
                 yaw_index += 1
                 if yaw_index >= len(yaw_list):
@@ -2207,17 +2667,25 @@ class MainApp(QMainWindow,Ui_MainWindow):
                     radius_current += radius_step
         #NEU KHONG CO TREN N LAN THI THOAT RA VA THONG BAO BANG HINH ANH VA GIONG NOI
         self.navigation_thread.dang_dinhvi_status = False 
+
         if not cricle_yes:
             print("DINH VI THAT BAI")
           #  Uti.RobotSpeakWithPath('khongtimthayhinhtron.mp3')
             self.label_status.setText("Robot định vị thất bại")
+            self.ui25.label_ui_dv.setText("Robot định vị thất bại")
+            self.ui25.Btn_ui_xn_dv.setEnabled(True)
             return False
         else:
             print("DINH VI XONG HOAN TOAN")
             self.label_status.setText("Robot định vị thành công")
+            self.ui25.label_ui_dv.setText("Robot định vị thành công")
+            self.ui25.Btn_ui_xn_dv.setEnabled(True)
             # Đóng cửa sổ thông báo sau khi hoàn thành
             #msg_box.close()
             return result 
+
+
+         
 
 ################## Navigate thread  ##################
     def kiem_tra_du_dieu_khien_chay(self):
@@ -2242,8 +2710,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
     def button_xn_pressed(self):
            if(self.id_voice==200):
             self.stackedWidget.setCurrentWidget(self.page_main)
-         #   self.show_page_dinhvi()
-        
+            self.dinh_vi_fcn_1()
            elif( self.id_voice==123):
             self.stackedWidget.setCurrentWidget(self.page_main)
            else:
@@ -2255,14 +2722,17 @@ class MainApp(QMainWindow,Ui_MainWindow):
                 self.btn_xac_nhan.setEnabled(True)
                 if self.id_voice == RobConf.HOME_ID:
                     Uti.RobotSpeakWithPath('new_voice/new_hoan_thanh.wav')
-                    
-                    
+                elif self.id_voice == 1000:
+                    pass
                 else:
                     Uti.RobotSpeakWithPath('voice_hmi_new/new_xac_nhan.wav')
                     self.listWidget_ds.takeItem(0)
+                self.di_dendiem_DV = True  
             else: 
+            
                 print("fail go")
-                self.man_hinh_dan_duong()
+                self.di_dendiem_DV = False
+               # self.man_hinh_dan_duong()
   
     def ve_home_trong_chu_trinh(self):
         # B1 chay ve home
@@ -2279,9 +2749,6 @@ class MainApp(QMainWindow,Ui_MainWindow):
 
         self.ros2_handle.goal_publisher.send_goal(x_goal, y_goal, z_goal, w_goal)
         # B2 dinh vi 
-        print("Robot dang dinh vi")
-        
-        print("da dinh vi xong")
 
         self.listWidget_ds.clear()
          # Đặt lại tất cả các trạng thái item về False
@@ -2289,8 +2756,9 @@ class MainApp(QMainWindow,Ui_MainWindow):
             self.item_states[id_item] = False
             
         self.checkBox_kvc.setCheckState(Qt.Unchecked)
-
-       
+    def ve_home_khan_cap(self):
+        x_goal, y_goal, z_goal, w_goal, idout = sql.doc_du_lieu_toado_robot(200) 
+        self.ros2_handle.goal_publisher.send_goal(x_goal, y_goal, z_goal, w_goal)
     def ve_dock_sac(self):
 
         x_goal, y_goal, z_goal, w_goal, idout = sql.doc_du_lieu_toado_robot(123)
@@ -2375,7 +2843,45 @@ class MainApp(QMainWindow,Ui_MainWindow):
           #  print('toi dang di sac')
                    
 ################## Checklist  ##################
-#Setup list
+ #Setup list
+    def export_to_excel(self):
+        export_path = "/home/robot/ROBOT_HD/Excel"
+
+        try:
+            workbook = Workbook()
+            sheet = workbook.active
+
+            # Thêm header (bỏ qua cột checkbox ở index 0)
+            header_labels = [self.tableWidget_2.horizontalHeaderItem(i).text() for i in range(1, self.tableWidget_2.columnCount())]
+            sheet.append(header_labels)
+
+            # Thêm toàn bộ dữ liệu từ tableWidget_2 (bỏ qua cột checkbox)
+            num_rows = self.tableWidget_2.rowCount()
+            num_cols = self.tableWidget_2.columnCount()
+            for row in range(num_rows):
+                row_data = []
+                for col in range(1, num_cols):  # Bắt đầu từ cột 1 để bỏ qua checkbox
+                    item = self.tableWidget_2.item(row, col)
+                    row_data.append(item.text() if item else "")
+                sheet.append(row_data)
+
+            # Tạo tên file dựa trên ngày hiện tại
+            now = datetime.now()
+            file_name = f"exported_all_data_{now.strftime('%Y%m%d_%H%M%S')}.xlsx"
+            full_file_path = os.path.join(export_path, file_name)
+
+            # Đảm bảo thư mục tồn tại
+            os.makedirs(export_path, exist_ok=True)
+
+            workbook.save(full_file_path)
+            self.terminal_3.setPlainText(f"All data exported successfully to: {full_file_path}")
+
+        except ImportError:
+            QMessageBox.critical(self, "Error", "The 'openpyxl' library is not installed. Please install it using 'pip install openpyxl'.")
+            self.terminal_3.setPlainText("Error: 'openpyxl' not installed.")
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"An error occurred during export: {e}")
+            self.terminal_3.setPlainText(f"Error during export: {e}")
    # HAM DUNG DE SET CHIEU RONG CUA COT
     def set_column_widths_1(self):
         self.tableWidget_2.setColumnWidth(0, 85)   # Cột checkbox
@@ -2416,7 +2922,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
                     checkbox_widget.setLayout(layout)
 
                     # Kết nối tín hiệu checkbox với hàm xử lý
-                    checkbox.stateChanged.connect(self.get_selected_rows)
+                    checkbox.stateChanged.connect(self.get_selected_rows_2)
 
                     # Thêm widget checkbox vào bảng
                     self.tableWidget_2.setCellWidget(row_idx, 0, checkbox_widget)
@@ -2440,7 +2946,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
 
     # HAM CHON CHECKBOX
 
-    def get_selected_rows(self):
+    def get_selected_rows_2(self):
         self.selected_rows = []
         num_rows = self.tableWidget_2.rowCount()
         for row in range(num_rows):
@@ -2473,7 +2979,60 @@ class MainApp(QMainWindow,Ui_MainWindow):
                 
             else:
                 self.terminal_3.setPlainText("Deletion cancelled by user.")
+    
+            self.fcn_load_list_0()
+            self.fcn_load_list_1()     
+    
+    def UI_xn_chupanh(self):
+        self.chup_hinh = QMainWindow()
+        self.ui20 = Ui_Form_xn_chupanh()
+        self.ui20.setupUi(self.chup_hinh)
+        self.ui20.btn_finish_camera.clicked.connect(self.handle_chup_anh)
+        self.chup_hinh.show()
+
+    def save_data_chupanh(self):
+        self.UI_xn_chupanh()
+
+    def capture_image(self):
+        """Chụp ảnh điểm danh và lưu đường dẫn."""
+        user_id = getattr(self, "current_id", None)
+
+        if user_id is None:
+            QMessageBox.warning(self, "Lỗi", "Không có ID hiện tại để lưu ảnh.")
+            return
+
+        if not self.checkin_active and not self.checkout_active:
+            QMessageBox.warning(self, "Cảnh báo", "Vui lòng chỉ định loại điểm danh (Check In hoặc Check Out).")
+            return
+
+        if self.checkin_active and self.checkout_active:
+            QMessageBox.warning(self, "Cảnh báo", "Không thể đồng thời Check In và Check Out.")
+            return
+
+        filename = f"{user_id}_1.png" if self.checkin_active else f"{user_id}_0.png"
+
+        if self.checkin_active:
+            folder_path = "/home/robot/ROBOT_HD/imageList/checkin"
+        elif self.checkout_active:
+            folder_path = "/home/robot/ROBOT_HD/imageList/checkout"
+        else:
+            return
+
+        if not os.path.exists(folder_path):
+            os.makedirs(folder_path)
+
+        save_path = os.path.join(folder_path, filename)
         
+
+        ret, frame = self.cap.read()
+        if ret:
+            cv2.imwrite(save_path, frame)
+            QMessageBox.information(self, "Thông báo", f"Đã lưu ảnh thành công")
+            self.image_save_path = save_path # Lưu đường dẫn ảnh
+            self.back_setup()
+        else:
+            QMessageBox.warning(self, "Lỗi", "Không thể chụp ảnh.")
+
     def check_checkbox_state(self, state):
         if state == Qt.Checked:
             self.btn_opencamera_2.setEnabled(True)
@@ -2484,12 +3043,27 @@ class MainApp(QMainWindow,Ui_MainWindow):
             self.close_camera()
         else:
             self.start_camera()
+    def uncheck_checkout(self, checked):
+        if checked:
+            self.checkbox_checkout_2.setChecked(False)
+
+    def uncheck_checkin(self, checked):
+        if checked:
+            self.checkbox_checkin_2.setChecked(False)
+    def update_checkin_state(self, checked):
+        self.checkin_active = checked
+
+    def update_checkout_state(self, checked):
+        self.checkout_active = checked
+
     def close_camera(self):
-     
         self.camera_running = False
-        self.cap.release()
+        if self.cap and self.cap.isOpened():
+            self.cap.release()
         self.cap = None
         self.chua_camera.clear()
+        self.chua_camera_3.setText("Camera đã đóng")
+        self.last_qr_text = "Không tìm thấy mã QR"
 
     def start_camera(self):
         self.camera_running = True
@@ -2497,7 +3071,8 @@ class MainApp(QMainWindow,Ui_MainWindow):
         if not self.cap or not self.cap.isOpened():
             QtWidgets.QMessageBox.critical(self, "Lỗi", "Không mở được camera.")
             return
-        self.timer.start(30)  
+        self.timer.start(30)
+        self.chua_camera_3.setText(self.last_qr_text) # Hiển thị lại text QR cuối cùng
 
     def update_frame(self):
         if not self.cap or not self.cap.isOpened():
@@ -2507,7 +3082,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
         if not ret:
             return
 
-        frame = self.process_qr(frame)
+        frame, qr_data = self.process_qr(frame)
 
         # Hiển thị ảnh camera
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -2516,28 +3091,44 @@ class MainApp(QMainWindow,Ui_MainWindow):
         qt_img = QtGui.QImage(rgb_frame.data, w, h, bytes_per_line, QtGui.QImage.Format_RGB888)
         self.chua_camera.setPixmap(QtGui.QPixmap.fromImage(qt_img))
 
+        # Nếu có dữ liệu QR và camera đang chạy, lưu vào buffer
+        if qr_data and self.camera_running:
+            self.qr_data_buffer = qr_data
+
     def process_qr(self, frame):
         decoded_objects = decode(frame)
         result_text = ""
+        qr_data_dict = {}  # Dictionary để lưu trữ dữ liệu QR đã tách
 
         for obj in decoded_objects:
             # Giải mã dữ liệu
             try:
-                qr_data = obj.data.decode('utf-8')
+                qr_raw_data = obj.data.decode('utf-8')
             except UnicodeDecodeError:
-                qr_data = obj.data.hex()
+                qr_raw_data = obj.data.hex()
 
-            # Tách từng dòng và gán biểu tượng tương ứng
-            lines = qr_data.strip().split('\n')
+            # Tách từng dòng và lưu vào dictionary
+            lines = qr_raw_data.strip().split('\n')
             for line in lines:
-                if "Tên" in line:
-                    result_text += f"👤 {line}\n"
-                elif "ID" in line:
-                    result_text += f"🆔 {line}\n"
-                elif "Phòng" in line or "phòng" in line:
-                    result_text += f"🏢 {line}\n"
+                if ":" in line:
+                    key, value = line.split(":", 1)
+                    qr_data_dict[key.strip()] = value.strip()
                 else:
-                    result_text += f"{line}\n"
+                    # Xử lý các dòng không có dấu ":" nếu cần
+                    pass
+      
+                
+            # Tạo text hiển thị
+            display_lines = []
+            if "Tên" in qr_data_dict:
+                display_lines.append(f"Họ và tên :{qr_data_dict['Tên']}")
+            if "ID" in qr_data_dict:
+                display_lines.append(f"ID :{qr_data_dict['ID']}")
+                self.current_id = qr_data_dict["ID"]
+            if "Phòng" in qr_data_dict:
+                display_lines.append(f"Phòng :{qr_data_dict['Phòng']}")
+
+            result_text = "\n".join(display_lines)
 
             # Vẽ khung quanh QR code
             points = obj.polygon
@@ -2554,19 +3145,346 @@ class MainApp(QMainWindow,Ui_MainWindow):
         # Cập nhật QLabel chứa kết quả
         if result_text:
             self.chua_camera_3.setText(result_text.strip())
+            self.last_qr_text = result_text.strip() # Lưu lại text QR
+            return frame, qr_data_dict  # Trả về dictionary chứa dữ liệu QR
         else:
-            self.chua_camera_3.setText("🔍 Không tìm thấy mã QR")
+            self.chua_camera_3.setText(self.last_qr_text) # Giữ nguyên text QR cuối cùng
+            return frame, None
+    def handle_chup_anh(self):
+        self.capture_image()
+        if self.image_save_path:
+            # Cập nhật đường dẫn ảnh vào qr_data_buffer để lưu vào database
+            if self.qr_data_buffer:
+                if self.checkbox_checkin_2.isChecked() and self.is_checkin_processed:
+                    self.qr_data_buffer["Image_Checkin"] = self.image_save_path
+                    self.add_qr_data_to_db(self.qr_data_buffer, checkin=True) # Gọi lưu DB sau khi chụp
+                    self.is_checkin_processed = False # Reset flag sau khi lưu
+                elif self.checkbox_checkout_2.isChecked() and self.is_checkout_processed:
+                    self.qr_data_buffer["Image_Checkout"] = self.image_save_path
+                    self.add_qr_data_to_db(self.qr_data_buffer, checkout=True) # Gọi lưu DB sau khi chụp
+                    self.is_checkout_processed = False # Reset flag sau khi lưu
+            # Đóng cửa sổ sau khi chụp
+            button = self.sender()
+            window = button.window()
+            window.close()
+            self.close_camera()
+            self.image_save_path = None # Reset đường dẫn ảnh
+        else:
+            QMessageBox.warning(self, "Lỗi", "Không thể lưu đường dẫn ảnh.")
+    def check_existing_checkin_checkout(self, user_id):
+        """Kiểm tra xem ID đã có dữ liệu check-in hoặc check-out hay chưa."""
+        has_checkin = False
+        has_checkout = False
+        try:
+            mydb = mysql.connector.connect(
+                user="robot",
+                password="12345678",
+                host="127.0.0.1",
+                database="sql_rsr"
+            )
+            mycursor = mydb.cursor()
+            sql_check = "SELECT DateTime_Checkin, DateTime_Checkout FROM LIST WHERE ID = %s"
+            mycursor.execute(sql_check, (user_id,))
+            existing_record = mycursor.fetchone()
+            if existing_record:
+                checkin_time, checkout_time = existing_record
+                if checkin_time is not None:
+                    has_checkin = True
+                if checkout_time is not None:
+                    has_checkout = True
+        except mysql.connector.Error as err:
+            print(f"Lỗi kết nối MySQL: {err}")
+        finally:
+            if mydb.is_connected():
+                mycursor.close()
+                mydb.close()
+        return has_checkin, has_checkout
+    def process_and_add_qr_data(self):
+        """Xử lý dữ liệu QR đã quét và thêm vào cơ sở dữ liệu dựa trên checkbox.
+        Ngăn chặn mở UI chụp ảnh nếu đã có dữ liệu check-in hoặc check-out tương ứng.
+        """
+        if self.qr_data_buffer:
+            id_to_check = self.qr_data_buffer.get("ID")
+            if id_to_check:
+                has_checkin, has_checkout = self.check_existing_checkin_checkout(id_to_check)
 
-        return frame
-    
+                if self.checkbox_checkin_2.isChecked():
+                    if has_checkin:
+                        QMessageBox.warning(self, "Cảnh báo", f"ID {id_to_check} đã có dữ liệu check-in trước đó.")
+                        return
+                    self.UI_xn_chupanh() # Mở UI chụp ảnh cho check-in
+                    self.is_checkin_processed = True
+                    self.is_checkout_processed = False # Reset checkout flag
+                elif self.checkbox_checkout_2.isChecked():
+                    if has_checkout:
+                        QMessageBox.warning(self, "Cảnh báo", f"ID {id_to_check} đã có dữ liệu check-out trước đó.")
+                        return
+                    self.UI_xn_chupanh() # Mở UI chụp ảnh cho check-out (nếu cần)
+                    self.is_checkout_processed = True
+                    self.is_checkin_processed = False # Reset checkin flag
+                else:
+                    QMessageBox.warning(self, "Cảnh báo", "Vui lòng chọn Check In hoặc Check Out.")
+                    return
+            else:
+                QMessageBox.warning(self, "Cảnh báo", "Không tìm thấy ID trong dữ liệu QR.")
+                return
+        else:
+            QMessageBox.warning(self, "Cảnh báo", "Chưa có dữ liệu QR nào được quét.")
+    def add_qr_data_to_db(self, qr_data, checkin=False, checkout=False):
+        """Thêm hoặc cập nhật dữ liệu QR code vào cơ sở dữ liệu, bao gồm đường dẫn ảnh.
+        Ngăn chặn lưu ảnh và cập nhật nếu đã có dữ liệu check-in hoặc check-out tương ứng.
+        """
+        try:
+            mydb = mysql.connector.connect(
+                user="robot",
+                password="12345678",
+                host="127.0.0.1",
+                database="sql_rsr"
+            )
+            mycursor = mydb.cursor()
+        except mysql.connector.Error as err:
+            print(f"Lỗi kết nối MySQL: {err}")
+            return
 
+        try:
+            if "ID" in qr_data and "Tên" in qr_data and "Phòng" in qr_data:
+                id_to_check = qr_data["ID"]
+                image_checkin_path = qr_data.get("Image_Checkin")
+                image_checkout_path = qr_data.get("Image_Checkout")
 
+                sql_check = "SELECT ID, DateTime_Checkin, DateTime_Checkout, Image_Checkin, Image_Checkout FROM LIST WHERE ID = %s"
+                mycursor.execute(sql_check, (id_to_check,))
+                existing_record = mycursor.fetchone()
+
+                if existing_record:
+                    record_id, checkin_time, checkout_time, existing_image_in, existing_image_out = existing_record
+                    if checkin:
+                        if checkin_time is not None or existing_image_in is not None:
+                            print(f"Cảnh báo: ID {id_to_check} đã có dữ liệu check-in trước đó. Không lưu lại.")
+                            QMessageBox.warning(self, "Cảnh báo", f"ID {id_to_check} đã được check-in trước đó.")
+                            return
+                        else:
+                            update_fields = ["DateTime_Checkin = %s"]
+                            update_values = [datetime.now()]
+                            if image_checkin_path:
+                                update_fields.append("Image_Checkin = %s")
+                                update_values.append(image_checkin_path)
+
+                            sql_update = f"UPDATE LIST SET {', '.join(update_fields)} WHERE ID = %s"
+                            mycursor.execute(sql_update, (*update_values, id_to_check))
+                            mydb.commit()
+                            print(f"Đã cập nhật check-in cho ID: {id_to_check} với ảnh (nếu có).")
+                    elif checkout:
+                        if checkout_time is not None or existing_image_out is not None:
+                            print(f"Cảnh báo: ID {id_to_check} đã có dữ liệu check-out trước đó. Không lưu lại.")
+                            QMessageBox.warning(self, "Cảnh báo", f"ID {id_to_check} đã được check-out trước đó.")
+                            return
+                        else:
+                            update_fields = ["DateTime_Checkout = %s"]
+                            update_values = [datetime.now()]
+                            if image_checkout_path:
+                                update_fields.append("Image_Checkout = %s")
+                                update_values.append(image_checkout_path)
+
+                            sql_update = f"UPDATE LIST SET {', '.join(update_fields)} WHERE ID = %s"
+                            mycursor.execute(sql_update, (*update_values, id_to_check))
+                            mydb.commit()
+                            print(f"Đã cập nhật check-out cho ID: {id_to_check} với ảnh (nếu có).")
+                else:
+                    insert_fields = ["ID", "Name", "Room"]
+                    insert_values = [qr_data["ID"], qr_data["Tên"], qr_data["Phòng"]]
+                    if checkin and image_checkin_path:
+                        insert_fields.append("DateTime_Checkin")
+                        insert_values.append(datetime.now())
+                        insert_fields.append("Image_Checkin")
+                        insert_values.append(image_checkin_path)
+                    elif checkout and image_checkout_path:
+                        insert_fields.append("DateTime_Checkout")
+                        insert_values.append(datetime.now())
+                        insert_fields.append("Image_Checkout")
+                        insert_values.append(image_checkout_path)
+                    elif checkin:
+                        insert_fields.append("DateTime_Checkin")
+                        insert_values.append(datetime.now())
+                    elif checkout:
+                        insert_fields.append("DateTime_Checkout")
+                        insert_values.append(datetime.now())
+
+                    sql_insert = f"INSERT INTO LIST ({', '.join(insert_fields)}) VALUES ({', '.join(['%s'] * len(insert_fields))})"
+                    mycursor.execute(sql_insert, insert_values)
+                    mydb.commit()
+                    print(f"Đã thêm dữ liệu ID: {qr_data['ID']} với thông tin check-in/check-out và ảnh (nếu có).")
+
+            else:
+                print("Lỗi: Dữ liệu QR không đầy đủ các trường cần thiết (ID, Tên, Phòng).")
+        except mysql.connector.Error as err:
+            mydb.rollback()
+            print(f"Lỗi thực thi SQL: {err}")
+        finally:
+            if mydb.is_connected():
+                mycursor.close()
+                mydb.close()
 
     def closeEvent(self, event):
-        if self.cap:
+        if self.cap and self.cap.isOpened():
             self.cap.release()
         self.timer.stop()
         event.accept()
+    # Load du lieu danh sach
+    def set_column_widths_2(self):
+       
+        self.tableWidget_3.setColumnWidth(0, 100)  # Cột ID
+        self.tableWidget_3.setColumnWidth(1, 170)  # Cột NAME
+        self.tableWidget_3.setColumnWidth(2, 100)  # Cột ROOM
+        self.tableWidget_3.setColumnWidth(3, 160)  # Cột DateTime checkin
+        self.tableWidget_3.setColumnWidth(4, 160)  # Cột DateTIme checkout
+
+    # SET CHIEU CAO CUA HANG
+    def set_row_heights_2(self):
+        for row in range(self.tableWidget_3.rowCount()):
+            self.tableWidget_3.setRowHeight(row, 30)  # Chiều cao mỗi hàng là 30 pixel
+
+    # HAM LOAD DATA LEN BANG
+    def fcn_load_list_1(self):
+        data = sql.doc_du_lieu_list('readall')
+
+        if data is not None:
+            num_rows = len(data)
+            num_columns = 5  # Đúng số cột dữ liệu
+
+            self.tableWidget_3.clear()  # Xóa dữ liệu cũ trước khi tải lại
+            self.tableWidget_3.setRowCount(num_rows)
+            self.tableWidget_3.setColumnCount(num_columns)
+            self.tableWidget_3.setHorizontalHeaderLabels(['ID', 'Name', 'Room', 'DateTime_Checkin', 'DateTime_CheckOut'])
+
+            if num_rows > 0:
+                for row_idx, row_data in enumerate(data):
+
+                    # Thêm dữ liệu vào các cột và căn giữa
+                    for col_idx, item in enumerate(row_data):
+                        item_widget = QTableWidgetItem(str(item))
+                        item_widget.setTextAlignment(Qt.AlignCenter)
+                        self.tableWidget_3.setItem(row_idx, col_idx, item_widget)  # Sử dụng col_idx trực tiếp
+
+                self.set_column_widths_2()
+                self.set_row_heights_2()
+
+            else:
+                self.tableWidget_3.clear()
+                self.tableWidget_3.setRowCount(0)
+                self.tableWidget_3.setColumnCount(5)  # Đúng số cột dữ liệu
+                self.tableWidget_3.setHorizontalHeaderLabels(['ID', 'Name', 'Room', 'DateTime_Checkin', 'DateTime_CheckOut'])
+
+################## Tra cuu  ##################
+    def speak_vietnamese_gg(self,text): 
+        try:
+            tts = gTTS(text=text, lang='vi')
+            filename = "temp_speech.mp3"
+            tts.save(filename)
+            playsound(filename)
+            os.remove(filename)
+        except Exception as e:
+            print(e)
+
+    def load_excel(self):
+        
+        try:
+            df = pd.read_excel("data_v1.xlsx", header=None, engine='openpyxl')
+            df = df.iloc[:, :2]
+            df.columns = ['Câu hỏi', 'Câu trả lời']
+            df.dropna(how="any", inplace=True)
+
+            self.tc_nha_truong_2.clear()
+            for _, row in df.iterrows():
+                item = QListWidgetItem(row['Câu hỏi'])
+                item.setData(Qt.UserRole, row['Câu trả lời'])
+                item.setTextAlignment(Qt.AlignLeft)  # Canh giữa
+                self.tc_nha_truong_2.addItem(item)
+        except Exception as e:
+            QMessageBox.critical(self, "Lỗi", f"Không đọc được file Excel: {str(e)}")
+    def on_question_clicked(self):
+        item = self.tc_nha_truong_2.currentItem()
+        if item:
+            answer = item.data(Qt.UserRole)
+            test = answer
+            print(test)
+            self.tra_loi_tc_nha_truong_4.setText(test)
+
+            if self.checkBox_giong_noi_5.isChecked():
+                self.tra_loi_tc_nha_truong_4.setText(answer)
+                self.speak_vietnamese_gg(answer)
+    def toggle_start_ai(self):
+        if not self.ai_dang_chay:
+            self.btn_bat_dau_ai_2.setText("Kết thúc")
+            self.label_cau_hoi_ai_2.clear()
+            self.ai_dang_chay = True
+            # xu li ai tai day 
+    
+            r = sr.Recognizer()
+            with sr.Microphone() as source:
+
+                self.label_lang_nghe_2.setText("Tôi đang lắng nghe bạn...")
+                QApplication.processEvents()  # Cập nhật giao diện ngay
+
+                r.adjust_for_ambient_noise(source)
+                try:
+                    audio = r.listen(source, timeout=10, phrase_time_limit=10)
+
+                    text = r.recognize_google(audio, language='vi-VN')
+                    self.cau_hoi_text = text
+                    self.label_cau_hoi_ai_2.setText(f"Câu hỏi: {text}")
+                    self.label_tra_loi_ai_2.setText("Đã ghi âm xong. Nhấn 'Xác nhận' để gửi.")
+                except sr.UnknownValueError:
+                    self.label_cau_hoi_ai_2.setText("Không thể nhận diện được giọng nói.Bạn bấm Hủy để bắt đầu lại nhé ")
+                    self.label_tra_loi_ai_2.setText("")
+                except sr.RequestError as e:
+                    self.label_cau_hoi_ai_2.setText(f"Lỗi kết nối: {e}")
+                    self.label_tra_loi_ai_2.setText("")
+                except sr.WaitTimeoutError:
+                    self.label_cau_hoi_ai_2.setText("Hết thời gian chờ. Bạn chưa nói gì.")
+                    self.label_tra_loi_ai_2.setText("Vui lòng thử lại.")
+
+        else:
+            self.btn_bat_dau_ai_2.setText("Bắt đầu")
+            self.ai_dang_chay = False
+            self.label_cau_hoi_ai_2.clear()
+            self.label_tra_loi_ai_2.clear()
+            self.label_lang_nghe_2.setText("Bạn muốn tra cứu thì hãy bấm bắt đầu nhé !")
+    def huy_cau_hoi_ai(self):
+            self.cau_hoi_text = ""
+            self.label_cau_hoi_ai_2.setText("Câu hỏi đã bị hủy. Vui lòng nhấn 'Bắt đầu' để thu lại.")
+            self.label_tra_loi_ai_2.setText("")
+            self.btn_bat_dau_ai_2.setText("Bắt đầu")
+            self.ai_dang_chay = False
+    def xac_nhan_cau_hoi_ai(self):
+            if not self.cau_hoi_text:
+                self.label_tra_loi_ai_2.setText("Chưa có câu hỏi để gửi.")
+                return
+
+            self.label_tra_loi_ai_2.setText("Đang xử lý câu hỏi... Vui lòng chờ.")
+            QApplication.processEvents()
+            self.label_cau_hoi_ai_2.clear()
+            self.label_tra_loi_ai_2.clear()
+            try:
+                
+                response = self.model.generate_content(self.cau_hoi_text)
+                
+                if hasattr(response, "text") and response.text:
+                    tra_loi = response.text.strip()
+                    self.label_tra_loi_ai_2.setText(f"Trả lời: {tra_loi}")
+                    # Chuyển văn bản thành giọng nói
+                    tts = gTTS(text=response.text, lang='vi')
+                    tts.save("phan_hoi_v3.mp3")
+                    playsound("phan_hoi_v3.mp3")
+                    os.remove("phan_hoi_v3.mp3")
+                    self.cau_hoi_text = ""
+                    
+                else:
+                    self.label_tra_loi_ai_2.setText(" Không nhận được phản hồi từ AI.")
+
+            except Exception as e:
+                self.label_tra_loi_ai_2.setText(f"Lỗi khi gửi câu hỏi: {str(e)}")
+            
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MainApp()

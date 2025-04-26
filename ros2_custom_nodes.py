@@ -345,7 +345,7 @@ class GoalPosePublisher(QThread):
         self.node.get_logger().info("Started!")
         self.send_goal_result = None
         self.delay_time = sql.doc_du_lieu_robot_ros('delay_time')
-
+        self.dinhvi_vitri = False
     def run(self, ):
         self.is_running = True
         while self.is_running:
@@ -380,6 +380,7 @@ class GoalPosePublisher(QThread):
         self._send_goal_future.add_done_callback(self.goal_response_callback)
 
     def send_goal(self, x, y, z, w):
+        self.dinhvi_vitri = False
         self.task_queue.put((self._perform_send_goal, (x, y, z, w,), {}))
 
     def goal_response_callback(self, future):
@@ -387,10 +388,10 @@ class GoalPosePublisher(QThread):
         if not goal_handle.accepted:
             self.node.get_logger().info('Goal rejected.')
             self.reached_goal.emit(False)
+            self.dinhvi_vitri = False
             return
 
         self.node.get_logger().info('Goal accepted.')
-       
         self._get_result_future = goal_handle.get_result_async()
         self._get_result_future.add_done_callback(self.get_result_callback)
 
@@ -403,9 +404,11 @@ class GoalPosePublisher(QThread):
             if self.send_goal_result:
                 self.node.get_logger().info('Goal reached!')
                 self.reached_goal.emit(True)
+                self.dinhvi_vitri = True
             else:
                 self.node.get_logger().info('Goal was aborted.')
                 self.reached_goal.emit(False)
+                self.dinhvi_vitri = False
         except:
             self.send_goal_result = None
             self.node.get_logger().warn('Can get result from future result')

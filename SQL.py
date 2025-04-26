@@ -355,3 +355,100 @@ def delete_all_data_list():
         if mydb.is_connected():
             mycursor.close()
             mydb.close()
+def chen_du_lieu_list(data):
+    """Chèn một bản ghi mới vào bảng LIST, bao gồm cả ID."""
+    try:
+        mydb = mysql.connector.connect(
+            user="robot",
+            password="12345678",
+            host="127.0.0.1",
+            database="sql_rsr"
+        )
+        mycursor = mydb.cursor()
+    except mysql.connector.Error as err:
+        print(f"Lỗi kết nối cơ sở dữ liệu: {err}")
+        return False
+
+    # Kiểm tra xem dữ liệu đầu vào có đúng định dạng không
+    if not isinstance(data, dict):
+        print("Dữ liệu đầu vào phải là một dictionary.")
+        return False
+
+    required_keys = ['ID', 'Name', 'Room', 'DateTime_Checkin', 'DateTime_CheckOut']
+    if not all(key in data for key in required_keys):
+        print(f"Vui lòng cung cấp đầy đủ các khóa sau: {required_keys}")
+        return False
+
+    # Lấy dữ liệu từ dictionary
+    record_id = data.get('ID')
+    name = data.get('Name')
+    room = data.get('Room')
+    datetime_checkin = data.get('DateTime_Checkin')
+    datetime_checkout = data.get('DateTime_CheckOut')
+    image_checkin = data.get('Image_Checkin')
+    image_checkout = data.get('Image_Checkout')
+
+    # Tạo câu lệnh SQL INSERT
+    insert_query = "INSERT INTO LIST (ID, Name, Room, DateTime_Checkin, DateTime_CheckOut, Image_Checkin, Image_Checkout) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+    values = (record_id, name, room, datetime_checkin, datetime_checkout, image_checkin, image_checkout)
+
+    try:
+        mycursor.execute(insert_query, values)
+        mydb.commit()
+        print(f"Đã chèn thành công {mycursor.rowcount} bản ghi với ID = {record_id}.")
+        return True
+    except mysql.connector.Error as err:
+        print(f"Lỗi khi chèn dữ liệu: {err}")
+        mydb.rollback()
+        return False
+    finally:
+        if mydb.is_connected():
+            mycursor.close()
+            mydb.close()
+def doc_du_lieu_toado(input_key):
+    """Đọc dữ liệu từ bảng toado và trả về giá trị hoặc danh sách các bản ghi."""
+
+    try:
+        mydb = mysql.connector.connect(
+            user="robot",
+            password="12345678",
+            host="127.0.0.1",
+            database="sql_rsr"
+        )
+        mycursor = mydb.cursor()
+    except mysql.connector.Error as err:
+        print(f"Lỗi kết nối cơ sở dữ liệu: {err}")
+        return None
+
+    # Truy vấn để lấy dữ liệu từ bảng toado
+    select_query = "SELECT toadoX, toadoY, toadoZ, toadoW, IDban FROM toado;"
+    mycursor.execute(select_query)
+
+    # Lấy tất cả các bản ghi
+    results = mycursor.fetchall()
+
+    # Mapping input keys to corresponding row indices and data types for toado table
+    input_mapping = {
+        'toadoX': (0, float),
+        'toadoY': (1, float),
+        'toadoZ': (2, float),
+        'toadoW': (3, float),
+        'IDban': (4, int),
+        'readall': (None, None)  # Special case for readall
+    }
+
+    if input_key in input_mapping:
+        index, data_type = input_mapping[input_key]
+        if index is not None:
+            # Duyệt qua các hàng và trả về giá trị đầu tiên tìm thấy
+            for row in results:
+                return data_type(row[index])
+        elif input_key == 'readall':
+            return [
+                (float(row[0]), float(row[1]), float(row[2]),
+                 float(row[3]), int(row[4]))
+                for row in results
+            ]
+
+    return None  # Trả về None nếu input không hợp lệ hoặc không tìm thấy dữ liệu
+
