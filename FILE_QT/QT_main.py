@@ -192,6 +192,10 @@ class Ui_MainWindow(object):
         self.label_2.setObjectName("label_2")
         self.label = QtWidgets.QLabel(self.tab_gioi_thieu)
         self.label.setGeometry(QtCore.QRect(0, 230, 1861, 551))
+        font = QtGui.QFont()
+        font.setFamily("Ubuntu Mono")
+        font.setPointSize(15)
+        self.label.setFont(font)
         self.label.setStyleSheet("background - color : white ; \n"
 "font: \"MS Shell Dlg 2\";")
         self.label.setObjectName("label")
@@ -201,9 +205,9 @@ class Ui_MainWindow(object):
         self.label_9.setPixmap(QtGui.QPixmap("../images/SRC - LOGO.svg"))
         self.label_9.setObjectName("label_9")
         self.label_3 = QtWidgets.QLabel(self.tab_gioi_thieu)
-        self.label_3.setGeometry(QtCore.QRect(0, 590, 1731, 271))
+        self.label_3.setGeometry(QtCore.QRect(40, 670, 1731, 271))
         self.label_3.setStyleSheet("background - color : white ; \n"
-"font: \"MS Shell Dlg 2\";")
+"")
         self.label_3.setObjectName("label_3")
         self.label_17 = QtWidgets.QLabel(self.tab_gioi_thieu)
         self.label_17.setGeometry(QtCore.QRect(1440, -30, 341, 111))
@@ -1330,19 +1334,12 @@ class Ui_MainWindow(object):
 "background-color: rgb(230, 230, 230);\n"
 "\n"
 "}\n"
-"QPushButton#btn_thu_tu:hover{\n"
-"background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));\n"
-"\n"
-"}\n"
 "QPushButton#btn_thu_tu:pressed{\n"
+"background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));\n"
 "padding-left :2px;\n"
 "padding-top :2px;\n"
 "\n"
-"    background-color: rgb(58, 192, 255);\n"
-"}\n"
-"QPushButton#btn_thu_tu:checked {\n"
-"background-color: rgb(58, 192, 255);\n"
-"\n"
+"    \n"
 "}\n"
 "\n"
 "")
@@ -1384,19 +1381,10 @@ class Ui_MainWindow(object):
 "    background-color: rgb(230,230,230);\n"
 "\n"
 "}\n"
-"QPushButton#btn_them_bot:hover{\n"
-"background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));\n"
-"\n"
-"}\n"
 "QPushButton#btn_them_bot:pressed{\n"
+"background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));\n"
 "padding-left :2px;\n"
 "padding-top :2px;\n"
-"\n"
-"    background-color: rgb(58, 192, 240);\n"
-"}\n"
-"QPushButton#btn_them_bot:checked {\n"
-"background-color: rgb(58, 192, 255);\n"
-"\n"
 "}\n"
 "\n"
 "")
@@ -4205,10 +4193,10 @@ class Ui_MainWindow(object):
         self.label_3.setText(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Trebuchet MS\'; font-size:15pt; font-weight:400; font-style:normal;\">\n"
-"<p align=\"right\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:24pt; font-weight:600; text-decoration: underline;\"> GVHD :</span><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:24pt;\"> </span><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:24pt; font-weight:600;\">Ts.</span><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:24pt;\"> Đặng Xuân Ba                   </span></p>\n"
-"<p align=\"right\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:24pt;\">                        </span><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:24pt; font-weight:600; text-decoration: underline;\">SVTH :</span><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:24pt;\"> Lương Thế Dương - 20151219 </span></p>\n"
-"<p align=\"right\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:24pt;\">Thái Thanh Duy - 20151133    </span></p>\n"
+"</style></head><body style=\" font-family:\'Ubuntu\'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
+"<p align=\"right\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:24pt; font-weight:600; text-decoration: underline;\"> GVHD :</span><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:24pt;\"> </span><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:24pt; font-weight:600;\">Ts.</span><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:24pt;\"> Đặng Xuân Ba                    </span></p>\n"
+"<p align=\"right\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:24pt;\">                                    </span><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:24pt; font-weight:600; text-decoration: underline;\">SVTH :</span><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:24pt;\"> Lương Thế Dương - 20151219 </span></p>\n"
+"<p align=\"right\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:24pt;\">       Thái Thanh Duy - 20151133  </span></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:8pt;\">`</span></p></body></html>"))
         self.label_17.setText(_translate("MainWindow", "SMART ROBOTIC CENTER "))
         self.label_18.setText(_translate("MainWindow", "TRUNG TÂM ROBOT THÔNG MINH "))
@@ -4255,7 +4243,7 @@ class Ui_MainWindow(object):
         self.bt_back_dan_duong.setText(_translate("MainWindow", "Quay Lại"))
         self.btn_thu_tu.setText(_translate("MainWindow", "Thứ tự"))
         self.btn_batdau_danduong.setText(_translate("MainWindow", "Bắt đầu"))
-        self.btn_them_bot.setText(_translate("MainWindow", "Thêm/Bớt"))
+        self.btn_them_bot.setText(_translate("MainWindow", "Xóa"))
         self.checkBox_giong_noi.setText(_translate("MainWindow", "Giọng nói"))
         self.btn_ban_do.setText(_translate("MainWindow", "Bản đồ"))
         self.checkBox_kvc.setText(_translate("MainWindow", "Khu vực chờ"))
@@ -4369,4 +4357,4 @@ class Ui_MainWindow(object):
         self.tab_danh_sach_2.setTabText(self.tab_danh_sach_2.indexOf(self.tab_ai_2), _translate("MainWindow", "Al"))
         self.bt_stop.setText(_translate("MainWindow", "STOP"))
         self.label_4.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:16pt; font-weight:600;\">SMART ROBOTIC CENTER </span></p><p><span style=\" font-size:16pt; font-weight:600;\">TRUNG TÂM ROBOT THÔNG MINH </span></p><p><br/></p></body></html>"))
-        self.label_5.setText(_translate("MainWindow", "ROBOT TIẾP TÂN ASA"))
+        self.label_5.setText(_translate("MainWindow", "ROBOT TIẾP TÂN ASR"))

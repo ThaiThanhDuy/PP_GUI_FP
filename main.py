@@ -61,6 +61,9 @@ from playsound3 import playsound  # Thay đổi import ở đây
 #UI
 import keyyyyy
 from FILE_QT.QT_main import Ui_MainWindow 
+from FILE_QT.login import Ui_MainWindow_login
+from FILE_QT.ProgressBar_Bibot import Ui_MainWindow_bar
+from FILE_QT.form_cho_giay_lat import Ui_Form_cho_giay_lat
 from status_popup import StatusPopup, NamedMap
 from FILE_QT.from_nhapphong import Ui_Form_nhaptenban
 from FILE_QT.form_themvao import Ui_Form_them
@@ -115,16 +118,186 @@ def xuly_cham_ngoai(): # ham xu ly khi cham ra ngoai ban phim se tat
             keyyyyy.Registe.virtual_keyboard.close()
     except:
         print("failed to open virtual keyboard ,already exist ")
+
+class SpeechRecognitionThread(QThread):
+    """Luồng riêng để thực hiện nhận diện giọng nói liên tục."""
+    recognized_text = pyqtSignal(str)
+    error_occurred = pyqtSignal(str)
+    running = True
+
+    def __init__(self):
+        super().__init__()
+        self.recognizer = sr.Recognizer()
+        self.microphone = sr.Microphone()
+
+        # Điều chỉnh ngưỡng năng lượng để lọc tiếng ồn (tùy thuộc vào môi trường)
+        with self.microphone as source:
+            self.recognizer.adjust_for_ambient_noise(source)
+            self.recognizer.energy_threshold = 300  # Điều chỉnh giá trị này nếu cần
+
+    def run(self):
+        while self.running:
+            try:
+                with self.microphone as source:
+                    print("Đang lắng nghe...")
+                    audio = self.recognizer.listen(source, phrase_time_limit=3) # Nghe tối đa 3 giây mỗi lần
+                text = self.recognizer.recognize_google(audio, language='vi-VN')
+                print(f"Đã nhận diện: {text}")
+                self.recognized_text.emit(text)
+            except sr.UnknownValueError:
+                print("Không thể nhận diện giọng nói")
+                time.sleep(0.5) # Nghỉ một chút trước khi nghe lại
+            except sr.RequestError as e:
+                self.error_occurred.emit(f"Lỗi kết nối đến dịch vụ nhận diện giọng nói; {e}")
+                self.running = False # Dừng luồng nếu có lỗi kết nối
+            except Exception as e:
+                self.error_occurred.emit(f"Lỗi không xác định: {e}")
+                self.running = False
+            if not self.running:
+                print("Dừng lắng nghe.")
+                break
+
+    def stop(self):
+        self.running = False
+class LoginScreen(QMainWindow):
+    def __init__(self, loading_screen):
+        super().__init__()
+        self.loading_screen = loading_screen  # Lưu tham chiếu đến LoadingScreen
+        self.ui_login = Ui_MainWindow_login()  # Khởi tạo giao diện login
+        self.ui_login.setupUi(self)
+
+        if hasattr(self.ui_login, 'btn_dn_login'):
+            self.ui_login.btn_dn_login.clicked.connect(self.handle_login)
+        else:
+            print("Lỗi: Không tìm thấy nút btn_dn_login trong giao diện LoginScreen!")
+
+        self.ui_login.Button_tat_login.clicked.connect(self.close_login)
+        # self.ui_login.Button_tat_login.clicked.connect(self.ros2_handle.stop)
+        self.ui_login.lineEdit_dangnhap.setText(RobConf.USERNAME_DF)
+        self.ui_login.lineEdit_matkhau.setText(RobConf.PASSWORD_DF)
+        self.ui_login.Button_tat_login.setEnabled(False)
+        self.ui_login.Button_quenmk.clicked.connect(
+            lambda: QMessageBox.information(self, "Chào bạn", "Liên hệ qua sđt 0942385474"))
+        self.ui_login.lineEdit_matkhau.mousePressEvent = self.xu_ly_mk
+        self.ui_login.lineEdit_dangnhap.mousePressEvent = self.xu_ly_dn
+        self.ui_login.label_222.mousePressEvent = self.xu_ly_close
+
+    def xu_ly_close(self, event):
+        print("da an")
+        self.check_acc()
+        # xuly_cham_ngoai()  # Chú thích hoặc định nghĩa hàm này nếu cần
+
+    def xu_ly_dn(self, event):
+        print("dang nhap")
+        self.ui_login.Button_tat_login.setEnabled(False)
+        try:
+            if not hasattr(keyyyyy.Registe, "virtual_keyboard") or not keyyyyy.Registe.virtual_keyboard.isVisible():
+                keyyyyy.Registe.virtual_keyboard = keyyyyy.VKBD(self.ui_login.lineEdit_dangnhap)
+                keyyyyy.Registe.virtual_keyboard.show()
+            else:
+                # keyyyyy.Registe.virtual_keyboard.activateWindow()
+                keyyyyy.Registe.virtual_keyboard.hide()
+        except Exception as e:
+            print(f"failed to open virtual keyboard ,already exist or error: {e}")
+
+    def xu_ly_mk(self, event):
+        print("mat khau")
+        try:
+            if not hasattr(keyyyyy.Registe, "virtual_keyboard") or not keyyyyy.Registe.virtual_keyboard.isVisible():
+                keyyyyy.Registe.virtual_keyboard = keyyyyy.VKBD(self.ui_login.lineEdit_matkhau)
+                keyyyyy.Registe.virtual_keyboard.show()
+            else:
+                # keyyyyy.Registe.virtual_keyboard.activateWindow()
+                keyyyyy.Registe.virtual_keyboard.hide()
+        except Exception as e:
+            print(f"failed to open virtual keyboard ,already exist or error: {e}")
+
+    def check_acc(self):
+        tendangnhap = self.ui_login.lineEdit_dangnhap.text()
+        password = self.ui_login.lineEdit_matkhau.text()
+
+        if (tendangnhap == RobConf.USERNAME) and (password == RobConf.PASSWORD):
+            self.ui_login.Button_tat_login.setEnabled(True)
+        else:
+            self.ui_login.Button_tat_login.setEnabled(False)
+            Uti.RobotSpeakWithPath('voice_hmi_new/dangnhapsai.wav')
+            QMessageBox.information(self, "Chào bạn", "Tài khoản hoặc mật khẩu không đúng")
+            self.ui_login.lineEdit_dangnhap.clear()
+            self.ui_login.lineEdit_matkhau.clear()
+
+    def show_login(self):
+        self.showFullScreen()
+        Uti.RobotSpeakWithPath('voice_hmi_new/dang_nhap.wav')
+
+    def close_login(self):
+        self.close()
+
+    def handle_login(self):
+        print("Đã nhấn nút đăng nhập!")
+        tendangnhap = self.ui_login.lineEdit_dangnhap.text()
+        password = self.ui_login.lineEdit_matkhau.text()
+
+        if (tendangnhap == RobConf.USERNAME) and (password == RobConf.PASSWORD):
+            self.ui_login.Button_tat_login.setEnabled(True)
+            print("Đăng nhập thành công!")
+            self.close_login()
+            self.loading_screen.show_loading()
+        else:
+            self.ui_login.Button_tat_login.setEnabled(False)
+            Uti.RobotSpeakWithPath('voice_hmi_new/dangnhapsai.wav')
+            QMessageBox.information(self, "Chào bạn", "Tài khoản hoặc mật khẩu không đúng")
+            self.ui_login.lineEdit_dangnhap.clear()
+            self.ui_login.lineEdit_matkhau.clear()
+class LoadingScreen(QMainWindow):
+    def __init__(self, main_app):
+        super().__init__()
+        self.main_app = main_app
+        self.ui_bar = Ui_MainWindow_bar()
+        self.ui_bar.setupUi(self)
+        self.progress_bar = self.ui_bar.progressBar_1
+        self.a = 0
+        self.running = False
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.process)
+
+    def show_loading(self):
+        self.progress_bar.setValue(0)
+        self.a = 0
+        self.running = True
+        self.showFullScreen()
+        Uti.RobotSpeakWithPath('voice_hmi_new/new_doi.wav')
+        self.timer.start(50)
+
+    def close_loading(self):
+        self.running = False
+        self.timer.stop()
+        self.close()
+        self.main_app.showFullScreen()
+        Uti.RobotSpeakWithPath('voice_hmi_new/new_tinh_nang.wav')
+    def process(self):
+        if not self.running:
+            return
+        self.a += 1
+        self.progress_bar.setValue(self.a)
+        if self.progress_bar.value() == self.progress_bar.maximum():
+            self.close_loading()
+
 class MainApp(QMainWindow,Ui_MainWindow):
     def __init__(self):
         super().__init__()
-        self.navigation_thread = NavigationThread()
+      # loading_screen = LoadingScreen(self)
+       #loading_screen.show_loading()
+      #
         self.setupUi(self) 
+        self.navigation_thread = NavigationThread()
         self.ros2_handle = ROS2Handle()
         self.status_popup = StatusPopup()
-            
         self.initialize_ros2_manager()
+
+        #Process bar vs login 
         
+        self.a = 0
+        self.running = True
         
         self.css_ham = """
                                border-radius: 20px;
@@ -151,6 +324,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.port_backcamera = RobConf.chargCame
         self.port_front_R = RobConf.faceCame1
         self.port_front_L = RobConf.faceCam2
+        
         self.cap_qr = None
         self.capC = None
         
@@ -229,6 +403,49 @@ class MainApp(QMainWindow,Ui_MainWindow):
         # trang thai ai 
         self.ai_dang_chay = False
         self.di_dendiem_DV = False
+
+        self.speech_thread = None
+       
+
+    
+    def show_main(self):
+        self.show() # Hàm này được gọi từ LoadingScreen sau khi đóng
+ 
+    def manhinh_chogiaylat(self):
+        self.form_chogiaylat = QMainWindow()
+        self.form_chogiaylat.showFullScreen()
+        self.uic6 = Ui_Form_cho_giay_lat()
+        # self.form_chogiaylat.setGeometry(500, 200, 600, 550)
+
+        self.uic6.setupUi(self.form_chogiaylat)
+        self.form_chogiaylat.show()
+
+        # đặt giá trị cho thanh Bar
+        self.uic6.progressBar_2.setValue(0)
+        # gọi hàm program
+        self.program_chogiaylat()
+        self.b = 0
+        self.running_s = True
+
+    def program_chogiaylat(self):
+        timer = QTimer(self)
+        timer.timeout.connect(self.process_chogiaylat)
+        # thời gian chạy hết thanh Bar là 10 mili giây
+        timer.start(10)
+
+    def process_chogiaylat(self):
+        if not self.running_s:  # kiểm tra nếu biến running là False
+            return  # thoát khỏi hàm process
+        self.b += 1
+        self.uic6.progressBar_2.setValue(self.b)
+        # Kiểm tra hoàn thành (đạt 100%)
+        if self.uic6.progressBar_2.value() == self.uic6.progressBar_2.maximum():
+            # Hiển thị màn hình đăng nhập
+            print("đã load xong")
+            self.form_chogiaylat.close()
+            # đưa biến running False
+            self.running_s = False
+#            self.hien_thi_hinh_anh()
     def xu_ly_nhap_banphim(self, event):
         print("da nhap")
         try:
@@ -249,6 +466,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.bt_thu_nho.clicked.connect(self.showMinimized)
         self.bt_thoat.clicked.connect(self.ros2_handle.stop) 
         self.check_pin.clicked.connect(self.show_data_pin)
+        self.bt_stop.clicked.connect(self.ros2_handle.cmd_vel_publisher.stop_movement)
         ## Back button
         self.bt_back_setup.clicked.connect(self.back_setup)
         self.bt_back_dichuyen_robot.clicked.connect(self.back_setup)
@@ -357,6 +575,10 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.btn_batdau_danduong.clicked.connect(self.dan_duong)
 
         self.btn_ve_home_khancap.clicked.connect(self.ve_home_khan_cap)
+
+        self.btn_them_bot.clicked.connect(self.xoaDS)
+        self.btn_thu_tu.clicked.connect(self.sort_items)
+        self.checkBox_giong_noi.stateChanged.connect(self.toggle_che_do_giong_noi)
     def DINH_VI_BTN(self):
         self.ht_chutrinh_dv = True
         self.btn_enable.clicked.connect(self.fcn_enable_type)
@@ -413,15 +635,17 @@ class MainApp(QMainWindow,Ui_MainWindow):
 
     def back_setup(self):
         self.stackedWidget.setCurrentWidget(self.page_main)
+      #  Uti.RobotSpeakWithPath('voice_hmi_new/new_tinh_nang.wav')
     def Go_to_main(self):
         self.tabWidget_main = self.findChild(QTabWidget, "tab_main")
-        
+        Uti.RobotSpeakWithPath('voice_hmi_new/new_tinh_nang.wav')
     def show_setup_ts_robot(self):
         self.stackedWidget.setCurrentWidget(self.page_setup_ts_robot)
     def show_dichuyen_robot(self):
         self.stackedWidget.setCurrentWidget(self.page_dichuyen_robot)
     def show_page_setup_cam(self):
         self.stackedWidget.setCurrentWidget(self.page_setup_cam)
+        Uti.RobotSpeakWithPath('voice_hmi_new/setup_cam.wav')
     def show_page_setup_dinhvi(self):
         self.stackedWidget.setCurrentWidget(self.page_setup_dinhvi)
     def show_page_setup_tk(self):
@@ -429,8 +653,10 @@ class MainApp(QMainWindow,Ui_MainWindow):
     #Page ros
     def show_page_mode(self):
         self.stackedWidget.setCurrentWidget(self.page_mode)
+        Uti.RobotSpeakWithPath('voice_hmi_new/new_che_do_di_chuyen.wav')
     def show_dan_duong(self):
         self.stackedWidget.setCurrentWidget(self.page_dan_duong)
+        Uti.RobotSpeakWithPath('voice_hmi_new/new_vi_tri_di_chuyen.wav')
         self.fcn_load_list_0()
     
     def show_page_setup(self):
@@ -446,6 +672,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.stackedWidget.setCurrentWidget(self.page_dinhvi)
     def show_check_list(self):
         self.stackedWidget.setCurrentWidget(self.page_check_list)
+       
     def show_danhsach(self):
         self.stackedWidget.setCurrentWidget(self.page_danhsach)
 
@@ -454,6 +681,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
     def show_page_tracuu(self):
         self.stackedWidget.setCurrentWidget(self.page_tra_cuu)
     # Funtion event 
+
     def toggleFullScreen(self):
         """ Bật hoặc tắt chế độ toàn màn hình """
         if self.isFullScreen():
@@ -462,6 +690,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
             self.showFullScreen()  # Bật toàn màn hình
     def show_data_pin(self):
         self.UI_xn_pin()
+
     def UI_xn_pin(self):
         self.tinhtrang_pin = QMainWindow()
         self.ui21 = Ui_Form_status_pin()
@@ -606,7 +835,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
 ################## Setup ##################
 ################## CAI DAT THONG SO ROBOT ##################
     def show_thong_so_robot(self):
-       
+        
         self.textbox_vtt.setPlainText(str(RobConf.VX_AUTO_MAX))
         self.textbox_vtt_2.setPlainText(str(RobConf.VX_MANUAL_MAX))
         self.textbox_vtx.setPlainText(str(RobConf.VW_AUTO_MAX))
@@ -616,12 +845,14 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.textbox_ccdl.setPlainText(str(RobConf.chieu_cao_led))
         self.textbox_pin_sac_auto.setPlainText(str(RobConf.MUC_DIEN_AP_SAC))
         self.textbox_delay_time.setPlainText(str(RobConf.DELAY_TIME))
+
         self.textbox_confirm_pw.setEnabled(False)
         self.textbox_password.setEnabled(False)
         self.textbox_username.setEnabled(False)
         self.textbox_username.setStyleSheet("background-color: rgb(235, 235, 235);")  # Màu xám
         self.textbox_confirm_pw.setStyleSheet("background-color: rgb(235, 235, 235);")  #Màu xám
         self.textbox_password.setStyleSheet("background-color: rgb(235, 235, 235);")  #caidatrobot
+
     def fcn_reset_password(self):
         # Define the correct password
 
@@ -702,20 +933,20 @@ class MainApp(QMainWindow,Ui_MainWindow):
             self.password_global = password_temp
 
             Uti.setupRobot_sql_save(
-                self.VX_AUTO_MAX, 
-                self.VW_AUTO_MAX, 
-                self.VX_MANUAL_MAX, 
-                self.VW_MANUAL_MAX, 
-                self.DUNG_SAI_DIEM_DEN_VITRI, 
-                self.DUNG_SAI_DIEM_DEN_GOC, 
-                self.CHIEU_CAO_LED, 
-                self.username_global, 
-                self.password_global, 
-                self.MUC_DIEN_AP_SAC_PIN,
-                self.port_backcamera,
-                self.port_headcamera,
-                self.port_front_L,
-                self.port_front_R,
+            self.VX_AUTO_MAX, 
+            self.VW_AUTO_MAX, 
+            self.VX_MANUAL_MAX, 
+            self.VW_MANUAL_MAX, 
+            self.DUNG_SAI_DIEM_DEN_VITRI, 
+            self.DUNG_SAI_DIEM_DEN_GOC, 
+            self.CHIEU_CAO_LED, 
+            self.username_global, 
+            self.password_global, 
+            self.MUC_DIEN_AP_SAC_PIN,
+            self.port_backcamera,
+            self.port_headcamera,
+            self.port_front_L,
+            self.port_front_R,
             )
 
             # Đối với QPlainTextEdit
@@ -747,59 +978,63 @@ class MainApp(QMainWindow,Ui_MainWindow):
         try:
         # Kiểm tra từng giá trị từ textbox
             vxt_auto_max_text = self.textbox_vtt.toPlainText()
+            print(f"{vxt_auto_max_text}")
             self.VX_AUTO_MAX = float(vxt_auto_max_text) if vxt_auto_max_text else None
             self.validate_input(self.VX_AUTO_MAX, RobConf.AUTO_VX_MIN, RobConf.AUTO_VX_MAX, "[Auto] vận tốc thẳng.")
 
             vw_auto_max_text = self.textbox_vtx.toPlainText()
+            print(f"{vw_auto_max_text}")
             self.VW_AUTO_MAX = float(vw_auto_max_text) if vw_auto_max_text else None
             self.validate_input(self.VW_AUTO_MAX, RobConf.AUTO_VW_MIN, RobConf.AUTO_VW_MAX, "[Auto] vận tốc xoay.")
 
             vx_manual_max_text = self.textbox_vtt_2.toPlainText()
+            print(f"{vx_manual_max_text}")
             self.VX_MANUAL_MAX = float(vx_manual_max_text) if vx_manual_max_text else None
             self.validate_input(self.VX_MANUAL_MAX, RobConf.MANUAL_VX_MIN, RobConf.MANUAL_VX_MAX, "[Manual] vận tốc thẳng.")
 
             vw_manual_max_text = self.textbox_vtx_2.toPlainText()
+            print(f"{vw_manual_max_text}")
             self.VW_MANUAL_MAX = float(vw_manual_max_text) if vw_manual_max_text else None
             self.validate_input(self.VW_MANUAL_MAX, RobConf.MANUAL_VW_MIN, RobConf.MANUAL_VW_MAX, "[Manual] vận tốc xoay.")
 
             dung_sai_diem_den_vitri_text = self.textbox_sskc.toPlainText()
+            print(f"{dung_sai_diem_den_vitri_text}")
             self.DUNG_SAI_DIEM_DEN_VITRI = float(dung_sai_diem_den_vitri_text) if dung_sai_diem_den_vitri_text else None
             self.validate_input(self.DUNG_SAI_DIEM_DEN_VITRI, 0, RobConf.DUNG_SAI_KC_MAX, "Sai số khoảng cách.")
 
             dung_sai_diem_den_goc_text = self.textbox_ssgx.toPlainText()
+           # print(f"{dung_sai_diem_den_goc_text}")
             self.DUNG_SAI_DIEM_DEN_GOC = float(dung_sai_diem_den_goc_text) if dung_sai_diem_den_goc_text else None
             self.validate_input(self.DUNG_SAI_DIEM_DEN_GOC, 0, RobConf.DUNG_SAI_GOC_MAX, "Sai số góc xoay.")
 
             chieu_cao_led_text = self.textbox_ccdl.toPlainText()
+            print(f"{chieu_cao_led_text}")
             self.CHIEU_CAO_LED = float(chieu_cao_led_text) if chieu_cao_led_text else None
             self.validate_input(self.CHIEU_CAO_LED, RobConf.CHIEU_CAO_LED_MIN, RobConf.CHIEU_CAO_LED_MAX, "Chiều cao đèn LED.")
 
             muc_dien_ap_sac_pin_text = self.textbox_pin_sac_auto.toPlainText()
+            print(f"{muc_dien_ap_sac_pin_text}")
             self.MUC_DIEN_AP_SAC_PIN = float(muc_dien_ap_sac_pin_text) if muc_dien_ap_sac_pin_text else None
             self.validate_input(self.MUC_DIEN_AP_SAC_PIN, RobConf.MUC_DIEN_AP_SAC_MIN, RobConf.MUC_DIEN_AP_SAC_MAX, "Mức pin sạc tự động.")
           
             delay_time = self.textbox_delay_time.toPlainText()
-            try:
-                self.ros2_handle.goal_publisher.delay_time = int(delay_time)
-            except ValueError:
-                self.display_thatbai("Error: "+str(ValueError))
-                return
+            print(f"{delay_time}")
 
             success = sql.setupRobot_sql_save(
-            self.VX_AUTO_MAX,
-            self.VW_AUTO_MAX,
-            self.VX_MANUAL_MAX,
-            self.VW_MANUAL_MAX,
-            self.DUNG_SAI_DIEM_DEN_VITRI,
-            self.DUNG_SAI_DIEM_DEN_GOC,
-            self.CHIEU_CAO_LED,
+            self.VX_AUTO_MAX, 
+            self.VW_AUTO_MAX, 
+            self.VX_MANUAL_MAX, 
+            self.VW_MANUAL_MAX, 
+            self.DUNG_SAI_DIEM_DEN_VITRI, 
+            self.DUNG_SAI_DIEM_DEN_GOC, 
+            self.CHIEU_CAO_LED, 
+            self.username_global, 
+            self.password_global, 
             self.MUC_DIEN_AP_SAC_PIN,
             self.port_backcamera,
             self.port_headcamera,
             self.port_front_L,
             self.port_front_R,
-            self.username_global,
-            self.password_global,
         )
             if success:
                 self.display_thanhcong("Dữ Liệu Đã Lưu Thành Công")
@@ -971,15 +1206,15 @@ class MainApp(QMainWindow,Ui_MainWindow):
         
         
         sql.setupRobot_sql_save(
-            self.VX_AUTO_MAX,
-            self.VW_AUTO_MAX,
-            self.VX_MANUAL_MAX,
-            self.VW_MANUAL_MAX,
-            self.DUNG_SAI_DIEM_DEN_VITRI,
-            self.DUNG_SAI_DIEM_DEN_GOC,
-            self.CHIEU_CAO_LED,
-            self.username_global,
-            self.password_global,
+            self.VX_AUTO_MAX, 
+            self.VW_AUTO_MAX, 
+            self.VX_MANUAL_MAX, 
+            self.VW_MANUAL_MAX, 
+            self.DUNG_SAI_DIEM_DEN_VITRI, 
+            self.DUNG_SAI_DIEM_DEN_GOC, 
+            self.CHIEU_CAO_LED, 
+            self.username_global, 
+            self.password_global, 
             self.MUC_DIEN_AP_SAC_PIN,
             self.port_backcamera,
             self.port_headcamera,
@@ -1212,6 +1447,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.bt_RIGHT.released.connect(self.ros2_handle.cmd_vel_publisher.stop_movement)
         self.bt_LEFT.pressed.connect(self.ros2_handle.cmd_vel_publisher.left)
         self.bt_LEFT.released.connect(self.ros2_handle.cmd_vel_publisher.stop_movement)
+        self.bt_STOP.pressed.connect(self.ros2_handle.cmd_vel_publisher.stop_movement)
     def manhinh_nhap_soban(self):  # dùng cho nút cập nhật số bàn
         self.from_nhap = QMainWindow()
         self.uic3 = Ui_Form_nhaptenban()
@@ -1858,6 +2094,55 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.listWidget_ds.clear()
         for item in items:
             self.listWidget_ds.addItem(item)
+    def xoaDS(self):
+        self.listWidget_ds.clear()
+        for key in self.item_states:
+            self.item_states[key] = False
+
+    # GIONG NOI
+    def toggle_che_do_giong_noi(self, state):
+        if state == Qt.Checked:
+            print("Bật chế độ giọng nói - Bắt đầu lắng nghe...")
+            self.start_listening()
+        else:
+            print("Tắt chế độ giọng nói - Dừng lắng nghe.")
+            self.stop_listening()
+    def show_error_message(self, message):
+        print(f"Lỗi: {message}")
+    def start_listening(self):
+        if self.speech_thread is None or not self.speech_thread.isRunning():
+            self.speech_thread = SpeechRecognitionThread()
+            self.speech_thread.recognized_text.connect(self.phan_tich_va_them_phong)
+            self.speech_thread.error_occurred.connect(self.show_error_message) # Thêm xử lý lỗi nếu cần
+            self.speech_thread.start()
+        else:
+            print("Luồng nhận diện giọng nói đã chạy.")
+
+    def stop_listening(self):
+        if self.speech_thread and self.speech_thread.isRunning():
+            self.speech_thread.stop()
+            self.speech_thread.wait() # Đợi luồng kết thúc
+            self.speech_thread = None
+            print("Luồng nhận diện giọng nói đã dừng.")
+        else:
+            print("Không có luồng nhận diện giọng nói nào đang chạy để dừng.")
+
+    def phan_tich_va_them_phong(self, text):
+        if "thêm phòng" in text.lower():
+            parts = text.lower().split()
+            for i, part in enumerate(parts):
+                if part == "phòng" and i + 1 < len(parts):
+                    try:
+                        so_phong = int(parts[i + 1])
+                        if 1 <= so_phong <= 10:
+                            self.toggle_item(so_phong)
+                        else:
+                            print(f"Số phòng không hợp lệ: {so_phong}. Chỉ hỗ trợ phòng 1 đến 10.")
+                    except ValueError:
+                        print(f"Không thể nhận diện số phòng trong: {parts[i + 1]}")
+        # Bạn có thể thêm các lệnh giọng nói khác tại đây (ví dụ: "xóa tất cả", "sắp xếp lại")
+
+
 ################## GIAO DIEN  CHAY DANH SACH ##################
     # SET CHIEU CAO CUA HANG
     def set_column_widths_0(self):
@@ -2682,10 +2967,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
             self.ui25.Btn_ui_xn_dv.setEnabled(True)
             # Đóng cửa sổ thông báo sau khi hoàn thành
             #msg_box.close()
-            return result 
-
-
-         
+            return result         
 
 ################## Navigate thread  ##################
     def kiem_tra_du_dieu_khien_chay(self):
@@ -3046,10 +3328,11 @@ class MainApp(QMainWindow,Ui_MainWindow):
     def uncheck_checkout(self, checked):
         if checked:
             self.checkbox_checkout_2.setChecked(False)
-
+    
     def uncheck_checkin(self, checked):
         if checked:
             self.checkbox_checkin_2.setChecked(False)
+      
     def update_checkin_state(self, checked):
         self.checkin_active = checked
 
@@ -3212,13 +3495,16 @@ class MainApp(QMainWindow,Ui_MainWindow):
                     if has_checkin:
                         QMessageBox.warning(self, "Cảnh báo", f"ID {id_to_check} đã có dữ liệu check-in trước đó.")
                         return
+                  
                     self.UI_xn_chupanh() # Mở UI chụp ảnh cho check-in
                     self.is_checkin_processed = True
                     self.is_checkout_processed = False # Reset checkout flag
                 elif self.checkbox_checkout_2.isChecked():
                     if has_checkout:
                         QMessageBox.warning(self, "Cảnh báo", f"ID {id_to_check} đã có dữ liệu check-out trước đó.")
+                        
                         return
+                
                     self.UI_xn_chupanh() # Mở UI chụp ảnh cho check-out (nếu cần)
                     self.is_checkout_processed = True
                     self.is_checkin_processed = False # Reset checkin flag
@@ -3484,11 +3770,17 @@ class MainApp(QMainWindow,Ui_MainWindow):
 
             except Exception as e:
                 self.label_tra_loi_ai_2.setText(f"Lỗi khi gửi câu hỏi: {str(e)}")
-            
+    
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = MainApp()
+  # window = MainApp()
 
-    window.show()
+ #  window.show()
     #window.showFullScreen()
+
+    main_app = MainApp()
+    loading_screen = LoadingScreen(main_app)
+    login_screen = LoginScreen(loading_screen)  # Truyền loading_screen vào LoginScreen
+
+    login_screen.show_login()
     sys.exit(app.exec_())

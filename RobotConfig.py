@@ -66,7 +66,7 @@ MUC_DIEN_AP_SAC_MAX = 12 #100% tuong duong 12 volt
 
 # THONG SO MAC DINH CUA ROBOT =====================
 
-USERNAME_DF = 'ute'
+USERNAME_DF = 'UTE'
 PASSWORD_DF = '123'
 AUTO_VX_DF = 0.1*AUTO_VX_MAX
 AUTO_VW_DF = 0.1*AUTO_VW_MAX

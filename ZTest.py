@@ -201,88 +201,121 @@
             return result 
     
       def dinh_vi_fcn(self):
+    self.navigation_thread.dang_dinhvi_status = True
+    self.dang_dinhvi_cnt = 0
+    Uti.RobotSpeakWithPath('voice_hmi_new/dinhvi.wav')
 
-  
-        self.navigation_thread.dang_dinhvi_status = True
+    print('[dinh_vi_fcn]---------------------------BAT DAU QUA TRINH DINH VI------------------------')
+
+    counterMove = 0
+    timeReadcame = 10
+    cricle_yes = False
+    radius_step = 0.5
+    yaw_step = 45
+    radius_current = 0.0
+    yaw_index = 0
+    yaw_current = 0
+    yaw_list = [0, 45, 90, 135, 180, 225, 270, 315]
+    result = False
+
+    while (not result) and (counterMove < timeReadcame):
+        rdeg, pdeg, yawdeg = self.quaternion_to_euler(
+            self.ros2_handle.odom_listener.data_odom[0],
+            self.ros2_handle.odom_listener.data_odom[1],
+            0,
+            self.ros2_handle.odom_listener.data_odom[3]
+        )
+
+        print(f"[DEBUG] Góc yaw đầu vào: {yawdeg} độ")
+        print(f"X:{self.ros2_handle.odom_listener.data_odom[0]}")
+        print(f"Y:{self.ros2_handle.odom_listener.data_odom[1]}")
+        print(f"Z:{self.ros2_handle.odom_listener.data_odom[2]}")
+        print(f"W:{self.ros2_handle.odom_listener.data_odom[3]}")
+
+        result_simlar = 0
+        x_best, y_best, yaw_best = 0, 0, 0
+        yess = False
+
+        if yess:
+            cricle_yes = True
+            xx, yy = x_best, y_best
+
+            print(f'[dinh_vi_fcn]Vi tri Diem hien tai cho x: {xx}, y = {yy}.')
+            result = True
+
+            print('[dinh_vi_fcn]------------------- ĐÃ LẤY XONG TỌA ĐỘ ---------------------')
+            print(f'[dinh_vi_fcn] x: {xx}, y: {yy}, z: {self.ros2_handle.odom_listener.data_odom[2]}, w: {self.ros2_handle.odom_listener.data_odom[3]} -pose cam')
+            print("[dinh_vi_fcn]DINH VI XONG!!!!!")
+            break
+
+        elif (yess == False) and (self.ht_chutrinh_dv == True):
+            yaw_current = yaw_list[yaw_index]
+
+            x_desired = radius_current * math.cos(math.radians(yaw_current))
+            y_desired = radius_current * math.sin(math.radians(yaw_current))
+            z_desired = 0
+            yaw_desired = math.radians(yaw_current)
+            qx, qy, qz, qw = self.euler_to_quaternion(yaw_desired, 0, 0)
+            w_desired = qw
+
+            print(f'[dinh_vi_fcn]-------Tim duong tron, Di chuyen den vi tri: goc = {yaw_current}, x = {x_desired:.2f}, y = {y_desired:.2f}')
+            self.ros2_handle.goal_publisher.send_goal(x=x_desired, y=y_desired, z=z_desired, w=w_desired)
+
+            # Chờ robot đến nơi + thêm thời gian để quét hình (2 giây)
+            time.sleep(2)
+
+            yaw_index += 1
+            if yaw_index >= len(yaw_list):
+                yaw_index = 0
+                radius_current += radius_step
+                print(f"[dinh_vi_fcn]--- Tăng bán kính lên: {radius_current} ---")
+
+        counterMove += 1  # đảm bảo không lặp vô hạn nếu không tìm thấy
+
+    print('[dinh_vi_fcn] KẾT THÚC QUÁ TRÌNH ĐỊNH VỊ')
+
+
+def dinh_vi_fcn(self):
+       
         self.dang_dinhvi_cnt = 0
         Uti.RobotSpeakWithPath('voice_hmi_new/dinhvi.wav')
-    
-        
-     
-    
-        #self.run_file_code_thread.duongdan = 2
-        print('[dinh_vi_fcn]---------------------------BAT DAU QUA TRINH DINH VI------------------------')
 
-        #B1: TIM HINH TRONG MAU VANG TREN CAM: NEU CO DUONG TRON THI TINH TAM VA CAP NHAT VI TRI
-        counterMove = 0
-        timeReadcame = 10
-        cricle_yes = False
-        radius_step = 0.5
-        yaw_step = 45
-        radius_current = 0.0
-        radius_step = 0.5
-        yaw_index = 0
-        yaw_current = 0
-       # yaw_list = [0, 45, 90, 135, 180, -135, -90, -45]
-        yaw_list = [0, 45, 90, 135, 180, 225, 270, 315]
-        result = False
-        while (not result) and (counterMove < timeReadcame): # quay lai qua trinh doc came
-            #if self.navigation_thread.quatrinh_move == False:
-                            #time.sleep(2)
-            rdeg, pdeg, yawdeg = self.quaternion_to_euler(self.ros2_handle.odom_listener.data_odom[0],self.ros2_handle.odom_listener.data_odom[1],
-             0,self.ros2_handle.odom_listener.data_odom[3])
-          
-            print(f"[DEBUG] Góc yaw đầu vào: {yawdeg} độ")
-        #self.sub_win1.uic.terminal_2.setPlainText(str(yawdeg))
-       # print("GOC YAWdeg now: ", yawdeg)
+        print('[dinh_vi_fcn]---------------------------BẮT ĐẦU QUÁ TRÌNH ĐỊNH VỊ------------------------')
+
+        yaw_list_deg = [45,180,225]  # Danh sách góc yaw bạn muốn robot hướng tới (đơn vị độ)
+        x_desired = 0.0
+        y_desired = 0.0
+        z_desired = 0.0
+        self.current_yaw_index = 0  # Theo dõi góc yaw hiện tại trong danh sách
+        print(f"Co :{len(yaw_list_deg)} goc")
+        while self.current_yaw_index < len(yaw_list_deg):
+         
+            rdeg, pdeg, yawdeg = self.quaternion_to_euler(self.ros2_handle.odom_listener.data_odom[0],self.ros2_handle.odom_listener.data_odom[1], self.ros2_handle.odom_listener.data_odom[2],self.ros2_handle.odom_listener.data_odom[3] )
+
+            print(f"Status done:{ self.ros2_handle.goal_publisher.dinhvi_vitri}")
             print(f"X:{self.ros2_handle.odom_listener.data_odom[0]}")
             print(f"Y:{self.ros2_handle.odom_listener.data_odom[1]}")
             print(f"Z:{self.ros2_handle.odom_listener.data_odom[2]}")
             print(f"W:{self.ros2_handle.odom_listener.data_odom[3]}")
-  
-            result_simlar = 0
-            x_best, y_best, yaw_best = 0,0,0
-       
-            yess = False
+            print(f"R:{rdeg}")
+            print(f"P:{pdeg}")
+            print(f"[DEBUG] Góc yaw hiện tại: {math.radians(yawdeg):.5f} rad ({yawdeg:.5f}°)")
 
-            if yess:
-                # Tinh duoc vi tri hinhtron                    
-                cricle_yes = True
-                # Chinh Pose he thong
-                    # doc thong so ti le cam/m va vi tri home
-                    # Đọc các giá trị từ tệp văn bản
-                xx, yy = x_best,y_best
-           
-                print(f'[dinh_vi_fcn]Vi tri Diem hien tai cho x: {xx}, y = {yy}.')
+     
+            if  self.ros2_handle.goal_publisher.dinhvi_vitri == True:
+                print(f'[dinh_vi_fcn] Robot đã đến góc {yaw_list_deg[self.current_yaw_index]}°.')
+             #   self.di_dendiem_DV = False  # Reset để chuẩn bị cho góc tiếp theo
+                self.current_yaw_index += 1 # Chuyển sang góc tiếp theo
+            else :
+                yaw_rad = math.radians(yaw_list_deg[self.current_yaw_index])
+                qx_desired, qy_desired, qz_desired, qw_desired = self.euler_to_quaternion(yaw_rad, 0, 0)
+            
+                print(f'[dinh_vi_fcn]-------Di chuyển đến góc: {yaw_list_deg[self.current_yaw_index]}°, x = {x_desired:.2f}, y = {y_desired:.2f}, w = {qw_desired:.2f}')
+                self.ros2_handle.goal_publisher.send_goal(x=x_desired, y=y_desired, z=z_desired, w=qw_desired)
         
-                result = True
-          
+                time.sleep(0.5) # Thêm một khoảng delay nhỏ để tránh gửi goal quá nhanh
+
                 
-                print('[dinh_vi_fcn]------------------- ĐÃ LẤY XONG TỌA ĐỘ ---------------------')
+              
 
-                print(f'[dinh_vi_fcn] x: {xx}, y: {yy}, z: {self.ros2_handle.odom_listener.data_odom[2]}, w: {self.ros2_handle.odom_listener.data_odom[3]}','-pose cam')
-                print("[dinh_vi_fcn]DINH VI XONG!!!!!")
-                break
-            elif (yess == False ) and (self.ht_chutrinh_dv == True) : #NEU KHONG CO DUOI N LAN THI QUA B2: GOI LENH DI CHUYEN ROBOT DEN VI TRI MONG MUON, CHO HE THONG DUNG, TIM HINH TRON MAU VANG
-        
-                yaw_current = yaw_list[yaw_index]
- 
-                x_desired = radius_current*np.cos(math.radians(yaw_current))
-                y_desired = radius_current*np.sin(math.radians(yaw_current))
-                z_desired = 0
-              #  yaw_desired = math.radians(0)
-                yaw_desired = math.radians(yaw_current)
-                qx, qy, qz, qw = self.euler_to_quaternion(yaw_desired,0,0)
-                w_desired = qw 
-                print(f'[dinh_vi_fcn]-------Tim duong tron, Di chuyen den vi tri nay: goc = {yaw_current}, x = {x_desired}, y = {y_desired}')
-                #self.desired_move(x_desired=x_desired, y_desired=y_desired, z_desired=qz, w_desired=qw,id_desired=200)      
-                self.ros2_handle.goal_publisher.send_goal( x = x_desired, y = y_desired, z = z_desired, w = w_desired)
-                print('[dinh_vi_fcn]CHO ROBOT TOI DIEM MOI XONG')
-            #    time.sleep(5)
-             
-                # Cập nhật vòng lặp
-                yaw_index += 1
-                if yaw_index >= len(yaw_list):
-                    yaw_index = 0
-                    radius_current += radius_step
-  
+        print('[dinh_vi_fcn] ================= KẾT THÚC QUÁ TRÌNH ĐỊNH VỊ =================')

@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow_login</class>
+ <widget class="QMainWindow" name="MainWindow_login">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1911</width>
+    <height>1000</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QPushButton" name="btn_dn_login">
+    <property name="geometry">
+     <rect>
+      <x>790</x>
+      <y>680</y>
+      <width>341</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>25</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton#btn_dn_login
+{
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 0, 0, 255), stop:1 rgba(230, 230, 230, 220));
+color:rgba(255, 255, 255, 200);
+border-radius:20px;
+}
+QPushButton#btn_dn_login:hover{
+/*background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(150, 123, 111, 219), stop:1 rgba(85, 84, 81, 226));*/
+	
+	background-color: qlineargradient(spread:pad, x1:0.348, y1:0.561727, x2:1, y2:0.54, stop:0.199005 rgba(13, 211, 218, 210), stop:1 rgba(220, 220, 220, 255));
+}
+QPushButton#btn_dn_login:pressed{
+
+ padding-left:5px;
+ padding-top:5px;
+	
+
+
+}</string>
+    </property>
+    <property name="text">
+     <string>Đăng nhập</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_222">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>-30</y>
+      <width>1951</width>
+      <height>1931</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">
+background-color: rgba(0,0,0,120);
+/*border-top-left-radius :50px;*/
+
+</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>hinh_coppy_right.jpg</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_dangnhapp">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>170</y>
+      <width>761</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>32</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">
+color: rgba(255, 255, 255,220);
+</string>
+    </property>
+    <property name="text">
+     <string>Xin chào, tôi là ROBOT ASR</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_dangnhap">
+    <property name="geometry">
+     <rect>
+      <x>650</x>
+      <y>340</y>
+      <width>590</width>
+      <height>110</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>22</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color:rgba(255, 255, 255, 200);
+border-radius:15px;
+border-bottom:2px solid rgba(46, 82, 101, 200);
+color:rgba(0, 0, 0, 240);
+padding-bottom:7px;</string>
+    </property>
+    <property name="placeholderText">
+     <string>Tên Đăng Nhập</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_matkhau">
+    <property name="geometry">
+     <rect>
+      <x>650</x>
+      <y>490</y>
+      <width>590</width>
+      <height>110</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>22</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color:rgba(255, 255, 255, 200);
+border-radius:15px;
+border-bottom:2px solid rgba(46, 82, 101, 200);
+color:rgba(0, 0, 0, 240);
+padding-bottom:7px;</string>
+    </property>
+    <property name="echoMode">
+     <enum>QLineEdit::Password</enum>
+    </property>
+    <property name="placeholderText">
+     <string>Mật Khẩu</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Button_quenmk">
+    <property name="geometry">
+     <rect>
+      <x>820</x>
+      <y>860</y>
+      <width>301</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton#Button_quenmk{
+	
+color:rgba(255, 255, 255, 200);
+border:none;
+}
+/*QPushButton#Button_quenmk:hover{
+color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(0, 0, 255, 255), stop:1 rgba(0, 0, 255, 255));
+}*/
+QPushButton#Button_quenmk:pressed{
+
+ padding-left:5px;
+ padding-top:5px;
+	
+
+
+}</string>
+    </property>
+    <property name="text">
+     <string>Quên mật khẩu?</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Button_tat_login">
+    <property name="geometry">
+     <rect>
+      <x>1870</x>
+      <y>10</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">
+border-radius:15px;
+background-color: rgb(255, 255, 255);
+</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <zorder>label_222</zorder>
+   <zorder>label_dangnhapp</zorder>
+   <zorder>Button_tat_login</zorder>
+   <zorder>lineEdit_dangnhap</zorder>
+   <zorder>lineEdit_matkhau</zorder>
+   <zorder>btn_dn_login</zorder>
+   <zorder>Button_quenmk</zorder>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1911</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

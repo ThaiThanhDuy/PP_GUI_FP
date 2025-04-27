@@ -540,6 +540,12 @@
           <height>551</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <family>Ubuntu Mono</family>
+          <pointsize>15</pointsize>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">background - color : white ; 
 font: &quot;MS Shell Dlg 2&quot;;</string>
@@ -577,24 +583,24 @@ p, li { white-space: pre-wrap; }
        <widget class="QLabel" name="label_3">
         <property name="geometry">
          <rect>
-          <x>0</x>
-          <y>590</y>
+          <x>40</x>
+          <y>670</y>
           <width>1731</width>
           <height>271</height>
          </rect>
         </property>
         <property name="styleSheet">
          <string notr="true">background - color : white ; 
-font: &quot;MS Shell Dlg 2&quot;;</string>
+</string>
         </property>
         <property name="text">
          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Trebuchet MS'; font-size:15pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;right&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:24pt; font-weight:600; text-decoration: underline;&quot;&gt; GVHD :&lt;/span&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:24pt;&quot;&gt; &lt;/span&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:24pt; font-weight:600;&quot;&gt;Ts.&lt;/span&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:24pt;&quot;&gt; Đặng Xuân Ba                   &lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;right&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:24pt;&quot;&gt;						&lt;/span&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:24pt; font-weight:600; text-decoration: underline;&quot;&gt;SVTH :&lt;/span&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:24pt;&quot;&gt; Lương Thế Dương - 20151219 &lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;right&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:24pt;&quot;&gt;Thái Thanh Duy - 20151133    &lt;/span&gt;&lt;/p&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;right&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:24pt; font-weight:600; text-decoration: underline;&quot;&gt; GVHD :&lt;/span&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:24pt;&quot;&gt; &lt;/span&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:24pt; font-weight:600;&quot;&gt;Ts.&lt;/span&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:24pt;&quot;&gt; Đặng Xuân Ba                    &lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;right&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:24pt;&quot;&gt;						    		&lt;/span&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:24pt; font-weight:600; text-decoration: underline;&quot;&gt;SVTH :&lt;/span&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:24pt;&quot;&gt; Lương Thế Dương - 20151219 &lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;right&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:24pt;&quot;&gt; 	  Thái Thanh Duy - 20151133  &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt;&quot;&gt;`&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
@@ -2722,19 +2728,12 @@ padding-top :2px;
 background-color: rgb(230, 230, 230);
 
 }
-QPushButton#btn_thu_tu:hover{
-background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));
-
-}
 QPushButton#btn_thu_tu:pressed{
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));
 padding-left :2px;
 padding-top :2px;
 
-	background-color: rgb(58, 192, 255);
-}
-QPushButton#btn_thu_tu:checked {
-background-color: rgb(58, 192, 255);
-
+	
 }
 
 </string>
@@ -2810,25 +2809,16 @@ background-color: rgb(0, 230, 77);
 	background-color: rgb(230,230,230);
 
 }
-QPushButton#btn_them_bot:hover{
-background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));
-
-}
 QPushButton#btn_them_bot:pressed{
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));
 padding-left :2px;
 padding-top :2px;
-
-	background-color: rgb(58, 192, 240);
-}
-QPushButton#btn_them_bot:checked {
-background-color: rgb(58, 192, 255);
-
 }
 
 </string>
        </property>
        <property name="text">
-        <string>Thêm/Bớt</string>
+        <string>Xóa</string>
        </property>
        <property name="icon">
         <iconset>
@@ -8703,7 +8693,7 @@ QPushButton#bt_stop:pressed{
      </font>
     </property>
     <property name="text">
-     <string>ROBOT TIẾP TÂN ASA</string>
+     <string>ROBOT TIẾP TÂN ASR</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
