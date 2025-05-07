@@ -32,6 +32,7 @@ import cv2
 from pydub import AudioSegment
 import unicodedata
 import unidecode
+import paho.mqtt.client as mqtt
 
 from datetime import datetime, timedelta
 from reportlab.lib.pagesizes import letter
@@ -119,46 +120,6 @@ def xuly_cham_ngoai(): # ham xu ly khi cham ra ngoai ban phim se tat
     except:
         print("failed to open virtual keyboard ,already exist ")
 
-class SpeechRecognitionThread(QThread):
-    """Luồng riêng để thực hiện nhận diện giọng nói liên tục."""
-    recognized_text = pyqtSignal(str)
-    error_occurred = pyqtSignal(str)
-    running = True
-
-    def __init__(self):
-        super().__init__()
-        self.recognizer = sr.Recognizer()
-        self.microphone = sr.Microphone()
-
-        # Điều chỉnh ngưỡng năng lượng để lọc tiếng ồn (tùy thuộc vào môi trường)
-        with self.microphone as source:
-            self.recognizer.adjust_for_ambient_noise(source)
-            self.recognizer.energy_threshold = 300  # Điều chỉnh giá trị này nếu cần
-
-    def run(self):
-        while self.running:
-            try:
-                with self.microphone as source:
-                    print("Đang lắng nghe...")
-                    audio = self.recognizer.listen(source, phrase_time_limit=3) # Nghe tối đa 3 giây mỗi lần
-                text = self.recognizer.recognize_google(audio, language='vi-VN')
-                print(f"Đã nhận diện: {text}")
-                self.recognized_text.emit(text)
-            except sr.UnknownValueError:
-                print("Không thể nhận diện giọng nói")
-                time.sleep(0.5) # Nghỉ một chút trước khi nghe lại
-            except sr.RequestError as e:
-                self.error_occurred.emit(f"Lỗi kết nối đến dịch vụ nhận diện giọng nói; {e}")
-                self.running = False # Dừng luồng nếu có lỗi kết nối
-            except Exception as e:
-                self.error_occurred.emit(f"Lỗi không xác định: {e}")
-                self.running = False
-            if not self.running:
-                print("Dừng lắng nghe.")
-                break
-
-    def stop(self):
-        self.running = False
 class LoginScreen(QMainWindow):
     def __init__(self, loading_screen):
         super().__init__()
@@ -406,6 +367,16 @@ class MainApp(QMainWindow,Ui_MainWindow):
 
         self.speech_thread = None
        
+        #Mobile
+        self.broker_url = ""
+        self.port = 0
+        self.topic_subscribe_command = ""
+        self.topic_publish_camera = ""
+        self.username = ""
+        self.password = ""
+        self.client = None
+        self.btn_bat_ketnoi_mobile.clicked.connect(self.start_mobile)
+        self.btn_tat_ketnoi_mobile.clicked.connect(self.stop_mobile)
 
     
     def show_main(self):
@@ -481,6 +452,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.bt_back_setup_ts_robot_2.clicked.connect(self.back_setup)
         self.bt_back_tc_ai_2.clicked.connect(self.back_setup)
         self.bt_back_tc_nha_truong_4.clicked.connect(self.back_setup)
+        self.bt_back_mobile.clicked.connect(self.back_setup)
         #Setup button
         self.bt_setup.clicked.connect(self.show_page_setup)
         self.bt_setup_robot.clicked.connect(self.show_setup_ts_robot)
@@ -496,7 +468,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.bt_setup_dinh_vi.clicked.connect(self.show_page_setup_dinhvi)
         self.bt_wifi.clicked.connect(self.show_page_wifi)
         self.btn_kt_wifi.clicked.connect(self.kiem_tra_wifi)
-        self.btn_ketnoi_mobile.clicked.connect(self.status_ketnoi_mobile)
+    
         self.bt_set_home.clicked.connect(self.show_dichuyen_robot)
         self.btn_reset_pw.clicked.connect(self.fcn_reset_password)
         self.btn_save_pw.clicked.connect(self.fcn_save_password)
@@ -549,6 +521,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.Button_xoa.clicked.connect(self.xoa_tungthanhphan)
     
         self.Button_toado.clicked.connect(self.show_toado)
+        self.mobile_button.clicked.connect(self.show_mobile)
     def control_auto(self):
         self.btn_phong1.clicked.connect(lambda: self.toggle_item(1))
         self.btn_phong2.clicked.connect(lambda: self.toggle_item(2))
@@ -578,7 +551,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
 
         self.btn_them_bot.clicked.connect(self.xoaDS)
         self.btn_thu_tu.clicked.connect(self.sort_items)
-        self.checkBox_giong_noi.stateChanged.connect(self.toggle_che_do_giong_noi)
+    
     def DINH_VI_BTN(self):
         self.ht_chutrinh_dv = True
         self.btn_enable.clicked.connect(self.fcn_enable_type)
@@ -629,7 +602,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.btn_bat_dau_ai_2.clicked.connect(self.toggle_start_ai)
         self.btn_tich_hoi_ai_2.clicked.connect(self.xac_nhan_cau_hoi_ai)
         self.btn_huy_hoi_ai_2.clicked.connect(self.huy_cau_hoi_ai)
- 
+    
     # Funtion Page
 ################### Page Setup ##################
 
@@ -680,6 +653,9 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.stackedWidget.setCurrentWidget(self.page_wifi)
     def show_page_tracuu(self):
         self.stackedWidget.setCurrentWidget(self.page_tra_cuu)
+    def show_mobile(self):
+        self.stackedWidget.setCurrentWidget(self.page_mobile)
+        
     # Funtion event 
 
     def toggleFullScreen(self):
@@ -829,9 +805,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
 
         else:
             print(f"Hệ điều hành '{os_name}' không được hỗ trợ.")
-    def status_ketnoi_mobile(self):
-        print("ket noi mobile thanh cong")
-        self.label_status_2.setText("ket noi mobile thanh cong")
+
 ################## Setup ##################
 ################## CAI DAT THONG SO ROBOT ##################
     def show_thong_so_robot(self):
@@ -960,7 +934,6 @@ class MainApp(QMainWindow,Ui_MainWindow):
             self.textbox_password.setEnabled(False)
             self.textbox_username.setEnabled(False)
             self.display_thanhcong("Mật khẩu đã được cập nhật")
-
 
         else:
           
@@ -1244,6 +1217,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.from_dang_nd_cam.setGeometry(680, 240, 550, 250)
         self.from_dang_nd_cam.setStyleSheet("background-color:rgb(255, 255, 255);")
         self.from_dang_nd_cam.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint)
+        self.fcn_load_data()
         self.from_dang_nd_cam.show()
         # self.uic10.btn_dang_nd_cam.clicked.connect(self.close_dang_nd_cam)
         self.uic10.btn_dang_nd_cam.clicked.connect(self.close_dang_nd_cam)
@@ -1276,90 +1250,32 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.from_error_cam.close()
     #======================= ham cua nut nhan CHECK CAM ======================
     def check_cam(self):
-        global headCamera
-        # self.dang_nd_cam()
 
-        brightness_value = 100
-
-        print('------------ Bắt đầu tìm tâm hình tròn -----------')
-        # print("sanggggg: ", brightness_value)
-
-        cap = cv2.VideoCapture(0)
-
-        if not cap.isOpened():
-            print("Không thể mở camera.")
-            return
-        
-        cap.set(cv2.CAP_PROP_BRIGHTNESS, brightness_value / 1)
         start_time = time.time()
-        max_radius = 0
-        circle_count = 0  # Đếm số lượng hình tròn
-        while True:
-            ret, frame = cap.read()
-            if not ret:
-                print("Không thể đọc khung hình từ camera.")
-                break
-            frame = cv2.resize(frame, (1000, 600))  
-            blurred_frame = cv2.GaussianBlur(frame, (25, 25), 0) 
-            hsv = cv2.cvtColor(blurred_frame, cv2.COLOR_BGR2HSV)
-            color_ranges = {
-                'yellow': ([20, 100, 100], [36, 255, 255]) 
-                # 'green': ([36, 25, 25], [86, 255, 255])
-            }
-            gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            combined_mask = np.zeros(gray_frame.shape[:2], dtype=np.uint8)
-            centers = {}
 
-            found_circle = False
-            circle_count = 0  # Đếm số lượng hình tròn
+        yawdeg  = round((self.ros2_handle.odom_listener.data_odom[3]*180.0)/math.pi,3)
+        print(yawdeg)
+        result  = self.setup_dv.test_image(200, yawdeg, self.capC,  self.cap_qr)
+        result_text = ""
+        for idx, (coords, similarity) in enumerate(result[:1]):
+            result_text += f"({coords[0]}, {coords[1]}, {coords[2]}, {coords[3]}) "
+            result_text += f"{similarity:.6f} \n"
 
-            for color_name, (lower, upper) in color_ranges.items():
-                mask = cv2.inRange(hsv, np.array(lower), np.array(upper))
-                combined_mask = cv2.bitwise_or(combined_mask, mask)
-                contours, _ = cv2.findContours(combined_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        print(result_text)
+           
+        end_time = time.time() - start_time
+        print("THOI GIAN THUC THI", end_time)
 
-                for contour in contours:
-                    ((x, y), radius) = cv2.minEnclosingCircle(contour)
-                    center = (int(x), int(y))
-                    radius = int(radius)
-                    if radius > max_radius:
-                        max_radius = radius
-                    cv2.circle(frame, center, radius, (0, 255, 0), 2)
-                    cv2.circle(frame, center, 5, (0, 0, 255), -1)
-                    text = f"{radius}px" 
-                    cv2.putText(frame, text, (center[0] - 10, center[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
-                    found_circle = True
-                    circle_count += 1  # Tăng đếm số lượng hình tròn
+        self.check_and_opencamera()
 
-                # cv2.imshow('Webcam', frame)
-
-            
-
-            if not found_circle:
-                brightness_value += 5
-                if brightness_value > 255:
-                    brightness_value = 150
-                    print("Không tìm thấy hình tròn sau khi điều chỉnh độ sáng.")
-                    break
-                cap.set(cv2.CAP_PROP_BRIGHTNESS, brightness_value / 1)
-                time.sleep(0.5)
-
-         #   if (cv2.waitKey(1) & 0xFF == ord('q')) or (time.time() - start_time > 10):
-              #  brightness_value = 100
-             #   break
-
-        cap.release()
-        # cv2.destroyAllWindows()
-
-        print(f"Bán kính lớn nhất được phát hiện: {max_radius} pixel")
 
 
         #---- giao diện thông báo ------
-        if circle_count == 1:
+        if similarity > 0.5:
             self.finish_cam()
             Uti.RobotSpeakWithPath('voice_hmi_new/finish_check_cam.wav')
         else:
-            print(f"Phát hiện được {circle_count} hình tròn")
+            print(f"Không xác định được vị trí")
             self.error_cam()
     def check_and_opencamera(self):
         # Mở camera nếu chưa mở
@@ -1377,6 +1293,170 @@ class MainApp(QMainWindow,Ui_MainWindow):
             except Exception as e:
                 print(e)
 ################## ROS ##################
+################### MOBILE ##################
+    def start_mobile(self):
+        self.broker_url = "c69aeca2d48441618b65f77f38e2d8dc.s1.eu.hivemq.cloud"
+        self.port = 8883
+        self.topic_subscribe_command = "command/car"  # Topic nhận lệnh
+        self.topic_publish_camera = "camera/stream"    # Topic gửi hình ảnh
+
+        # Thông tin đăng nhập
+        self.username = "hivemq.webclient.1746280264795"
+        self.password = "ay;Z9W0$L1k7fbS!xH?C"
+
+        # Tạo client MQTT
+        self.client = mqtt.Client()
+        self.client.username_pw_set(self.username, self.password)
+        self.client.on_connect = self.on_connect
+        self.client.on_message = self.on_message
+        self.client.on_subscribe = self.on_subscribe
+
+        # Thiết lập kết nối TLS
+        self.client.tls_set()
+
+        # Thực hiện kết nối (non-blocking)
+        self.client.connect_async(self.broker_url, self.port, 60)
+
+        # Bắt đầu vòng lặp MQTT để xử lý kết nối và tin nhắn
+        self.client.loop_start()
+
+        # Lưu ý: Không gọi start_camera_stream trực tiếp ở đây nữa
+
+    def on_connect(self, client, userdata, flags, rc):
+        if rc == 0:
+            print("Đã kết nối thành công đến MQTT broker!")
+            if self.label_status_3:
+                self.label_status_3.setText("Đã kết nối thành công đến MQTT broker!")
+            client.subscribe(self.topic_subscribe_command)  # Subscribe topic điều khiển
+            # Bắt đầu camera stream trong một thread riêng sau khi kết nối thành công
+            camera_thread = threading.Thread(target=self.start_camera_stream)
+            camera_thread.daemon = True  # Cho phép thread thoát khi chương trình chính thoát
+            camera_thread.start()
+        else:
+            print(f"Kết nối thất bại với mã lỗi {rc}")
+            if self.label_status_3:
+                self.label_status_3.setText(f"Kết nối thất bại với mã lỗi {rc}")
+
+    # Hàm callback khi nhận được tin nhắn
+    def on_message(self, client, userdata, msg):
+        if msg.topic == self.topic_subscribe_command:
+            command = msg.payload.decode().upper()
+            print(f"Nhận được lệnh: {command}")
+            self.process_command(command)
+            self.label_nhan_lenh.setText(f"Nhận được lệnh: {command}")
+
+    # Hàm callback khi đăng ký topic thành công
+    def on_subscribe(self, client, userdata, mid, granted_qos):
+        print(f"Đã đăng ký topic: {self.topic_subscribe_command} với QoS: {granted_qos}")
+      #  self.label_status_3.setText(f"Đã đăng ký topic: {self.topic_subscribe_command} với QoS: {granted_qos}")
+
+    def process_command(self, command):
+        """
+        Xử lý các lệnh điều khiển xe.
+        Hỗ trợ các lệnh có giá trị (ví dụ: FORWARD-50) và không có giá trị (ví dụ: STOP, HOME, DOCK).
+        """
+        command = command.upper().strip()
+        print(f"Nhận được lệnh: {command}")
+
+        if '-' in command:
+            parts = command.split('-')
+            if len(parts) == 2:
+                action = parts[0].strip()
+                value_str = parts[1].strip()
+                try:
+                    value = int(value_str)
+                    tocdo = value / 100.0
+                    print(f"Lệnh hành động: {action}, Giá trị: {value}, Tốc độ: {tocdo}")
+                    self.ros2_handle.cmd_vel_publisher.vx = tocdo
+                    self.ros2_handle.cmd_vel_publisher.vw = tocdo * 1.0
+                    print(f"vx:{self.ros2_handle.cmd_vel_publisher.vx}")
+                    print(f"vw:{self.ros2_handle.cmd_vel_publisher.vw}")
+
+                    if action == "FORWARD":
+                        print(f"Di chuyển về phía trước với tốc độ: {tocdo}")
+                        self.ros2_handle.cmd_vel_publisher.forward()
+                    elif action == "BACKWARD":
+                        print(f"Di chuyển về phía sau với tốc độ: {tocdo}")
+                        self.ros2_handle.cmd_vel_publisher.backward()
+                    elif action == "LEFT":
+                        print(f"Rẽ trái với tốc độ: {tocdo}")
+                        self.ros2_handle.cmd_vel_publisher.left()
+                    elif action == "RIGHT":
+                        print(f"Rẽ phải với tốc độ: {tocdo}")
+                        self.ros2_handle.cmd_vel_publisher.right()
+                    else:
+                        print(f"Lệnh hành động không hợp lệ (có giá trị): {action}")
+
+                except ValueError:
+                    print(f"Giá trị '{value_str}' trong lệnh không phải là số.")
+            else:
+                print(f"Định dạng lệnh có dấu '-' không hợp lệ: {command}. Mong đợi 'COMMAND-VALUE'.")
+        else:
+            # Xử lý các lệnh không có dấu '-'
+            action = command
+            if action == "STOP":
+                print("Dừng lại")
+                self.ros2_handle.cmd_vel_publisher.stop_movement()
+            elif action == "HOME":
+                print("Go to home")
+                self.ve_home_trong_chu_trinh()
+            elif action == "DOCK":
+                print("Go to dock")
+                self.ve_dock_sac()
+            else:
+                print(f"Lệnh hành động không hợp lệ (không có giá trị): {action}")
+                
+    def start_camera_stream(self):
+        # Mở camera
+        self.cap = cv2.VideoCapture(RobConf.faceCame1)  # Thay đổi index nếu cần
+
+        try:
+            while True:
+                if self.cap is None or not self.cap.isOpened():
+                    print("Không thể truy cập camera.")
+                    break
+                ret, frame = self.cap.read()
+                if not ret:
+                    print("Không thể đọc frame từ camera.")
+                    break
+
+                # Mã hóa frame thành JPEG
+                _, img_encoded = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 80])
+                data_to_send = img_encoded.tobytes()
+
+                # Publish frame lên topic camera
+                if self.client and self.client.is_connected():
+                    self.client.publish(self.topic_publish_camera, payload=data_to_send, qos=0)
+                    # print(f"Đã gửi frame ảnh ({len(data_to_send)} bytes) lên topic: {self.topic_publish_camera}")
+                    pass # In log gửi ảnh có thể làm chậm quá trình
+                else:
+                    print("Không thể publish ảnh vì không có kết nối MQTT.")
+                    break
+
+                time.sleep(0.1)  # Gửi mỗi 100ms (điều chỉnh tùy ý)
+                time.sleep(0.01)
+
+        except KeyboardInterrupt:
+            print("Dừng stream camera.")
+        finally:
+            self.stop_camera()
+
+    def stop_camera(self):
+        if self.cap is not None and self.cap.isOpened():
+            self.cap.release()
+            print("Đã đóng camera.")
+            self.cap = None
+
+    def stop_mobile(self):
+        print("Đang ngắt kết nối MQTT...")
+        if self.client:
+            self.label_status_3.setText("Vui lòng ấn nút kết nối mobile")
+            self.label_nhan_lenh.setText("Đang chờ lệnh")
+            self.client.loop_stop()  # Dừng vòng lặp MQTT thread
+            self.client.disconnect()
+            print("Đã ngắt kết nối MQTT.")
+        self.stop_camera() # Đảm bảo camera cũng được dừng
+
 ################## MANUAL ##################
     def thaydoivantoc(self):
         slider_value = self.Slider_vantoc.value()
@@ -2098,49 +2178,6 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.listWidget_ds.clear()
         for key in self.item_states:
             self.item_states[key] = False
-
-    # GIONG NOI
-    def toggle_che_do_giong_noi(self, state):
-        if state == Qt.Checked:
-            print("Bật chế độ giọng nói - Bắt đầu lắng nghe...")
-            self.start_listening()
-        else:
-            print("Tắt chế độ giọng nói - Dừng lắng nghe.")
-            self.stop_listening()
-    def show_error_message(self, message):
-        print(f"Lỗi: {message}")
-    def start_listening(self):
-        if self.speech_thread is None or not self.speech_thread.isRunning():
-            self.speech_thread = SpeechRecognitionThread()
-            self.speech_thread.recognized_text.connect(self.phan_tich_va_them_phong)
-            self.speech_thread.error_occurred.connect(self.show_error_message) # Thêm xử lý lỗi nếu cần
-            self.speech_thread.start()
-        else:
-            print("Luồng nhận diện giọng nói đã chạy.")
-
-    def stop_listening(self):
-        if self.speech_thread and self.speech_thread.isRunning():
-            self.speech_thread.stop()
-            self.speech_thread.wait() # Đợi luồng kết thúc
-            self.speech_thread = None
-            print("Luồng nhận diện giọng nói đã dừng.")
-        else:
-            print("Không có luồng nhận diện giọng nói nào đang chạy để dừng.")
-
-    def phan_tich_va_them_phong(self, text):
-        if "thêm phòng" in text.lower():
-            parts = text.lower().split()
-            for i, part in enumerate(parts):
-                if part == "phòng" and i + 1 < len(parts):
-                    try:
-                        so_phong = int(parts[i + 1])
-                        if 1 <= so_phong <= 10:
-                            self.toggle_item(so_phong)
-                        else:
-                            print(f"Số phòng không hợp lệ: {so_phong}. Chỉ hỗ trợ phòng 1 đến 10.")
-                    except ValueError:
-                        print(f"Không thể nhận diện số phòng trong: {parts[i + 1]}")
-        # Bạn có thể thêm các lệnh giọng nói khác tại đây (ví dụ: "xóa tất cả", "sắp xếp lại")
 
 
 ################## GIAO DIEN  CHAY DANH SACH ##################
@@ -3632,6 +3669,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
 
     # HAM LOAD DATA LEN BANG
     def fcn_load_list_1(self):
+        self.tableWidget_3.clear()  # Xóa dữ liệu cũ trước khi tải lại
         data = sql.doc_du_lieu_list('readall')
 
         if data is not None:

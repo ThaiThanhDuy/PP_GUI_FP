@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow_login(object):
     def setupUi(self, MainWindow_login):
         MainWindow_login.setObjectName("MainWindow_login")
-        MainWindow_login.resize(1911, 1000)
+        MainWindow_login.resize(1911, 1113)
         self.centralwidget = QtWidgets.QWidget(MainWindow_login)
         self.centralwidget.setObjectName("centralwidget")
         self.btn_dn_login = QtWidgets.QPushButton(self.centralwidget)
@@ -50,7 +50,7 @@ class Ui_MainWindow_login(object):
 "\n"
 "")
         self.label_222.setText("")
-        self.label_222.setPixmap(QtGui.QPixmap("hinh_coppy_right.jpg"))
+        self.label_222.setPixmap(QtGui.QPixmap("../ROBOT_HD/images/hinh_coppy_right.jpg"))
         self.label_222.setScaledContents(True)
         self.label_222.setObjectName("label_222")
         self.label_dangnhapp = QtWidgets.QLabel(self.centralwidget)

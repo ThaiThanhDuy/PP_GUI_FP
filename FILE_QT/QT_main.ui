@@ -497,7 +497,7 @@
        <string notr="true"/>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <property name="iconSize">
        <size>
@@ -1488,7 +1488,7 @@ QPushButton#bt_check_cam:pressed{
 }</string>
          </property>
          <property name="text">
-          <string>Check Cam</string>
+          <string>Check HOME</string>
          </property>
          <property name="icon">
           <iconset>
@@ -1843,29 +1843,29 @@ QPushButton#bt_mode_auto:pressed{
        <rect>
         <x>1640</x>
         <y>30</y>
-        <width>151</width>
+        <width>191</width>
         <height>41</height>
        </rect>
       </property>
       <property name="styleSheet">
        <string notr="true">QPushButton#bt_back_mode{
-   	border-bottom-right-radius :20px;
-	font: 75 18pt &quot;MS Shell Dlg 2&quot;;
-	
-	/*border: 3px solid rgb(230, 230, 230);*/
-	color: rgb(0, 0, 0);
-	
-	background-color: rgb(220, 220, 220);
-	background-color: rgb(255, 255, 255);
+     border-radius: 15px;
+	font: 75 23pt &quot;MS Shell Dlg 2&quot;;
+	border: 1px solid rgb(230, 230, 230);
+background-color: rgb(230, 230, 230);
 
 }
-
 QPushButton#bt_back_mode:pressed{
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));
+
+}
+QPushButton#bt_back_setup:pressed{
 padding-left :2px;
 padding-top :2px;
 
-	background-color: rgb(50, 192, 240);
+	background-color: rgb(58, 192, 255);
 }
+
 
 </string>
       </property>
@@ -2053,29 +2053,29 @@ QPushButton#bt_setup_tk:pressed{
        <rect>
         <x>1640</x>
         <y>30</y>
-        <width>171</width>
+        <width>191</width>
         <height>41</height>
        </rect>
       </property>
       <property name="styleSheet">
        <string notr="true">QPushButton#bt_back_setup{
-   	border-bottom-right-radius :20px;
-	font: 75 18pt &quot;MS Shell Dlg 2&quot;;
-	
-	/*border: 3px solid rgb(230, 230, 230);*/
-	color: rgb(0, 0, 0);
-	
-	background-color: rgb(220, 220, 220);
-	background-color: rgb(255, 255, 255);
+     border-radius: 15px;
+	font: 75 23pt &quot;MS Shell Dlg 2&quot;;
+	border: 1px solid rgb(230, 230, 230);
+background-color: rgb(230, 230, 230);
 
 }
+QPushButton#bt_back_setup:pressed{
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));
 
+}
 QPushButton#bt_back_setup:pressed{
 padding-left :2px;
 padding-top :2px;
 
-	background-color: rgb(50, 192, 240);
+	background-color: rgb(58, 192, 255);
 }
+
 </string>
       </property>
       <property name="text">
@@ -2133,7 +2133,7 @@ padding-top :2px;
 </string>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="tab_3">
         <attribute name="title">
@@ -2651,31 +2651,35 @@ background-color: rgb(58, 192, 255);
      <widget class="QPushButton" name="bt_back_dan_duong">
       <property name="geometry">
        <rect>
-        <x>1690</x>
+        <x>1670</x>
         <y>30</y>
-        <width>171</width>
+        <width>191</width>
         <height>41</height>
        </rect>
       </property>
       <property name="styleSheet">
        <string notr="true">QPushButton#bt_back_dan_duong{
-   	border-bottom-right-radius :20px;
-	font: 75 20pt &quot;MS Shell Dlg 2&quot;;
-	
-	/*border: 3px solid rgb(230, 230, 230);*/
-	color: rgb(0, 0, 0);
-	
-	background-color: rgb(220, 220, 220);
-	background-color: rgb(255, 255, 255);
+     border-radius: 15px;
+	font: 75 23pt &quot;MS Shell Dlg 2&quot;;
+	border: 1px solid rgb(230, 230, 230);
+background-color: rgb(230, 230, 230);
 
 }
-
 QPushButton#bt_back_dan_duong:pressed{
-padding-left :0px;
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));
+
+}
+QPushButton#btn_phong6:pressed{
+padding-left :2px;
 padding-top :2px;
 
-	background-color: rgb(50, 192, 240);
+	background-color: rgb(58, 192, 255);
 }
+QPushButton#bt_back_dan_duong:checked {
+background-color: rgb(58, 192, 255);
+
+}
+
 </string>
       </property>
       <property name="text">
@@ -2757,7 +2761,7 @@ padding-top :2px;
         <rect>
          <x>470</x>
          <y>620</y>
-         <width>301</width>
+         <width>300</width>
          <height>200</height>
         </rect>
        </property>
@@ -2794,9 +2798,9 @@ background-color: rgb(0, 230, 77);
       <widget class="QPushButton" name="btn_them_bot">
        <property name="geometry">
         <rect>
-         <x>480</x>
+         <x>470</x>
          <y>200</y>
-         <width>291</width>
+         <width>300</width>
          <height>150</height>
         </rect>
        </property>
@@ -2831,70 +2835,12 @@ padding-top :2px;
         </size>
        </property>
       </widget>
-      <widget class="QCheckBox" name="checkBox_giong_noi">
-       <property name="geometry">
-        <rect>
-         <x>510</x>
-         <y>60</y>
-         <width>221</width>
-         <height>91</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <family>MS Shell Dlg 2</family>
-         <pointsize>24</pointsize>
-         <weight>9</weight>
-         <italic>false</italic>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QCheckBox{
-	background-color: rgb(255, 255, 255);
-	border-radius: 15px;
-font: 75 24pt &quot;MS Shell Dlg 2&quot;;
-}
-QCheckBox:hover{
-padding-left :2px;
-padding-top :2px;
-
-}
-QCheckBox::indicator {
-    
-    border-radius: 10px; /* Đặt độ cong cho ô tích */
-    width: 40px; /* Đặt chiều rộng của ô tích */
-    height: 40px; /* Đặt chiều cao của ô tích */
-	border: 2px solid rgb(0, 0, 0);
-	position: absolute; /* Sử dụng position để định vị */
-    top: 0; /* Di chuyển indicator lên phía trên */
-left:10;
-}
-
-QCheckBox::indicator:unchecked{
-	background-color: rgb(255, 255, 255);
-
-}
-QCheckBox::indicator:checked{
-	
-	
-background-color: rgb(106, 255, 153);
-
-}
-
-
-</string>
-       </property>
-       <property name="text">
-        <string>Giọng nói</string>
-       </property>
-      </widget>
       <widget class="QPushButton" name="btn_ban_do">
        <property name="geometry">
         <rect>
-         <x>480</x>
+         <x>470</x>
          <y>410</y>
-         <width>291</width>
+         <width>301</width>
          <height>150</height>
         </rect>
        </property>
@@ -3102,7 +3048,7 @@ border: 3px solid rgb(255, 255, 255);</string>
        <string/>
       </property>
       <property name="pixmap">
-       <pixmap>../../../../lab/ROBOT_NH_V3/images/pic_robotleten-removebg-preview.png</pixmap>
+       <pixmap>../images/pic_robotleten-removebg-preview.png</pixmap>
       </property>
       <property name="scaledContents">
        <bool>true</bool>
@@ -4046,30 +3992,28 @@ font: 75 17pt &quot;MS Shell Dlg 2&quot;;
         <rect>
          <x>1470</x>
          <y>40</y>
-         <width>171</width>
+         <width>191</width>
          <height>41</height>
         </rect>
        </property>
        <property name="styleSheet">
         <string notr="true">QPushButton#bt_back_setup_ts_robot{
-   	border-bottom-right-radius :20px;
-	font: 75 18pt &quot;MS Shell Dlg 2&quot;;
-	
-	/*border: 3px solid rgb(230, 230, 230);*/
-	color: rgb(0, 0, 0);
-	
-	background-color: rgb(220, 220, 220);
-	background-color: rgb(255, 255, 255);
+     border-radius: 15px;
+	font: 75 23pt &quot;MS Shell Dlg 2&quot;;
+	border: 1px solid rgb(230, 230, 230);
+background-color: rgb(230, 230, 230);
 
 }
+QPushButton#bt_back_setup_ts_robot:pressed{
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));
 
+}
 QPushButton#bt_back_setup_ts_robot:pressed{
 padding-left :2px;
 padding-top :2px;
 
-	background-color: rgb(50, 192, 240);
+	background-color: rgb(58, 192, 255);
 }
-
 
 </string>
        </property>
@@ -4284,30 +4228,28 @@ font: 75 17pt &quot;MS Shell Dlg 2&quot;;
         <rect>
          <x>1470</x>
          <y>40</y>
-         <width>171</width>
+         <width>191</width>
          <height>41</height>
         </rect>
        </property>
        <property name="styleSheet">
         <string notr="true">QPushButton#bt_back_setup_ts_robot_2{
-   	border-bottom-right-radius :20px;
-	font: 75 18pt &quot;MS Shell Dlg 2&quot;;
-	
-	/*border: 3px solid rgb(230, 230, 230);*/
-	color: rgb(0, 0, 0);
-	
-	background-color: rgb(220, 220, 220);
-	background-color: rgb(255, 255, 255);
+     border-radius: 15px;
+	font: 75 23pt &quot;MS Shell Dlg 2&quot;;
+	border: 1px solid rgb(230, 230, 230);
+background-color: rgb(230, 230, 230);
 
 }
+QPushButton#bt_back_setup_ts_robot_2:pressed{
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));
 
+}
 QPushButton#bt_back_setup_ts_robot_2:pressed{
 padding-left :2px;
 padding-top :2px;
 
-	background-color: rgb(50, 192, 240);
+	background-color: rgb(58, 192, 255);
 }
-
 
 </string>
        </property>
@@ -4983,31 +4925,31 @@ border-radius: 20px;</string>
      <widget class="QPushButton" name="bt_back_dichuyen_robot">
       <property name="geometry">
        <rect>
-        <x>1700</x>
+        <x>1710</x>
         <y>0</y>
-        <width>171</width>
+        <width>191</width>
         <height>41</height>
        </rect>
       </property>
       <property name="styleSheet">
        <string notr="true">QPushButton#bt_back_dichuyen_robot{
-   	border-bottom-right-radius :20px;
-	font: 75 20pt &quot;MS Shell Dlg 2&quot;;
-	
-	/*border: 3px solid rgb(230, 230, 230);*/
-	color: rgb(0, 0, 0);
-	
-	background-color: rgb(220, 220, 220);
-	background-color: rgb(255, 255, 255);
+     border-radius: 15px;
+	font: 75 23pt &quot;MS Shell Dlg 2&quot;;
+	border: 1px solid rgb(230, 230, 230);
+background-color: rgb(230, 230, 230);
 
 }
-
 QPushButton#bt_back_dichuyen_robot:pressed{
-padding-left :0px;
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));
+
+}
+QPushButton#bt_back_dichuyen_robot:pressed{
+padding-left :2px;
 padding-top :2px;
 
-	background-color: rgb(50, 192, 240);
+	background-color: rgb(58, 192, 255);
 }
+
 </string>
       </property>
       <property name="text">
@@ -5022,55 +4964,6 @@ padding-top :2px;
         <width>50</width>
         <height>50</height>
        </size>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="checkBox_dk_tuxa">
-      <property name="geometry">
-       <rect>
-        <x>1080</x>
-        <y>0</y>
-        <width>361</width>
-        <height>51</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QCheckBox{
-	background-color: rgb(255, 255, 255);
-	border-radius: 15px;
-font: 75 24pt &quot;MS Shell Dlg 2&quot;;
-}
-QCheckBox:hover{
-padding-left :2px;
-padding-top :2px;
-
-}
-QCheckBox::indicator {
-    
-    border-radius: 10px; /* Đặt độ cong cho ô tích */
-    width: 40px; /* Đặt chiều rộng của ô tích */
-    height: 40px; /* Đặt chiều cao của ô tích */
-	border: 2px solid rgb(0, 0, 0);
-	position: absolute; /* Sử dụng position để định vị */
-    top: 0; /* Di chuyển indicator lên phía trên */
-left:10;
-}
-
-QCheckBox::indicator:unchecked{
-	background-color: rgb(255, 255, 255);
-
-}
-QCheckBox::indicator:checked{
-	
-	
-background-color: rgb(106, 255, 153);
-
-}
-
-
-</string>
-      </property>
-      <property name="text">
-       <string>Điều khiển từ xa</string>
       </property>
      </widget>
      <widget class="QScrollArea" name="map_scrollArea">
@@ -5607,6 +5500,248 @@ background-color: rgb(58, 192, 255);
         </widget>
        </item>
       </layout>
+     </widget>
+     <widget class="QPushButton" name="mobile_button">
+      <property name="geometry">
+       <rect>
+        <x>1080</x>
+        <y>0</y>
+        <width>281</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton#mobile_button{
+	background-color: rgb(255, 255, 255);
+
+color:rgba(0, 0, 0, 255);
+border-radius:10px;
+	
+	font: 75 20pt &quot;MS Shell Dlg 2&quot;;
+}
+QPushButton#bt_mode_auto:hover{
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 255, 255, 255), stop:1 rgba(58, 192, 255, 255));
+
+}
+QPushButton#bt_mode_auto:pressed{
+
+ padding-left:5px;
+ padding-top:5px;
+ background-color:rgba(58, 192, 200, 255);
+
+
+}</string>
+      </property>
+      <property name="text">
+       <string>Điều khiển từ xa</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_mobile">
+     <widget class="QFrame" name="frame_15">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>0</y>
+        <width>1700</width>
+        <height>1000</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 255, 255);
+  border-radius: 20px;</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QLabel" name="label_mobile">
+       <property name="geometry">
+        <rect>
+         <x>580</x>
+         <y>40</y>
+         <width>550</width>
+         <height>60</height>
+        </rect>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>800</width>
+         <height>200</height>
+        </size>
+       </property>
+       <property name="sizeIncrement">
+        <size>
+         <width>800</width>
+         <height>200</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>20</pointsize>
+         <weight>50</weight>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">
+background-color: rgb(58,192,240);
+border-radius: 20px;
+</string>
+       </property>
+       <property name="text">
+        <string>Mobile</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_status_3">
+       <property name="geometry">
+        <rect>
+         <x>70</x>
+         <y>200</y>
+         <width>1191</width>
+         <height>231</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>25</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Vui lòng ấn nút kết nối mobile</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btn_tat_ketnoi_mobile">
+       <property name="geometry">
+        <rect>
+         <x>960</x>
+         <y>810</y>
+         <width>311</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton#btn_tat_ketnoi_mobile{
+ 
+	border-radius: 15px;
+	background-color: rgb(58,192,240);
+	font: 75 17pt &quot;MS Shell Dlg 2&quot;;
+	
+}
+
+QPushButton#btn_tat_ketnoi_mobile:pressed{
+padding-left :3px;
+padding-top :3px;
+border-radius: 15px;
+font: 75 17pt &quot;MS Shell Dlg 2&quot;;
+
+	background-color: rgb(0, 255, 0);
+}
+</string>
+       </property>
+       <property name="text">
+        <string>Kết thúc kết nối mobile</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="bt_back_mobile">
+       <property name="geometry">
+        <rect>
+         <x>1460</x>
+         <y>60</y>
+         <width>191</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton#bt_back_mobile{
+     border-radius: 15px;
+	font: 75 23pt &quot;MS Shell Dlg 2&quot;;
+	border: 1px solid rgb(230, 230, 230);
+background-color: rgb(230, 230, 230);
+
+}
+QPushButton#bt_back_mobile:pressed{
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));
+
+}
+QPushButton#bt_back_mobile:pressed{
+padding-left :2px;
+padding-top :2px;
+
+	background-color: rgb(58, 192, 255);
+}
+
+</string>
+       </property>
+       <property name="text">
+        <string>Quay Lại</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>../../../.designer/images/quaylai_xoafont.png</normaloff>../../../.designer/images/quaylai_xoafont.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>60</width>
+         <height>60</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_nhan_lenh">
+       <property name="geometry">
+        <rect>
+         <x>70</x>
+         <y>450</y>
+         <width>581</width>
+         <height>231</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>25</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Đang chờ lệnh</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btn_bat_ketnoi_mobile">
+       <property name="geometry">
+        <rect>
+         <x>430</x>
+         <y>810</y>
+         <width>311</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton#btn_bat_ketnoi_mobile{
+ 
+	border-radius: 15px;
+	background-color: rgb(58,192,240);
+	font: 75 17pt &quot;MS Shell Dlg 2&quot;;
+	
+}
+
+QPushButton#btn_bat_ketnoi_mobile:pressed{
+padding-left :3px;
+padding-top :3px;
+border-radius: 15px;
+font: 75 17pt &quot;MS Shell Dlg 2&quot;;
+
+	background-color: rgb(0, 255, 0);
+}
+</string>
+       </property>
+       <property name="text">
+        <string>Bắt đầu kết nối mobile</string>
+       </property>
+      </widget>
      </widget>
     </widget>
     <widget class="QWidget" name="page_setup_cam">
@@ -6237,31 +6372,31 @@ border-radius: 10px;</string>
       <widget class="QPushButton" name="bt_back_setup_3">
        <property name="geometry">
         <rect>
-         <x>1500</x>
-         <y>40</y>
-         <width>171</width>
+         <x>1460</x>
+         <y>50</y>
+         <width>191</width>
          <height>41</height>
         </rect>
        </property>
        <property name="styleSheet">
         <string notr="true">QPushButton#bt_back_setup_3{
-   	border-bottom-right-radius :20px;
-	font: 75 18pt &quot;MS Shell Dlg 2&quot;;
-	
-	/*border: 3px solid rgb(230, 230, 230);*/
-	color: rgb(0, 0, 0);
-	
-	background-color: rgb(220, 220, 220);
-	background-color: rgb(255, 255, 255);
+     border-radius: 15px;
+	font: 75 23pt &quot;MS Shell Dlg 2&quot;;
+	border: 1px solid rgb(230, 230, 230);
+background-color: rgb(230, 230, 230);
 
 }
+QPushButton#bt_back_setup_3:pressed{
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));
 
+}
 QPushButton#bt_back_setup_3:pressed{
 padding-left :2px;
 padding-top :2px;
 
-	background-color: rgb(50, 192, 240);
+	background-color: rgb(58, 192, 255);
 }
+
 </string>
        </property>
        <property name="text">
@@ -6597,31 +6732,31 @@ background-color: rgb(106, 255, 153);
       <widget class="QPushButton" name="bt_back_setup_4">
        <property name="geometry">
         <rect>
-         <x>1510</x>
+         <x>1500</x>
          <y>50</y>
-         <width>171</width>
+         <width>191</width>
          <height>41</height>
         </rect>
        </property>
        <property name="styleSheet">
         <string notr="true">QPushButton#bt_back_setup_4{
-   	border-bottom-right-radius :20px;
-	font: 75 18pt &quot;MS Shell Dlg 2&quot;;
-	
-	/*border: 3px solid rgb(230, 230, 230);*/
-	color: rgb(0, 0, 0);
-	
-	background-color: rgb(220, 220, 220);
-	background-color: rgb(255, 255, 255);
+     border-radius: 15px;
+	font: 75 23pt &quot;MS Shell Dlg 2&quot;;
+	border: 1px solid rgb(230, 230, 230);
+background-color: rgb(230, 230, 230);
 
 }
+QPushButton#bt_back_setup_4:pressed{
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));
 
+}
 QPushButton#bt_back_setup_4:pressed{
 padding-left :2px;
 padding-top :2px;
 
-	background-color: rgb(50, 192, 240);
+	background-color: rgb(58, 192, 255);
 }
+
 </string>
        </property>
        <property name="text">
@@ -6793,31 +6928,31 @@ border-radius: 20px;
       <widget class="QPushButton" name="bt_back_setup_5">
        <property name="geometry">
         <rect>
-         <x>1510</x>
+         <x>1480</x>
          <y>50</y>
-         <width>171</width>
+         <width>191</width>
          <height>41</height>
         </rect>
        </property>
        <property name="styleSheet">
         <string notr="true">QPushButton#bt_back_setup_5{
-   	border-bottom-right-radius :20px;
-	font: 75 18pt &quot;MS Shell Dlg 2&quot;;
-	
-	/*border: 3px solid rgb(230, 230, 230);*/
-	color: rgb(0, 0, 0);
-	
-	background-color: rgb(220, 220, 220);
-	background-color: rgb(255, 255, 255);
+     border-radius: 15px;
+	font: 75 23pt &quot;MS Shell Dlg 2&quot;;
+	border: 1px solid rgb(230, 230, 230);
+background-color: rgb(230, 230, 230);
 
 }
+QPushButton#bt_back_setup_5:pressed{
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));
 
+}
 QPushButton#bt_back_setup_5:pressed{
 padding-left :2px;
 padding-top :2px;
 
-	background-color: rgb(50, 192, 240);
+	background-color: rgb(58, 192, 255);
 }
+
 </string>
        </property>
        <property name="text">
@@ -7580,31 +7715,31 @@ background-color: rgb(0,255,0);
       <widget class="QPushButton" name="bt_back_setup_2">
        <property name="geometry">
         <rect>
-         <x>1500</x>
-         <y>40</y>
-         <width>171</width>
+         <x>1470</x>
+         <y>60</y>
+         <width>191</width>
          <height>41</height>
         </rect>
        </property>
        <property name="styleSheet">
         <string notr="true">QPushButton#bt_back_setup_2{
-   	border-bottom-right-radius :20px;
-	font: 75 18pt &quot;MS Shell Dlg 2&quot;;
-	
-	/*border: 3px solid rgb(230, 230, 230);*/
-	color: rgb(0, 0, 0);
-	
-	background-color: rgb(220, 220, 220);
-	background-color: rgb(255, 255, 255);
+     border-radius: 15px;
+	font: 75 23pt &quot;MS Shell Dlg 2&quot;;
+	border: 1px solid rgb(230, 230, 230);
+background-color: rgb(230, 230, 230);
 
 }
+QPushButton#bt_back_setup_2:pressed{
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));
 
+}
 QPushButton#bt_back_setup_2:pressed{
 padding-left :2px;
 padding-top :2px;
 
-	background-color: rgb(50, 192, 240);
+	background-color: rgb(58, 192, 255);
 }
+
 </string>
        </property>
        <property name="text">
@@ -7740,31 +7875,31 @@ font: 75 17pt &quot;MS Shell Dlg 2&quot;;
       <widget class="QPushButton" name="bt_back_dinhvi">
        <property name="geometry">
         <rect>
-         <x>1400</x>
-         <y>80</y>
-         <width>171</width>
+         <x>1440</x>
+         <y>60</y>
+         <width>191</width>
          <height>41</height>
         </rect>
        </property>
        <property name="styleSheet">
         <string notr="true">QPushButton#bt_back_dinhvi{
-   	border-bottom-right-radius :20px;
-	font: 75 18pt &quot;MS Shell Dlg 2&quot;;
-	
-	/*border: 3px solid rgb(230, 230, 230);*/
-	color: rgb(0, 0, 0);
-	
-	background-color: rgb(220, 220, 220);
-	background-color: rgb(255, 255, 255);
+     border-radius: 15px;
+	font: 75 23pt &quot;MS Shell Dlg 2&quot;;
+	border: 1px solid rgb(230, 230, 230);
+background-color: rgb(230, 230, 230);
 
 }
+QPushButton#bt_back_dinhvi:pressed{
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));
 
+}
 QPushButton#bt_back_dinhvi:pressed{
 padding-left :2px;
 padding-top :2px;
 
-	background-color: rgb(50, 192, 240);
+	background-color: rgb(58, 192, 255);
 }
+
 </string>
        </property>
        <property name="text">
@@ -7862,66 +7997,34 @@ border-radius: 20px;
         <string>Tình trạng Wifi</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="btn_ketnoi_mobile">
-       <property name="geometry">
-        <rect>
-         <x>400</x>
-         <y>800</y>
-         <width>311</width>
-         <height>71</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton#btn_ketnoi_mobile{
- 
-	border-radius: 15px;
-	background-color: rgb(58,192,240);
-	font: 75 17pt &quot;MS Shell Dlg 2&quot;;
-	
-}
-
-QPushButton#btn_ketnoi_mobile:pressed{
-padding-left :3px;
-padding-top :3px;
-border-radius: 15px;
-font: 75 17pt &quot;MS Shell Dlg 2&quot;;
-
-	background-color: rgb(0, 255, 0);
-}
-</string>
-       </property>
-       <property name="text">
-        <string>Bắt đầu kết nối mobile</string>
-       </property>
-      </widget>
       <widget class="QPushButton" name="bt_back_wifi">
        <property name="geometry">
         <rect>
-         <x>1400</x>
-         <y>80</y>
-         <width>171</width>
+         <x>1440</x>
+         <y>60</y>
+         <width>191</width>
          <height>41</height>
         </rect>
        </property>
        <property name="styleSheet">
         <string notr="true">QPushButton#bt_back_wifi{
-   	border-bottom-right-radius :20px;
-	font: 75 18pt &quot;MS Shell Dlg 2&quot;;
-	
-	/*border: 3px solid rgb(230, 230, 230);*/
-	color: rgb(0, 0, 0);
-	
-	background-color: rgb(220, 220, 220);
-	background-color: rgb(255, 255, 255);
+     border-radius: 15px;
+	font: 75 23pt &quot;MS Shell Dlg 2&quot;;
+	border: 1px solid rgb(230, 230, 230);
+background-color: rgb(230, 230, 230);
 
 }
+QPushButton#bt_back_wifi:pressed{
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));
 
+}
 QPushButton#bt_back_wifi:pressed{
 padding-left :2px;
 padding-top :2px;
 
-	background-color: rgb(50, 192, 240);
+	background-color: rgb(58, 192, 255);
 }
+
 </string>
        </property>
        <property name="text">
@@ -8099,30 +8202,29 @@ QPushButton#bt_tc_cap_nhat_4:pressed{
         <widget class="QPushButton" name="bt_back_tc_nha_truong_4">
          <property name="geometry">
           <rect>
-           <x>1710</x>
+           <x>1670</x>
            <y>30</y>
-           <width>151</width>
+           <width>191</width>
            <height>41</height>
           </rect>
          </property>
          <property name="styleSheet">
           <string notr="true">QPushButton#bt_back_tc_nha_truong_4{
-   	border-bottom-right-radius :20px;
-	font: 75 18pt &quot;MS Shell Dlg 2&quot;;
-	
-	/*border: 3px solid rgb(230, 230, 230);*/
-	color: rgb(0, 0, 0);
-	
-	background-color: rgb(220, 220, 220);
-	background-color: rgb(255, 255, 255);
+     border-radius: 15px;
+	font: 75 23pt &quot;MS Shell Dlg 2&quot;;
+	border: 1px solid rgb(230, 230, 230);
+background-color: rgb(230, 230, 230);
 
 }
+QPushButton#bt_back_tc_nha_truong_4:pressed{
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));
 
+}
 QPushButton#bt_back_tc_nha_truong_4:pressed{
 padding-left :2px;
 padding-top :2px;
 
-	background-color: rgb(50, 192, 240);
+	background-color: rgb(58, 192, 255);
 }
 
 </string>
@@ -8679,8 +8781,8 @@ QPushButton#bt_stop:pressed{
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
-      <x>640</x>
-      <y>30</y>
+      <x>650</x>
+      <y>0</y>
       <width>631</width>
       <height>131</height>
      </rect>

@@ -792,25 +792,25 @@ class Ui_MainWindow(object):
         self.bt_mode_auto.setIconSize(QtCore.QSize(70, 70))
         self.bt_mode_auto.setObjectName("bt_mode_auto")
         self.bt_back_mode = QtWidgets.QPushButton(self.page_mode)
-        self.bt_back_mode.setGeometry(QtCore.QRect(1640, 30, 151, 41))
+        self.bt_back_mode.setGeometry(QtCore.QRect(1640, 30, 191, 41))
         self.bt_back_mode.setStyleSheet("QPushButton#bt_back_mode{\n"
-"       border-bottom-right-radius :20px;\n"
-"    font: 75 18pt \"MS Shell Dlg 2\";\n"
-"    \n"
-"    /*border: 3px solid rgb(230, 230, 230);*/\n"
-"    color: rgb(0, 0, 0);\n"
-"    \n"
-"    background-color: rgb(220, 220, 220);\n"
-"    background-color: rgb(255, 255, 255);\n"
+"     border-radius: 15px;\n"
+"    font: 75 23pt \"MS Shell Dlg 2\";\n"
+"    border: 1px solid rgb(230, 230, 230);\n"
+"background-color: rgb(230, 230, 230);\n"
 "\n"
 "}\n"
-"\n"
 "QPushButton#bt_back_mode:pressed{\n"
+"background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));\n"
+"\n"
+"}\n"
+"QPushButton#bt_back_setup:pressed{\n"
 "padding-left :2px;\n"
 "padding-top :2px;\n"
 "\n"
-"    background-color: rgb(50, 192, 240);\n"
+"    background-color: rgb(58, 192, 255);\n"
 "}\n"
+"\n"
 "\n"
 "")
         icon12 = QtGui.QIcon()
@@ -915,25 +915,25 @@ class Ui_MainWindow(object):
         self.bt_setup_tk.setIconSize(QtCore.QSize(60, 60))
         self.bt_setup_tk.setObjectName("bt_setup_tk")
         self.bt_back_setup = QtWidgets.QPushButton(self.page_setup)
-        self.bt_back_setup.setGeometry(QtCore.QRect(1640, 30, 171, 41))
+        self.bt_back_setup.setGeometry(QtCore.QRect(1640, 30, 191, 41))
         self.bt_back_setup.setStyleSheet("QPushButton#bt_back_setup{\n"
-"       border-bottom-right-radius :20px;\n"
-"    font: 75 18pt \"MS Shell Dlg 2\";\n"
-"    \n"
-"    /*border: 3px solid rgb(230, 230, 230);*/\n"
-"    color: rgb(0, 0, 0);\n"
-"    \n"
-"    background-color: rgb(220, 220, 220);\n"
-"    background-color: rgb(255, 255, 255);\n"
+"     border-radius: 15px;\n"
+"    font: 75 23pt \"MS Shell Dlg 2\";\n"
+"    border: 1px solid rgb(230, 230, 230);\n"
+"background-color: rgb(230, 230, 230);\n"
 "\n"
 "}\n"
+"QPushButton#bt_back_setup:pressed{\n"
+"background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));\n"
 "\n"
+"}\n"
 "QPushButton#bt_back_setup:pressed{\n"
 "padding-left :2px;\n"
 "padding-top :2px;\n"
 "\n"
-"    background-color: rgb(50, 192, 240);\n"
+"    background-color: rgb(58, 192, 255);\n"
 "}\n"
+"\n"
 "")
         self.bt_back_setup.setIcon(icon12)
         self.bt_back_setup.setIconSize(QtCore.QSize(60, 60))
@@ -1295,25 +1295,29 @@ class Ui_MainWindow(object):
         self.btn_tram_sac.setObjectName("btn_tram_sac")
         self.tabWidget_dan_duong.addTab(self.tab_2, "")
         self.bt_back_dan_duong = QtWidgets.QPushButton(self.page_dan_duong)
-        self.bt_back_dan_duong.setGeometry(QtCore.QRect(1690, 30, 171, 41))
+        self.bt_back_dan_duong.setGeometry(QtCore.QRect(1670, 30, 191, 41))
         self.bt_back_dan_duong.setStyleSheet("QPushButton#bt_back_dan_duong{\n"
-"       border-bottom-right-radius :20px;\n"
-"    font: 75 20pt \"MS Shell Dlg 2\";\n"
-"    \n"
-"    /*border: 3px solid rgb(230, 230, 230);*/\n"
-"    color: rgb(0, 0, 0);\n"
-"    \n"
-"    background-color: rgb(220, 220, 220);\n"
-"    background-color: rgb(255, 255, 255);\n"
+"     border-radius: 15px;\n"
+"    font: 75 23pt \"MS Shell Dlg 2\";\n"
+"    border: 1px solid rgb(230, 230, 230);\n"
+"background-color: rgb(230, 230, 230);\n"
 "\n"
 "}\n"
-"\n"
 "QPushButton#bt_back_dan_duong:pressed{\n"
-"padding-left :0px;\n"
+"background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));\n"
+"\n"
+"}\n"
+"QPushButton#btn_phong6:pressed{\n"
+"padding-left :2px;\n"
 "padding-top :2px;\n"
 "\n"
-"    background-color: rgb(50, 192, 240);\n"
+"    background-color: rgb(58, 192, 255);\n"
 "}\n"
+"QPushButton#bt_back_dan_duong:checked {\n"
+"background-color: rgb(58, 192, 255);\n"
+"\n"
+"}\n"
+"\n"
 "")
         self.bt_back_dan_duong.setIcon(icon12)
         self.bt_back_dan_duong.setIconSize(QtCore.QSize(50, 50))
@@ -1347,7 +1351,7 @@ class Ui_MainWindow(object):
         self.btn_thu_tu.setIconSize(QtCore.QSize(50, 50))
         self.btn_thu_tu.setObjectName("btn_thu_tu")
         self.btn_batdau_danduong = QtWidgets.QPushButton(self.frame_2)
-        self.btn_batdau_danduong.setGeometry(QtCore.QRect(470, 620, 301, 200))
+        self.btn_batdau_danduong.setGeometry(QtCore.QRect(470, 620, 300, 200))
         self.btn_batdau_danduong.setToolTipDuration(-8)
         self.btn_batdau_danduong.setStyleSheet("QPushButton#btn_batdau_danduong{\n"
 "    border-radius: 30px;\n"
@@ -1372,7 +1376,7 @@ class Ui_MainWindow(object):
 "")
         self.btn_batdau_danduong.setObjectName("btn_batdau_danduong")
         self.btn_them_bot = QtWidgets.QPushButton(self.frame_2)
-        self.btn_them_bot.setGeometry(QtCore.QRect(480, 200, 291, 150))
+        self.btn_them_bot.setGeometry(QtCore.QRect(470, 200, 300, 150))
         self.btn_them_bot.setStyleSheet("QPushButton#btn_them_bot{\n"
 "    border-radius: 20px;\n"
 "    font: 75 24pt \"MS Shell Dlg 2\";\n"
@@ -1391,52 +1395,8 @@ class Ui_MainWindow(object):
         self.btn_them_bot.setIcon(icon3)
         self.btn_them_bot.setIconSize(QtCore.QSize(50, 50))
         self.btn_them_bot.setObjectName("btn_them_bot")
-        self.checkBox_giong_noi = QtWidgets.QCheckBox(self.frame_2)
-        self.checkBox_giong_noi.setGeometry(QtCore.QRect(510, 60, 221, 91))
-        font = QtGui.QFont()
-        font.setFamily("MS Shell Dlg 2")
-        font.setPointSize(24)
-        font.setBold(False)
-        font.setItalic(False)
-        font.setWeight(9)
-        self.checkBox_giong_noi.setFont(font)
-        self.checkBox_giong_noi.setStyleSheet("QCheckBox{\n"
-"    background-color: rgb(255, 255, 255);\n"
-"    border-radius: 15px;\n"
-"font: 75 24pt \"MS Shell Dlg 2\";\n"
-"}\n"
-"QCheckBox:hover{\n"
-"padding-left :2px;\n"
-"padding-top :2px;\n"
-"\n"
-"}\n"
-"QCheckBox::indicator {\n"
-"    \n"
-"    border-radius: 10px; /* Đặt độ cong cho ô tích */\n"
-"    width: 40px; /* Đặt chiều rộng của ô tích */\n"
-"    height: 40px; /* Đặt chiều cao của ô tích */\n"
-"    border: 2px solid rgb(0, 0, 0);\n"
-"    position: absolute; /* Sử dụng position để định vị */\n"
-"    top: 0; /* Di chuyển indicator lên phía trên */\n"
-"left:10;\n"
-"}\n"
-"\n"
-"QCheckBox::indicator:unchecked{\n"
-"    background-color: rgb(255, 255, 255);\n"
-"\n"
-"}\n"
-"QCheckBox::indicator:checked{\n"
-"    \n"
-"    \n"
-"background-color: rgb(106, 255, 153);\n"
-"\n"
-"}\n"
-"\n"
-"\n"
-"")
-        self.checkBox_giong_noi.setObjectName("checkBox_giong_noi")
         self.btn_ban_do = QtWidgets.QPushButton(self.frame_2)
-        self.btn_ban_do.setGeometry(QtCore.QRect(480, 410, 291, 150))
+        self.btn_ban_do.setGeometry(QtCore.QRect(470, 410, 301, 150))
         self.btn_ban_do.setStyleSheet("QPushButton#btn_ban_do{\n"
 "    border-radius: 20px;\n"
 "    font: 75 28pt \"MS Shell Dlg 2\";\n"
@@ -1542,7 +1502,7 @@ class Ui_MainWindow(object):
 "border: 3px solid rgb(255, 255, 255);")
         self.label_xe.setFrameShadow(QtWidgets.QFrame.Plain)
         self.label_xe.setText("")
-        self.label_xe.setPixmap(QtGui.QPixmap("../../../../lab/ROBOT_NH_V3/images/pic_robotleten-removebg-preview.png"))
+        self.label_xe.setPixmap(QtGui.QPixmap("../images/pic_robotleten-removebg-preview.png"))
         self.label_xe.setScaledContents(True)
         self.label_xe.setWordWrap(False)
         self.label_xe.setObjectName("label_xe")
@@ -1883,26 +1843,24 @@ class Ui_MainWindow(object):
 "")
         self.btn_resetall_sql.setObjectName("btn_resetall_sql")
         self.bt_back_setup_ts_robot = QtWidgets.QPushButton(self.frame_32)
-        self.bt_back_setup_ts_robot.setGeometry(QtCore.QRect(1470, 40, 171, 41))
+        self.bt_back_setup_ts_robot.setGeometry(QtCore.QRect(1470, 40, 191, 41))
         self.bt_back_setup_ts_robot.setStyleSheet("QPushButton#bt_back_setup_ts_robot{\n"
-"       border-bottom-right-radius :20px;\n"
-"    font: 75 18pt \"MS Shell Dlg 2\";\n"
-"    \n"
-"    /*border: 3px solid rgb(230, 230, 230);*/\n"
-"    color: rgb(0, 0, 0);\n"
-"    \n"
-"    background-color: rgb(220, 220, 220);\n"
-"    background-color: rgb(255, 255, 255);\n"
+"     border-radius: 15px;\n"
+"    font: 75 23pt \"MS Shell Dlg 2\";\n"
+"    border: 1px solid rgb(230, 230, 230);\n"
+"background-color: rgb(230, 230, 230);\n"
 "\n"
 "}\n"
+"QPushButton#bt_back_setup_ts_robot:pressed{\n"
+"background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));\n"
 "\n"
+"}\n"
 "QPushButton#bt_back_setup_ts_robot:pressed{\n"
 "padding-left :2px;\n"
 "padding-top :2px;\n"
 "\n"
-"    background-color: rgb(50, 192, 240);\n"
+"    background-color: rgb(58, 192, 255);\n"
 "}\n"
-"\n"
 "\n"
 "")
         self.bt_back_setup_ts_robot.setIcon(icon12)
@@ -2004,26 +1962,24 @@ class Ui_MainWindow(object):
 "")
         self.btn_resetall_sql_2.setObjectName("btn_resetall_sql_2")
         self.bt_back_setup_ts_robot_2 = QtWidgets.QPushButton(self.frame_33)
-        self.bt_back_setup_ts_robot_2.setGeometry(QtCore.QRect(1470, 40, 171, 41))
+        self.bt_back_setup_ts_robot_2.setGeometry(QtCore.QRect(1470, 40, 191, 41))
         self.bt_back_setup_ts_robot_2.setStyleSheet("QPushButton#bt_back_setup_ts_robot_2{\n"
-"       border-bottom-right-radius :20px;\n"
-"    font: 75 18pt \"MS Shell Dlg 2\";\n"
-"    \n"
-"    /*border: 3px solid rgb(230, 230, 230);*/\n"
-"    color: rgb(0, 0, 0);\n"
-"    \n"
-"    background-color: rgb(220, 220, 220);\n"
-"    background-color: rgb(255, 255, 255);\n"
+"     border-radius: 15px;\n"
+"    font: 75 23pt \"MS Shell Dlg 2\";\n"
+"    border: 1px solid rgb(230, 230, 230);\n"
+"background-color: rgb(230, 230, 230);\n"
 "\n"
 "}\n"
+"QPushButton#bt_back_setup_ts_robot_2:pressed{\n"
+"background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));\n"
 "\n"
+"}\n"
 "QPushButton#bt_back_setup_ts_robot_2:pressed{\n"
 "padding-left :2px;\n"
 "padding-top :2px;\n"
 "\n"
-"    background-color: rgb(50, 192, 240);\n"
+"    background-color: rgb(58, 192, 255);\n"
 "}\n"
-"\n"
 "\n"
 "")
         self.bt_back_setup_ts_robot_2.setIcon(icon12)
@@ -2316,66 +2272,29 @@ class Ui_MainWindow(object):
 "border-radius: 20px;")
         self.listWidget_dsban.setObjectName("listWidget_dsban")
         self.bt_back_dichuyen_robot = QtWidgets.QPushButton(self.page_dichuyen_robot)
-        self.bt_back_dichuyen_robot.setGeometry(QtCore.QRect(1700, 0, 171, 41))
+        self.bt_back_dichuyen_robot.setGeometry(QtCore.QRect(1710, 0, 191, 41))
         self.bt_back_dichuyen_robot.setStyleSheet("QPushButton#bt_back_dichuyen_robot{\n"
-"       border-bottom-right-radius :20px;\n"
-"    font: 75 20pt \"MS Shell Dlg 2\";\n"
-"    \n"
-"    /*border: 3px solid rgb(230, 230, 230);*/\n"
-"    color: rgb(0, 0, 0);\n"
-"    \n"
-"    background-color: rgb(220, 220, 220);\n"
-"    background-color: rgb(255, 255, 255);\n"
+"     border-radius: 15px;\n"
+"    font: 75 23pt \"MS Shell Dlg 2\";\n"
+"    border: 1px solid rgb(230, 230, 230);\n"
+"background-color: rgb(230, 230, 230);\n"
 "\n"
 "}\n"
-"\n"
 "QPushButton#bt_back_dichuyen_robot:pressed{\n"
-"padding-left :0px;\n"
+"background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));\n"
+"\n"
+"}\n"
+"QPushButton#bt_back_dichuyen_robot:pressed{\n"
+"padding-left :2px;\n"
 "padding-top :2px;\n"
 "\n"
-"    background-color: rgb(50, 192, 240);\n"
+"    background-color: rgb(58, 192, 255);\n"
 "}\n"
+"\n"
 "")
         self.bt_back_dichuyen_robot.setIcon(icon12)
         self.bt_back_dichuyen_robot.setIconSize(QtCore.QSize(50, 50))
         self.bt_back_dichuyen_robot.setObjectName("bt_back_dichuyen_robot")
-        self.checkBox_dk_tuxa = QtWidgets.QCheckBox(self.page_dichuyen_robot)
-        self.checkBox_dk_tuxa.setGeometry(QtCore.QRect(1080, 0, 361, 51))
-        self.checkBox_dk_tuxa.setStyleSheet("QCheckBox{\n"
-"    background-color: rgb(255, 255, 255);\n"
-"    border-radius: 15px;\n"
-"font: 75 24pt \"MS Shell Dlg 2\";\n"
-"}\n"
-"QCheckBox:hover{\n"
-"padding-left :2px;\n"
-"padding-top :2px;\n"
-"\n"
-"}\n"
-"QCheckBox::indicator {\n"
-"    \n"
-"    border-radius: 10px; /* Đặt độ cong cho ô tích */\n"
-"    width: 40px; /* Đặt chiều rộng của ô tích */\n"
-"    height: 40px; /* Đặt chiều cao của ô tích */\n"
-"    border: 2px solid rgb(0, 0, 0);\n"
-"    position: absolute; /* Sử dụng position để định vị */\n"
-"    top: 0; /* Di chuyển indicator lên phía trên */\n"
-"left:10;\n"
-"}\n"
-"\n"
-"QCheckBox::indicator:unchecked{\n"
-"    background-color: rgb(255, 255, 255);\n"
-"\n"
-"}\n"
-"QCheckBox::indicator:checked{\n"
-"    \n"
-"    \n"
-"background-color: rgb(106, 255, 153);\n"
-"\n"
-"}\n"
-"\n"
-"\n"
-"")
-        self.checkBox_dk_tuxa.setObjectName("checkBox_dk_tuxa")
         self.map_scrollArea = QtWidgets.QScrollArea(self.page_dichuyen_robot)
         self.map_scrollArea.setGeometry(QtCore.QRect(1090, 210, 821, 591))
         self.map_scrollArea.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
@@ -2683,7 +2602,131 @@ class Ui_MainWindow(object):
         self.Button_add.setIconSize(QtCore.QSize(80, 80))
         self.Button_add.setObjectName("Button_add")
         self.gridLayout_5.addWidget(self.Button_add, 1, 0, 1, 1)
+        self.mobile_button = QtWidgets.QPushButton(self.page_dichuyen_robot)
+        self.mobile_button.setGeometry(QtCore.QRect(1080, 0, 281, 41))
+        self.mobile_button.setStyleSheet("QPushButton#mobile_button{\n"
+"    background-color: rgb(255, 255, 255);\n"
+"\n"
+"color:rgba(0, 0, 0, 255);\n"
+"border-radius:10px;\n"
+"    \n"
+"    font: 75 20pt \"MS Shell Dlg 2\";\n"
+"}\n"
+"QPushButton#bt_mode_auto:hover{\n"
+"    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 255, 255, 255), stop:1 rgba(58, 192, 255, 255));\n"
+"\n"
+"}\n"
+"QPushButton#bt_mode_auto:pressed{\n"
+"\n"
+" padding-left:5px;\n"
+" padding-top:5px;\n"
+" background-color:rgba(58, 192, 200, 255);\n"
+"\n"
+"\n"
+"}")
+        self.mobile_button.setObjectName("mobile_button")
         self.stackedWidget.addWidget(self.page_dichuyen_robot)
+        self.page_mobile = QtWidgets.QWidget()
+        self.page_mobile.setObjectName("page_mobile")
+        self.frame_15 = QtWidgets.QFrame(self.page_mobile)
+        self.frame_15.setGeometry(QtCore.QRect(120, 0, 1700, 1000))
+        self.frame_15.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+"  border-radius: 20px;")
+        self.frame_15.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_15.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_15.setObjectName("frame_15")
+        self.label_mobile = QtWidgets.QLabel(self.frame_15)
+        self.label_mobile.setGeometry(QtCore.QRect(580, 40, 550, 60))
+        self.label_mobile.setMaximumSize(QtCore.QSize(800, 200))
+        self.label_mobile.setSizeIncrement(QtCore.QSize(800, 200))
+        font = QtGui.QFont()
+        font.setPointSize(20)
+        font.setBold(False)
+        font.setWeight(50)
+        self.label_mobile.setFont(font)
+        self.label_mobile.setStyleSheet("\n"
+"background-color: rgb(58,192,240);\n"
+"border-radius: 20px;\n"
+"")
+        self.label_mobile.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_mobile.setObjectName("label_mobile")
+        self.label_status_3 = QtWidgets.QLabel(self.frame_15)
+        self.label_status_3.setGeometry(QtCore.QRect(70, 200, 1191, 231))
+        font = QtGui.QFont()
+        font.setPointSize(25)
+        self.label_status_3.setFont(font)
+        self.label_status_3.setObjectName("label_status_3")
+        self.btn_tat_ketnoi_mobile = QtWidgets.QPushButton(self.frame_15)
+        self.btn_tat_ketnoi_mobile.setGeometry(QtCore.QRect(960, 810, 311, 71))
+        self.btn_tat_ketnoi_mobile.setStyleSheet("QPushButton#btn_tat_ketnoi_mobile{\n"
+" \n"
+"    border-radius: 15px;\n"
+"    background-color: rgb(58,192,240);\n"
+"    font: 75 17pt \"MS Shell Dlg 2\";\n"
+"    \n"
+"}\n"
+"\n"
+"QPushButton#btn_tat_ketnoi_mobile:pressed{\n"
+"padding-left :3px;\n"
+"padding-top :3px;\n"
+"border-radius: 15px;\n"
+"font: 75 17pt \"MS Shell Dlg 2\";\n"
+"\n"
+"    background-color: rgb(0, 255, 0);\n"
+"}\n"
+"")
+        self.btn_tat_ketnoi_mobile.setObjectName("btn_tat_ketnoi_mobile")
+        self.bt_back_mobile = QtWidgets.QPushButton(self.frame_15)
+        self.bt_back_mobile.setGeometry(QtCore.QRect(1460, 60, 191, 41))
+        self.bt_back_mobile.setStyleSheet("QPushButton#bt_back_mobile{\n"
+"     border-radius: 15px;\n"
+"    font: 75 23pt \"MS Shell Dlg 2\";\n"
+"    border: 1px solid rgb(230, 230, 230);\n"
+"background-color: rgb(230, 230, 230);\n"
+"\n"
+"}\n"
+"QPushButton#bt_back_mobile:pressed{\n"
+"background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));\n"
+"\n"
+"}\n"
+"QPushButton#bt_back_mobile:pressed{\n"
+"padding-left :2px;\n"
+"padding-top :2px;\n"
+"\n"
+"    background-color: rgb(58, 192, 255);\n"
+"}\n"
+"\n"
+"")
+        self.bt_back_mobile.setIcon(icon12)
+        self.bt_back_mobile.setIconSize(QtCore.QSize(60, 60))
+        self.bt_back_mobile.setObjectName("bt_back_mobile")
+        self.label_nhan_lenh = QtWidgets.QLabel(self.frame_15)
+        self.label_nhan_lenh.setGeometry(QtCore.QRect(70, 450, 581, 231))
+        font = QtGui.QFont()
+        font.setPointSize(25)
+        self.label_nhan_lenh.setFont(font)
+        self.label_nhan_lenh.setObjectName("label_nhan_lenh")
+        self.btn_bat_ketnoi_mobile = QtWidgets.QPushButton(self.frame_15)
+        self.btn_bat_ketnoi_mobile.setGeometry(QtCore.QRect(430, 810, 311, 71))
+        self.btn_bat_ketnoi_mobile.setStyleSheet("QPushButton#btn_bat_ketnoi_mobile{\n"
+" \n"
+"    border-radius: 15px;\n"
+"    background-color: rgb(58,192,240);\n"
+"    font: 75 17pt \"MS Shell Dlg 2\";\n"
+"    \n"
+"}\n"
+"\n"
+"QPushButton#btn_bat_ketnoi_mobile:pressed{\n"
+"padding-left :3px;\n"
+"padding-top :3px;\n"
+"border-radius: 15px;\n"
+"font: 75 17pt \"MS Shell Dlg 2\";\n"
+"\n"
+"    background-color: rgb(0, 255, 0);\n"
+"}\n"
+"")
+        self.btn_bat_ketnoi_mobile.setObjectName("btn_bat_ketnoi_mobile")
+        self.stackedWidget.addWidget(self.page_mobile)
         self.page_setup_cam = QtWidgets.QWidget()
         self.page_setup_cam.setObjectName("page_setup_cam")
         self.frame_7 = QtWidgets.QFrame(self.page_setup_cam)
@@ -2907,25 +2950,25 @@ class Ui_MainWindow(object):
         self.combobox_front_2.setGeometry(QtCore.QRect(280, 410, 86, 40))
         self.combobox_front_2.setObjectName("combobox_front_2")
         self.bt_back_setup_3 = QtWidgets.QPushButton(self.frame_7)
-        self.bt_back_setup_3.setGeometry(QtCore.QRect(1500, 40, 171, 41))
+        self.bt_back_setup_3.setGeometry(QtCore.QRect(1460, 50, 191, 41))
         self.bt_back_setup_3.setStyleSheet("QPushButton#bt_back_setup_3{\n"
-"       border-bottom-right-radius :20px;\n"
-"    font: 75 18pt \"MS Shell Dlg 2\";\n"
-"    \n"
-"    /*border: 3px solid rgb(230, 230, 230);*/\n"
-"    color: rgb(0, 0, 0);\n"
-"    \n"
-"    background-color: rgb(220, 220, 220);\n"
-"    background-color: rgb(255, 255, 255);\n"
+"     border-radius: 15px;\n"
+"    font: 75 23pt \"MS Shell Dlg 2\";\n"
+"    border: 1px solid rgb(230, 230, 230);\n"
+"background-color: rgb(230, 230, 230);\n"
 "\n"
 "}\n"
+"QPushButton#bt_back_setup_3:pressed{\n"
+"background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));\n"
 "\n"
+"}\n"
 "QPushButton#bt_back_setup_3:pressed{\n"
 "padding-left :2px;\n"
 "padding-top :2px;\n"
 "\n"
-"    background-color: rgb(50, 192, 240);\n"
+"    background-color: rgb(58, 192, 255);\n"
 "}\n"
+"\n"
 "")
         self.bt_back_setup_3.setIcon(icon12)
         self.bt_back_setup_3.setIconSize(QtCore.QSize(60, 60))
@@ -3111,25 +3154,25 @@ class Ui_MainWindow(object):
 "")
         self.checkbox_checkout_2.setObjectName("checkbox_checkout_2")
         self.bt_back_setup_4 = QtWidgets.QPushButton(self.frame_11)
-        self.bt_back_setup_4.setGeometry(QtCore.QRect(1510, 50, 171, 41))
+        self.bt_back_setup_4.setGeometry(QtCore.QRect(1500, 50, 191, 41))
         self.bt_back_setup_4.setStyleSheet("QPushButton#bt_back_setup_4{\n"
-"       border-bottom-right-radius :20px;\n"
-"    font: 75 18pt \"MS Shell Dlg 2\";\n"
-"    \n"
-"    /*border: 3px solid rgb(230, 230, 230);*/\n"
-"    color: rgb(0, 0, 0);\n"
-"    \n"
-"    background-color: rgb(220, 220, 220);\n"
-"    background-color: rgb(255, 255, 255);\n"
+"     border-radius: 15px;\n"
+"    font: 75 23pt \"MS Shell Dlg 2\";\n"
+"    border: 1px solid rgb(230, 230, 230);\n"
+"background-color: rgb(230, 230, 230);\n"
 "\n"
 "}\n"
+"QPushButton#bt_back_setup_4:pressed{\n"
+"background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));\n"
 "\n"
+"}\n"
 "QPushButton#bt_back_setup_4:pressed{\n"
 "padding-left :2px;\n"
 "padding-top :2px;\n"
 "\n"
-"    background-color: rgb(50, 192, 240);\n"
+"    background-color: rgb(58, 192, 255);\n"
 "}\n"
+"\n"
 "")
         self.bt_back_setup_4.setIcon(icon12)
         self.bt_back_setup_4.setIconSize(QtCore.QSize(60, 60))
@@ -3210,25 +3253,25 @@ class Ui_MainWindow(object):
         self.label_caidat_cam_3.setAlignment(QtCore.Qt.AlignCenter)
         self.label_caidat_cam_3.setObjectName("label_caidat_cam_3")
         self.bt_back_setup_5 = QtWidgets.QPushButton(self.frame_12)
-        self.bt_back_setup_5.setGeometry(QtCore.QRect(1510, 50, 171, 41))
+        self.bt_back_setup_5.setGeometry(QtCore.QRect(1480, 50, 191, 41))
         self.bt_back_setup_5.setStyleSheet("QPushButton#bt_back_setup_5{\n"
-"       border-bottom-right-radius :20px;\n"
-"    font: 75 18pt \"MS Shell Dlg 2\";\n"
-"    \n"
-"    /*border: 3px solid rgb(230, 230, 230);*/\n"
-"    color: rgb(0, 0, 0);\n"
-"    \n"
-"    background-color: rgb(220, 220, 220);\n"
-"    background-color: rgb(255, 255, 255);\n"
+"     border-radius: 15px;\n"
+"    font: 75 23pt \"MS Shell Dlg 2\";\n"
+"    border: 1px solid rgb(230, 230, 230);\n"
+"background-color: rgb(230, 230, 230);\n"
 "\n"
 "}\n"
+"QPushButton#bt_back_setup_5:pressed{\n"
+"background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));\n"
 "\n"
+"}\n"
 "QPushButton#bt_back_setup_5:pressed{\n"
 "padding-left :2px;\n"
 "padding-top :2px;\n"
 "\n"
-"    background-color: rgb(50, 192, 240);\n"
+"    background-color: rgb(58, 192, 255);\n"
 "}\n"
+"\n"
 "")
         self.bt_back_setup_5.setIcon(icon12)
         self.bt_back_setup_5.setIconSize(QtCore.QSize(60, 60))
@@ -3579,25 +3622,25 @@ class Ui_MainWindow(object):
 "")
         self.btn_delete_data_all.setObjectName("btn_delete_data_all")
         self.bt_back_setup_2 = QtWidgets.QPushButton(self.frame_9)
-        self.bt_back_setup_2.setGeometry(QtCore.QRect(1500, 40, 171, 41))
+        self.bt_back_setup_2.setGeometry(QtCore.QRect(1470, 60, 191, 41))
         self.bt_back_setup_2.setStyleSheet("QPushButton#bt_back_setup_2{\n"
-"       border-bottom-right-radius :20px;\n"
-"    font: 75 18pt \"MS Shell Dlg 2\";\n"
-"    \n"
-"    /*border: 3px solid rgb(230, 230, 230);*/\n"
-"    color: rgb(0, 0, 0);\n"
-"    \n"
-"    background-color: rgb(220, 220, 220);\n"
-"    background-color: rgb(255, 255, 255);\n"
+"     border-radius: 15px;\n"
+"    font: 75 23pt \"MS Shell Dlg 2\";\n"
+"    border: 1px solid rgb(230, 230, 230);\n"
+"background-color: rgb(230, 230, 230);\n"
 "\n"
 "}\n"
+"QPushButton#bt_back_setup_2:pressed{\n"
+"background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));\n"
 "\n"
+"}\n"
 "QPushButton#bt_back_setup_2:pressed{\n"
 "padding-left :2px;\n"
 "padding-top :2px;\n"
 "\n"
-"    background-color: rgb(50, 192, 240);\n"
+"    background-color: rgb(58, 192, 255);\n"
 "}\n"
+"\n"
 "")
         self.bt_back_setup_2.setIcon(icon12)
         self.bt_back_setup_2.setIconSize(QtCore.QSize(60, 60))
@@ -3655,25 +3698,25 @@ class Ui_MainWindow(object):
 "")
         self.btn_bd_dinhvi.setObjectName("btn_bd_dinhvi")
         self.bt_back_dinhvi = QtWidgets.QPushButton(self.frame_8)
-        self.bt_back_dinhvi.setGeometry(QtCore.QRect(1400, 80, 171, 41))
+        self.bt_back_dinhvi.setGeometry(QtCore.QRect(1440, 60, 191, 41))
         self.bt_back_dinhvi.setStyleSheet("QPushButton#bt_back_dinhvi{\n"
-"       border-bottom-right-radius :20px;\n"
-"    font: 75 18pt \"MS Shell Dlg 2\";\n"
-"    \n"
-"    /*border: 3px solid rgb(230, 230, 230);*/\n"
-"    color: rgb(0, 0, 0);\n"
-"    \n"
-"    background-color: rgb(220, 220, 220);\n"
-"    background-color: rgb(255, 255, 255);\n"
+"     border-radius: 15px;\n"
+"    font: 75 23pt \"MS Shell Dlg 2\";\n"
+"    border: 1px solid rgb(230, 230, 230);\n"
+"background-color: rgb(230, 230, 230);\n"
 "\n"
 "}\n"
+"QPushButton#bt_back_dinhvi:pressed{\n"
+"background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));\n"
 "\n"
+"}\n"
 "QPushButton#bt_back_dinhvi:pressed{\n"
 "padding-left :2px;\n"
 "padding-top :2px;\n"
 "\n"
-"    background-color: rgb(50, 192, 240);\n"
+"    background-color: rgb(58, 192, 255);\n"
 "}\n"
+"\n"
 "")
         self.bt_back_dinhvi.setIcon(icon12)
         self.bt_back_dinhvi.setIconSize(QtCore.QSize(60, 60))
@@ -3709,46 +3752,26 @@ class Ui_MainWindow(object):
         font.setPointSize(25)
         self.label_status_2.setFont(font)
         self.label_status_2.setObjectName("label_status_2")
-        self.btn_ketnoi_mobile = QtWidgets.QPushButton(self.frame_13)
-        self.btn_ketnoi_mobile.setGeometry(QtCore.QRect(400, 800, 311, 71))
-        self.btn_ketnoi_mobile.setStyleSheet("QPushButton#btn_ketnoi_mobile{\n"
-" \n"
-"    border-radius: 15px;\n"
-"    background-color: rgb(58,192,240);\n"
-"    font: 75 17pt \"MS Shell Dlg 2\";\n"
-"    \n"
-"}\n"
-"\n"
-"QPushButton#btn_ketnoi_mobile:pressed{\n"
-"padding-left :3px;\n"
-"padding-top :3px;\n"
-"border-radius: 15px;\n"
-"font: 75 17pt \"MS Shell Dlg 2\";\n"
-"\n"
-"    background-color: rgb(0, 255, 0);\n"
-"}\n"
-"")
-        self.btn_ketnoi_mobile.setObjectName("btn_ketnoi_mobile")
         self.bt_back_wifi = QtWidgets.QPushButton(self.frame_13)
-        self.bt_back_wifi.setGeometry(QtCore.QRect(1400, 80, 171, 41))
+        self.bt_back_wifi.setGeometry(QtCore.QRect(1440, 60, 191, 41))
         self.bt_back_wifi.setStyleSheet("QPushButton#bt_back_wifi{\n"
-"       border-bottom-right-radius :20px;\n"
-"    font: 75 18pt \"MS Shell Dlg 2\";\n"
-"    \n"
-"    /*border: 3px solid rgb(230, 230, 230);*/\n"
-"    color: rgb(0, 0, 0);\n"
-"    \n"
-"    background-color: rgb(220, 220, 220);\n"
-"    background-color: rgb(255, 255, 255);\n"
+"     border-radius: 15px;\n"
+"    font: 75 23pt \"MS Shell Dlg 2\";\n"
+"    border: 1px solid rgb(230, 230, 230);\n"
+"background-color: rgb(230, 230, 230);\n"
 "\n"
 "}\n"
+"QPushButton#bt_back_wifi:pressed{\n"
+"background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));\n"
 "\n"
+"}\n"
 "QPushButton#bt_back_wifi:pressed{\n"
 "padding-left :2px;\n"
 "padding-top :2px;\n"
 "\n"
-"    background-color: rgb(50, 192, 240);\n"
+"    background-color: rgb(58, 192, 255);\n"
 "}\n"
+"\n"
 "")
         self.bt_back_wifi.setIcon(icon12)
         self.bt_back_wifi.setIconSize(QtCore.QSize(60, 60))
@@ -3832,24 +3855,23 @@ class Ui_MainWindow(object):
         self.bt_tc_cap_nhat_4.setIconSize(QtCore.QSize(70, 70))
         self.bt_tc_cap_nhat_4.setObjectName("bt_tc_cap_nhat_4")
         self.bt_back_tc_nha_truong_4 = QtWidgets.QPushButton(self.tab_nha_truong_2)
-        self.bt_back_tc_nha_truong_4.setGeometry(QtCore.QRect(1710, 30, 151, 41))
+        self.bt_back_tc_nha_truong_4.setGeometry(QtCore.QRect(1670, 30, 191, 41))
         self.bt_back_tc_nha_truong_4.setStyleSheet("QPushButton#bt_back_tc_nha_truong_4{\n"
-"       border-bottom-right-radius :20px;\n"
-"    font: 75 18pt \"MS Shell Dlg 2\";\n"
-"    \n"
-"    /*border: 3px solid rgb(230, 230, 230);*/\n"
-"    color: rgb(0, 0, 0);\n"
-"    \n"
-"    background-color: rgb(220, 220, 220);\n"
-"    background-color: rgb(255, 255, 255);\n"
+"     border-radius: 15px;\n"
+"    font: 75 23pt \"MS Shell Dlg 2\";\n"
+"    border: 1px solid rgb(230, 230, 230);\n"
+"background-color: rgb(230, 230, 230);\n"
 "\n"
 "}\n"
+"QPushButton#bt_back_tc_nha_truong_4:pressed{\n"
+"background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));\n"
 "\n"
+"}\n"
 "QPushButton#bt_back_tc_nha_truong_4:pressed{\n"
 "padding-left :2px;\n"
 "padding-top :2px;\n"
 "\n"
-"    background-color: rgb(50, 192, 240);\n"
+"    background-color: rgb(58, 192, 255);\n"
 "}\n"
 "\n"
 "")
@@ -4147,7 +4169,7 @@ class Ui_MainWindow(object):
         self.label_4.setGeometry(QtCore.QRect(250, 30, 411, 81))
         self.label_4.setObjectName("label_4")
         self.label_5 = QtWidgets.QLabel(self.centralwidget)
-        self.label_5.setGeometry(QtCore.QRect(640, 30, 631, 131))
+        self.label_5.setGeometry(QtCore.QRect(650, 0, 631, 131))
         font = QtGui.QFont()
         font.setPointSize(26)
         font.setBold(True)
@@ -4171,8 +4193,8 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         self.stackedWidget.setCurrentIndex(0)
-        self.tab_main.setCurrentIndex(0)
-        self.tabWidget_dan_duong.setCurrentIndex(0)
+        self.tab_main.setCurrentIndex(1)
+        self.tabWidget_dan_duong.setCurrentIndex(1)
         self.tab_danh_sach_2.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -4210,7 +4232,7 @@ class Ui_MainWindow(object):
         self.bt_them.setText(_translate("MainWindow", "Thêm"))
         self.bt_wifi.setText(_translate("MainWindow", "Wifi"))
         self.bt_setup_cam.setText(_translate("MainWindow", "Setup Cam"))
-        self.bt_check_cam.setText(_translate("MainWindow", "Check Cam"))
+        self.bt_check_cam.setText(_translate("MainWindow", "Check HOME"))
         self.btn_dinh_vi.setText(_translate("MainWindow", "Định Vị"))
         self.bt_set_home.setText(_translate("MainWindow", "Setup vị trí"))
         self.bt_danhsach.setText(_translate("MainWindow", "Danh sách"))
@@ -4244,7 +4266,6 @@ class Ui_MainWindow(object):
         self.btn_thu_tu.setText(_translate("MainWindow", "Thứ tự"))
         self.btn_batdau_danduong.setText(_translate("MainWindow", "Bắt đầu"))
         self.btn_them_bot.setText(_translate("MainWindow", "Xóa"))
-        self.checkBox_giong_noi.setText(_translate("MainWindow", "Giọng nói"))
         self.btn_ban_do.setText(_translate("MainWindow", "Bản đồ"))
         self.checkBox_kvc.setText(_translate("MainWindow", "Khu vực chờ"))
         self.label_name_tt.setText(_translate("MainWindow", "ROBOT ĐANG DI CHUYỂN ĐẾN:"))
@@ -4278,7 +4299,6 @@ class Ui_MainWindow(object):
         self.label_25.setText(_translate("MainWindow", "Confirm pw:"))
         self.label_39.setText(_translate("MainWindow", "Cài đặt mật khẩu"))
         self.bt_back_dichuyen_robot.setText(_translate("MainWindow", "Quay Lại"))
-        self.checkBox_dk_tuxa.setText(_translate("MainWindow", "Điều khiển từ xa"))
         self.map_label.setText(_translate("MainWindow", "Map Area"))
         self.save_map_button.setText(_translate("MainWindow", "Save map"))
         self.stop_mapping_button.setText(_translate("MainWindow", "Stop mapping"))
@@ -4289,6 +4309,13 @@ class Ui_MainWindow(object):
         self.Button_toado.setText(_translate("MainWindow", "Tọa độ"))
         self.Button_lammoi.setText(_translate("MainWindow", " Làm mới"))
         self.Button_add.setText(_translate("MainWindow", "    Thêm "))
+        self.mobile_button.setText(_translate("MainWindow", "Điều khiển từ xa"))
+        self.label_mobile.setText(_translate("MainWindow", "Mobile"))
+        self.label_status_3.setText(_translate("MainWindow", "Vui lòng ấn nút kết nối mobile"))
+        self.btn_tat_ketnoi_mobile.setText(_translate("MainWindow", "Kết thúc kết nối mobile"))
+        self.bt_back_mobile.setText(_translate("MainWindow", "Quay Lại"))
+        self.label_nhan_lenh.setText(_translate("MainWindow", "Đang chờ lệnh"))
+        self.btn_bat_ketnoi_mobile.setText(_translate("MainWindow", "Bắt đầu kết nối mobile"))
         self.label_caidat_cam.setText(_translate("MainWindow", "CÀI ĐẶT CAMERA"))
         self.lable_id_0.setText(_translate("MainWindow", "ID: "))
         self.lable_id_2.setText(_translate("MainWindow", "ID: "))
@@ -4339,7 +4366,6 @@ class Ui_MainWindow(object):
         self.bt_back_dinhvi.setText(_translate("MainWindow", "Quay Lại"))
         self.label_caidat_dinhvi_3.setText(_translate("MainWindow", "WIFI "))
         self.label_status_2.setText(_translate("MainWindow", "Tình trạng Wifi"))
-        self.btn_ketnoi_mobile.setText(_translate("MainWindow", "Bắt đầu kết nối mobile"))
         self.bt_back_wifi.setText(_translate("MainWindow", "Quay Lại"))
         self.btn_kt_wifi.setText(_translate("MainWindow", "Kiểm tra wifi"))
         self.tra_loi_tc_nha_truong_4.setText(_translate("MainWindow", "TextLabel"))

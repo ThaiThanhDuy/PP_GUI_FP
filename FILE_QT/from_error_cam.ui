@@ -69,8 +69,8 @@ border-radius: 25px;</string>
      <string notr="true">font: 16pt &quot;MS Shell Dlg 2&quot;</string>
     </property>
     <property name="text">
-     <string>Nhận dạng camera bị lỗi.
- Vui lòng điều chỉnh hình tròn. </string>
+     <string>Nhận dạng vị trí home bị lỗi.
+ Vui lòng điều chỉnh vị trí . </string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -90,7 +90,7 @@ border-radius: 25px;</string>
     </property>
     <property name="icon">
      <iconset>
-      <normaloff>warning.png</normaloff>warning.png</iconset>
+      <normaloff>../images/warning.png</normaloff>../images/warning.png</iconset>
     </property>
     <property name="iconSize">
      <size>
