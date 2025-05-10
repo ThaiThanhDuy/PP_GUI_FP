@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1906</width>
-    <height>1113</height>
+    <height>1116</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,7 +30,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>17</number>
     </property>
     <widget class="QWidget" name="page_main">
      <property name="styleSheet">
@@ -8098,7 +8098,7 @@ font: 75 17pt &quot;MS Shell Dlg 2&quot;;
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>0</y>
+         <y>20</y>
          <width>1871</width>
          <height>911</height>
         </rect>
@@ -8116,10 +8116,10 @@ font: 75 17pt &quot;MS Shell Dlg 2&quot;;
         <widget class="QLabel" name="tra_loi_tc_nha_truong_4">
          <property name="geometry">
           <rect>
-           <x>50</x>
-           <y>100</y>
-           <width>711</width>
-           <height>601</height>
+           <x>20</x>
+           <y>80</y>
+           <width>741</width>
+           <height>621</height>
           </rect>
          </property>
          <property name="font">
@@ -8139,9 +8139,9 @@ border-radius:20px;</string>
          <property name="geometry">
           <rect>
            <x>780</x>
-           <y>100</y>
+           <y>80</y>
            <width>1081</width>
-           <height>761</height>
+           <height>781</height>
           </rect>
          </property>
          <property name="font">
@@ -8246,9 +8246,9 @@ padding-top :2px;
         <widget class="QCheckBox" name="checkBox_giong_noi_5">
          <property name="geometry">
           <rect>
-           <x>60</x>
+           <x>20</x>
            <y>780</y>
-           <width>271</width>
+           <width>221</width>
            <height>71</height>
           </rect>
          </property>
@@ -8301,230 +8301,49 @@ background-color: rgb(106, 255, 153);
           <string>Giọng nói</string>
          </property>
         </widget>
-       </widget>
-       <widget class="QWidget" name="tab_ai_2">
-        <property name="styleSheet">
-         <string notr="true"/>
-        </property>
-        <attribute name="title">
-         <string>Al</string>
-        </attribute>
-        <widget class="QPushButton" name="bt_back_tc_ai_2">
+        <widget class="QPushButton" name="bt_tc_ai">
          <property name="geometry">
           <rect>
-           <x>1680</x>
-           <y>40</y>
-           <width>151</width>
-           <height>41</height>
-          </rect>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton#bt_back_tc_ai_2{
-   	border-bottom-right-radius :20px;
-	font: 75 18pt &quot;MS Shell Dlg 2&quot;;
-	
-	/*border: 3px solid rgb(230, 230, 230);*/
-	color: rgb(0, 0, 0);
-	
-	background-color: rgb(220, 220, 220);
-	background-color: rgb(255, 255, 255);
-
-}
-
-QPushButton#bt_back_tc_ai_2:pressed{
-padding-left :2px;
-padding-top :2px;
-
-	background-color: rgb(50, 192, 240);
-}
-
-</string>
-         </property>
-         <property name="text">
-          <string>Quay Lại</string>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>../../../../../media/duy/USB_16G/.designer/images/quaylai_xoafont.png</normaloff>../../../../../media/duy/USB_16G/.designer/images/quaylai_xoafont.png</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>30</width>
-           <height>30</height>
-          </size>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_cau_hoi_ai_2">
-         <property name="geometry">
-          <rect>
-           <x>20</x>
-           <y>140</y>
-           <width>1701</width>
-           <height>151</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>25</pointsize>
-          </font>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">background-color : white ;
-border-radius:20px;</string>
-         </property>
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-        <widget class="QPushButton" name="btn_tich_hoi_ai_2">
-         <property name="geometry">
-          <rect>
-           <x>1740</x>
-           <y>140</y>
-           <width>93</width>
-           <height>61</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <family>MS Shell Dlg 2</family>
-           <pointsize>10</pointsize>
-           <weight>9</weight>
-           <italic>false</italic>
-           <bold>false</bold>
-          </font>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">
-QPushButton#btn_tich_hoi_ai_2{
-	background-color: rgb(153, 255, 187);
-
-color:rgba(0, 0, 0, 255);
-border-radius:20px;
-	
-	font: 75 10pt &quot;MS Shell Dlg 2&quot;;
-}
-QPushButton#btn_tich_hoi_ai_2:hover{
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 255, 255, 255), stop:1 rgba(58, 192, 255, 255));
-
-}
-QPushButton#btn_tich_hoi_ai_2:pressed{
-
- padding-left:1px;
- padding-top:1px;
- background-color:rgba(58, 192, 200, 255);
-
-
-}</string>
-         </property>
-         <property name="text">
-          <string>Xác nhận</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_tra_loi_ai_2">
-         <property name="geometry">
-          <rect>
-           <x>20</x>
-           <y>320</y>
-           <width>1831</width>
-           <height>551</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>22</pointsize>
-          </font>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">background-color : white ;
-border-radius:20px;</string>
-         </property>
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-        <widget class="QPushButton" name="btn_huy_hoi_ai_2">
-         <property name="geometry">
-          <rect>
-           <x>1740</x>
-           <y>220</y>
-           <width>93</width>
-           <height>61</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <family>MS Shell Dlg 2</family>
-           <pointsize>10</pointsize>
-           <weight>9</weight>
-           <italic>false</italic>
-           <bold>false</bold>
-          </font>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">
-QPushButton#btn_huy_hoi_ai_2{
-	background-color: rgb(153, 255, 187);
-
-color:rgba(0, 0, 0, 255);
-border-radius:20px;
-	
-	font: 75 10pt &quot;MS Shell Dlg 2&quot;;
-}
-QPushButton#btn_huy_hoi_ai_2:hover{
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 255, 255, 255), stop:1 rgba(58, 192, 255, 255));
-
-}
-QPushButton#btn_huy_hoi_ai_2:pressed{
-
- padding-left:1px;
- padding-top:1px;
- background-color:rgba(58, 192, 200, 255);
-
-
-}</string>
-         </property>
-         <property name="text">
-          <string>Hủy</string>
-         </property>
-        </widget>
-        <widget class="QPushButton" name="btn_bat_dau_ai_2">
-         <property name="geometry">
-          <rect>
-           <x>760</x>
-           <y>10</y>
-           <width>311</width>
+           <x>260</x>
+           <y>740</y>
+           <width>171</width>
            <height>121</height>
           </rect>
          </property>
+         <property name="font">
+          <font>
+           <family>MS Shell Dlg 2</family>
+           <pointsize>35</pointsize>
+           <weight>9</weight>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
+         </property>
          <property name="styleSheet">
-          <string notr="true">QPushButton#btn_bat_dau_ai_2{
-	background-color: rgb(153, 255, 187);
+          <string notr="true">QPushButton#bt_tc_ai{
+	background-color: rgb(255, 96, 84);
 
-color:rgba(0, 0, 0, 255);
+color:rgba(0,0,0,255);
 border-radius:20px;
 	
 	font: 75 35pt &quot;MS Shell Dlg 2&quot;;
 }
-QPushButton#btn_bat_dau_ai_2:hover{
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 255, 255, 255), stop:1 rgba(58, 192, 255, 255));
 
-}
-QPushButton#btn_bat_dau_ai_2:pressed{
+QPushButton#bt_tc_ai:pressed{
 
  padding-left:5px;
  padding-top:5px;
  background-color:rgba(58, 192, 200, 255);
 
 
-}</string>
+}r</string>
          </property>
          <property name="text">
-          <string>Bắt đầu</string>
+          <string>Al</string>
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../../../../../media/duy/USB_16G/.designer/images/list_flation.png</normaloff>../../../../../media/duy/USB_16G/.designer/images/list_flation.png</iconset>
+           <normaloff>../../../Downloads/.designer/images/list_flation.png</normaloff>../../../Downloads/.designer/images/list_flation.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -8533,29 +8352,189 @@ QPushButton#btn_bat_dau_ai_2:pressed{
           </size>
          </property>
         </widget>
-        <widget class="QLabel" name="label_lang_nghe_2">
-         <property name="geometry">
-          <rect>
-           <x>20</x>
-           <y>80</y>
-           <width>601</width>
-           <height>51</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>15</pointsize>
-          </font>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">background-color : white ;
-border-radius:10px;</string>
-         </property>
-         <property name="text">
-          <string>text</string>
-         </property>
-        </widget>
        </widget>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_ai">
+     <widget class="QFrame" name="frame_16">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>20</y>
+        <width>1901</width>
+        <height>911</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QLabel" name="cau_hoi_ai">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>90</y>
+         <width>1861</width>
+         <height>191</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>22</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+border-radius: 20px;</string>
+       </property>
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="tra_loi_ai">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>290</y>
+         <width>1861</width>
+         <height>621</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>22</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+border-radius: 20px;</string>
+       </property>
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="bt_kt_ai">
+       <property name="geometry">
+        <rect>
+         <x>1700</x>
+         <y>40</y>
+         <width>191</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton#bt_kt_ai{
+     border-radius: 15px;
+	font: 75 23pt &quot;MS Shell Dlg 2&quot;;
+	border: 1px solid rgb(230, 230, 230);
+background-color: rgb(230, 230, 230);
+
+}
+QPushButton#bt_kt_ai:pressed{
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));
+
+}
+QPushButton#bt_kt_ai:pressed{
+padding-left :2px;
+padding-top :2px;
+
+	background-color: rgb(58, 192, 255);
+}
+
+</string>
+       </property>
+       <property name="text">
+        <string>Quay lại</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>../../../Downloads/.designer/images/list_flation.png</normaloff>../../../Downloads/.designer/images/list_flation.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>70</width>
+         <height>70</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_19">
+       <property name="geometry">
+        <rect>
+         <x>490</x>
+         <y>10</y>
+         <width>911</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>26</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(58, 192, 240);
+border-radius: 10px;</string>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TRA CỨU AI &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_gif">
+       <property name="geometry">
+        <rect>
+         <x>830</x>
+         <y>260</y>
+         <width>231</width>
+         <height>121</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>gif</string>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_wait">
+     <widget class="QFrame" name="frame_17">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>-201</y>
+        <width>2000</width>
+        <height>1200</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color:white;
+</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QLabel" name="label_wait">
+       <property name="geometry">
+        <rect>
+         <x>250</x>
+         <y>370</y>
+         <width>1481</width>
+         <height>701</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <property name="text">
+        <string>GIF</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
       </widget>
      </widget>
     </widget>

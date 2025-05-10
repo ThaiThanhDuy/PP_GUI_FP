@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1906, 1113)
+        MainWindow.resize(1906, 1116)
         MainWindow.setIconSize(QtCore.QSize(50, 50))
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -3806,13 +3806,13 @@ class Ui_MainWindow(object):
         self.frame_14.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_14.setObjectName("frame_14")
         self.tab_danh_sach_2 = QtWidgets.QTabWidget(self.frame_14)
-        self.tab_danh_sach_2.setGeometry(QtCore.QRect(10, 0, 1871, 911))
+        self.tab_danh_sach_2.setGeometry(QtCore.QRect(10, 20, 1871, 911))
         self.tab_danh_sach_2.setStyleSheet("boder-radius : 15px")
         self.tab_danh_sach_2.setObjectName("tab_danh_sach_2")
         self.tab_nha_truong_2 = QtWidgets.QWidget()
         self.tab_nha_truong_2.setObjectName("tab_nha_truong_2")
         self.tra_loi_tc_nha_truong_4 = QtWidgets.QLabel(self.tab_nha_truong_2)
-        self.tra_loi_tc_nha_truong_4.setGeometry(QtCore.QRect(50, 100, 711, 601))
+        self.tra_loi_tc_nha_truong_4.setGeometry(QtCore.QRect(20, 80, 741, 621))
         font = QtGui.QFont()
         font.setPointSize(22)
         self.tra_loi_tc_nha_truong_4.setFont(font)
@@ -3820,7 +3820,7 @@ class Ui_MainWindow(object):
 "border-radius:20px;")
         self.tra_loi_tc_nha_truong_4.setObjectName("tra_loi_tc_nha_truong_4")
         self.tc_nha_truong_2 = QtWidgets.QListWidget(self.tab_nha_truong_2)
-        self.tc_nha_truong_2.setGeometry(QtCore.QRect(780, 100, 1081, 761))
+        self.tc_nha_truong_2.setGeometry(QtCore.QRect(780, 80, 1081, 781))
         font = QtGui.QFont()
         font.setPointSize(20)
         self.tc_nha_truong_2.setFont(font)
@@ -3881,7 +3881,7 @@ class Ui_MainWindow(object):
         self.bt_back_tc_nha_truong_4.setIconSize(QtCore.QSize(30, 30))
         self.bt_back_tc_nha_truong_4.setObjectName("bt_back_tc_nha_truong_4")
         self.checkBox_giong_noi_5 = QtWidgets.QCheckBox(self.tab_nha_truong_2)
-        self.checkBox_giong_noi_5.setGeometry(QtCore.QRect(60, 780, 271, 71))
+        self.checkBox_giong_noi_5.setGeometry(QtCore.QRect(20, 780, 221, 71))
         font = QtGui.QFont()
         font.setFamily("MS Shell Dlg 2")
         font.setPointSize(24)
@@ -3924,168 +3924,133 @@ class Ui_MainWindow(object):
 "\n"
 "")
         self.checkBox_giong_noi_5.setObjectName("checkBox_giong_noi_5")
-        self.tab_danh_sach_2.addTab(self.tab_nha_truong_2, "")
-        self.tab_ai_2 = QtWidgets.QWidget()
-        self.tab_ai_2.setStyleSheet("")
-        self.tab_ai_2.setObjectName("tab_ai_2")
-        self.bt_back_tc_ai_2 = QtWidgets.QPushButton(self.tab_ai_2)
-        self.bt_back_tc_ai_2.setGeometry(QtCore.QRect(1680, 40, 151, 41))
-        self.bt_back_tc_ai_2.setStyleSheet("QPushButton#bt_back_tc_ai_2{\n"
-"       border-bottom-right-radius :20px;\n"
-"    font: 75 18pt \"MS Shell Dlg 2\";\n"
-"    \n"
-"    /*border: 3px solid rgb(230, 230, 230);*/\n"
-"    color: rgb(0, 0, 0);\n"
-"    \n"
-"    background-color: rgb(220, 220, 220);\n"
-"    background-color: rgb(255, 255, 255);\n"
-"\n"
-"}\n"
-"\n"
-"QPushButton#bt_back_tc_ai_2:pressed{\n"
-"padding-left :2px;\n"
-"padding-top :2px;\n"
-"\n"
-"    background-color: rgb(50, 192, 240);\n"
-"}\n"
-"\n"
-"")
-        self.bt_back_tc_ai_2.setIcon(icon30)
-        self.bt_back_tc_ai_2.setIconSize(QtCore.QSize(30, 30))
-        self.bt_back_tc_ai_2.setObjectName("bt_back_tc_ai_2")
-        self.label_cau_hoi_ai_2 = QtWidgets.QLabel(self.tab_ai_2)
-        self.label_cau_hoi_ai_2.setGeometry(QtCore.QRect(20, 140, 1701, 151))
-        font = QtGui.QFont()
-        font.setPointSize(25)
-        self.label_cau_hoi_ai_2.setFont(font)
-        self.label_cau_hoi_ai_2.setStyleSheet("background-color : white ;\n"
-"border-radius:20px;")
-        self.label_cau_hoi_ai_2.setObjectName("label_cau_hoi_ai_2")
-        self.btn_tich_hoi_ai_2 = QtWidgets.QPushButton(self.tab_ai_2)
-        self.btn_tich_hoi_ai_2.setGeometry(QtCore.QRect(1740, 140, 93, 61))
+        self.bt_tc_ai = QtWidgets.QPushButton(self.tab_nha_truong_2)
+        self.bt_tc_ai.setGeometry(QtCore.QRect(260, 740, 171, 121))
         font = QtGui.QFont()
         font.setFamily("MS Shell Dlg 2")
-        font.setPointSize(10)
+        font.setPointSize(35)
         font.setBold(False)
         font.setItalic(False)
         font.setWeight(9)
-        self.btn_tich_hoi_ai_2.setFont(font)
-        self.btn_tich_hoi_ai_2.setStyleSheet("\n"
-"QPushButton#btn_tich_hoi_ai_2{\n"
-"    background-color: rgb(153, 255, 187);\n"
+        self.bt_tc_ai.setFont(font)
+        self.bt_tc_ai.setStyleSheet("QPushButton#bt_tc_ai{\n"
+"    background-color: rgb(255, 96, 84);\n"
 "\n"
-"color:rgba(0, 0, 0, 255);\n"
-"border-radius:20px;\n"
-"    \n"
-"    font: 75 10pt \"MS Shell Dlg 2\";\n"
-"}\n"
-"QPushButton#btn_tich_hoi_ai_2:hover{\n"
-"    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 255, 255, 255), stop:1 rgba(58, 192, 255, 255));\n"
-"\n"
-"}\n"
-"QPushButton#btn_tich_hoi_ai_2:pressed{\n"
-"\n"
-" padding-left:1px;\n"
-" padding-top:1px;\n"
-" background-color:rgba(58, 192, 200, 255);\n"
-"\n"
-"\n"
-"}")
-        self.btn_tich_hoi_ai_2.setObjectName("btn_tich_hoi_ai_2")
-        self.label_tra_loi_ai_2 = QtWidgets.QLabel(self.tab_ai_2)
-        self.label_tra_loi_ai_2.setGeometry(QtCore.QRect(20, 320, 1831, 551))
-        font = QtGui.QFont()
-        font.setPointSize(22)
-        self.label_tra_loi_ai_2.setFont(font)
-        self.label_tra_loi_ai_2.setStyleSheet("background-color : white ;\n"
-"border-radius:20px;")
-        self.label_tra_loi_ai_2.setObjectName("label_tra_loi_ai_2")
-        self.btn_huy_hoi_ai_2 = QtWidgets.QPushButton(self.tab_ai_2)
-        self.btn_huy_hoi_ai_2.setGeometry(QtCore.QRect(1740, 220, 93, 61))
-        font = QtGui.QFont()
-        font.setFamily("MS Shell Dlg 2")
-        font.setPointSize(10)
-        font.setBold(False)
-        font.setItalic(False)
-        font.setWeight(9)
-        self.btn_huy_hoi_ai_2.setFont(font)
-        self.btn_huy_hoi_ai_2.setStyleSheet("\n"
-"QPushButton#btn_huy_hoi_ai_2{\n"
-"    background-color: rgb(153, 255, 187);\n"
-"\n"
-"color:rgba(0, 0, 0, 255);\n"
-"border-radius:20px;\n"
-"    \n"
-"    font: 75 10pt \"MS Shell Dlg 2\";\n"
-"}\n"
-"QPushButton#btn_huy_hoi_ai_2:hover{\n"
-"    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 255, 255, 255), stop:1 rgba(58, 192, 255, 255));\n"
-"\n"
-"}\n"
-"QPushButton#btn_huy_hoi_ai_2:pressed{\n"
-"\n"
-" padding-left:1px;\n"
-" padding-top:1px;\n"
-" background-color:rgba(58, 192, 200, 255);\n"
-"\n"
-"\n"
-"}")
-        self.btn_huy_hoi_ai_2.setObjectName("btn_huy_hoi_ai_2")
-        self.btn_bat_dau_ai_2 = QtWidgets.QPushButton(self.tab_ai_2)
-        self.btn_bat_dau_ai_2.setGeometry(QtCore.QRect(760, 10, 311, 121))
-        self.btn_bat_dau_ai_2.setStyleSheet("QPushButton#btn_bat_dau_ai_2{\n"
-"    background-color: rgb(153, 255, 187);\n"
-"\n"
-"color:rgba(0, 0, 0, 255);\n"
+"color:rgba(0,0,0,255);\n"
 "border-radius:20px;\n"
 "    \n"
 "    font: 75 35pt \"MS Shell Dlg 2\";\n"
 "}\n"
-"QPushButton#btn_bat_dau_ai_2:hover{\n"
-"    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 255, 255, 255), stop:1 rgba(58, 192, 255, 255));\n"
 "\n"
-"}\n"
-"QPushButton#btn_bat_dau_ai_2:pressed{\n"
+"QPushButton#bt_tc_ai:pressed{\n"
 "\n"
 " padding-left:5px;\n"
 " padding-top:5px;\n"
 " background-color:rgba(58, 192, 200, 255);\n"
 "\n"
 "\n"
-"}")
-        self.btn_bat_dau_ai_2.setIcon(icon29)
-        self.btn_bat_dau_ai_2.setIconSize(QtCore.QSize(70, 70))
-        self.btn_bat_dau_ai_2.setObjectName("btn_bat_dau_ai_2")
-        self.label_lang_nghe_2 = QtWidgets.QLabel(self.tab_ai_2)
-        self.label_lang_nghe_2.setGeometry(QtCore.QRect(20, 80, 601, 51))
-        font = QtGui.QFont()
-        font.setPointSize(15)
-        self.label_lang_nghe_2.setFont(font)
-        self.label_lang_nghe_2.setStyleSheet("background-color : white ;\n"
-"border-radius:10px;")
-        self.label_lang_nghe_2.setObjectName("label_lang_nghe_2")
-        self.tab_danh_sach_2.addTab(self.tab_ai_2, "")
+"}r")
+        icon31 = QtGui.QIcon()
+        icon31.addPixmap(QtGui.QPixmap("../../../Downloads/.designer/images/list_flation.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.bt_tc_ai.setIcon(icon31)
+        self.bt_tc_ai.setIconSize(QtCore.QSize(70, 70))
+        self.bt_tc_ai.setObjectName("bt_tc_ai")
+        self.tab_danh_sach_2.addTab(self.tab_nha_truong_2, "")
         self.stackedWidget.addWidget(self.page_tra_cuu)
+        self.page_ai = QtWidgets.QWidget()
+        self.page_ai.setObjectName("page_ai")
+        self.frame_16 = QtWidgets.QFrame(self.page_ai)
+        self.frame_16.setGeometry(QtCore.QRect(0, 20, 1901, 911))
+        self.frame_16.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_16.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_16.setObjectName("frame_16")
+        self.cau_hoi_ai = QtWidgets.QLabel(self.frame_16)
+        self.cau_hoi_ai.setGeometry(QtCore.QRect(30, 90, 1861, 191))
+        font = QtGui.QFont()
+        font.setPointSize(22)
+        self.cau_hoi_ai.setFont(font)
+        self.cau_hoi_ai.setStyleSheet("background-color: white;\n"
+"border-radius: 20px;")
+        self.cau_hoi_ai.setObjectName("cau_hoi_ai")
+        self.tra_loi_ai = QtWidgets.QLabel(self.frame_16)
+        self.tra_loi_ai.setGeometry(QtCore.QRect(30, 290, 1861, 621))
+        font = QtGui.QFont()
+        font.setPointSize(22)
+        self.tra_loi_ai.setFont(font)
+        self.tra_loi_ai.setStyleSheet("background-color: white;\n"
+"border-radius: 20px;")
+        self.tra_loi_ai.setObjectName("tra_loi_ai")
+        self.bt_kt_ai = QtWidgets.QPushButton(self.frame_16)
+        self.bt_kt_ai.setGeometry(QtCore.QRect(1700, 40, 191, 41))
+        self.bt_kt_ai.setStyleSheet("QPushButton#bt_kt_ai{\n"
+"     border-radius: 15px;\n"
+"    font: 75 23pt \"MS Shell Dlg 2\";\n"
+"    border: 1px solid rgb(230, 230, 230);\n"
+"background-color: rgb(230, 230, 230);\n"
+"\n"
+"}\n"
+"QPushButton#bt_kt_ai:pressed{\n"
+"background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 192, 255, 219), stop:1 rgba(58, 192, 255, 226));\n"
+"\n"
+"}\n"
+"QPushButton#bt_kt_ai:pressed{\n"
+"padding-left :2px;\n"
+"padding-top :2px;\n"
+"\n"
+"    background-color: rgb(58, 192, 255);\n"
+"}\n"
+"\n"
+"")
+        self.bt_kt_ai.setIcon(icon31)
+        self.bt_kt_ai.setIconSize(QtCore.QSize(70, 70))
+        self.bt_kt_ai.setObjectName("bt_kt_ai")
+        self.label_19 = QtWidgets.QLabel(self.frame_16)
+        self.label_19.setGeometry(QtCore.QRect(490, 10, 911, 61))
+        font = QtGui.QFont()
+        font.setPointSize(26)
+        self.label_19.setFont(font)
+        self.label_19.setStyleSheet("background-color: rgb(58, 192, 240);\n"
+"border-radius: 10px;")
+        self.label_19.setObjectName("label_19")
+        self.label_gif = QtWidgets.QLabel(self.frame_16)
+        self.label_gif.setGeometry(QtCore.QRect(830, 260, 231, 121))
+        self.label_gif.setObjectName("label_gif")
+        self.stackedWidget.addWidget(self.page_ai)
+        self.page_wait = QtWidgets.QWidget()
+        self.page_wait.setObjectName("page_wait")
+        self.frame_17 = QtWidgets.QFrame(self.page_wait)
+        self.frame_17.setGeometry(QtCore.QRect(0, -201, 2000, 1200))
+        self.frame_17.setStyleSheet("background-color:white;\n"
+"")
+        self.frame_17.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_17.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_17.setObjectName("frame_17")
+        self.label_wait = QtWidgets.QLabel(self.frame_17)
+        self.label_wait.setGeometry(QtCore.QRect(250, 370, 1481, 701))
+        self.label_wait.setStyleSheet("")
+        self.label_wait.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_wait.setObjectName("label_wait")
+        self.stackedWidget.addWidget(self.page_wait)
         self.bt_thoat = QtWidgets.QPushButton(self.centralwidget)
         self.bt_thoat.setGeometry(QtCore.QRect(1870, 0, 51, 41))
         self.bt_thoat.setText("")
-        icon31 = QtGui.QIcon()
-        icon31.addPixmap(QtGui.QPixmap("../../../.designer/images/close_screen.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.bt_thoat.setIcon(icon31)
+        icon32 = QtGui.QIcon()
+        icon32.addPixmap(QtGui.QPixmap("../../../.designer/images/close_screen.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.bt_thoat.setIcon(icon32)
         self.bt_thoat.setObjectName("bt_thoat")
         self.bt_thu_phong = QtWidgets.QPushButton(self.centralwidget)
         self.bt_thu_phong.setGeometry(QtCore.QRect(1810, 0, 61, 41))
         self.bt_thu_phong.setText("")
-        icon32 = QtGui.QIcon()
-        icon32.addPixmap(QtGui.QPixmap("../../../.designer/images/minimize_flaticon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.bt_thu_phong.setIcon(icon32)
+        icon33 = QtGui.QIcon()
+        icon33.addPixmap(QtGui.QPixmap("../../../.designer/images/minimize_flaticon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.bt_thu_phong.setIcon(icon33)
         self.bt_thu_phong.setObjectName("bt_thu_phong")
         self.bt_thu_nho = QtWidgets.QPushButton(self.centralwidget)
         self.bt_thu_nho.setGeometry(QtCore.QRect(1750, 0, 61, 41))
         self.bt_thu_nho.setText("")
-        icon33 = QtGui.QIcon()
-        icon33.addPixmap(QtGui.QPixmap("../../../.designer/images/mimiiii_flaticon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.bt_thu_nho.setIcon(icon33)
+        icon34 = QtGui.QIcon()
+        icon34.addPixmap(QtGui.QPixmap("../../../.designer/images/mimiiii_flaticon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.bt_thu_nho.setIcon(icon34)
         self.bt_thu_nho.setObjectName("bt_thu_nho")
         self.check_pin = QtWidgets.QPushButton(self.centralwidget)
         self.check_pin.setGeometry(QtCore.QRect(1490, 10, 150, 40))
@@ -4120,9 +4085,9 @@ class Ui_MainWindow(object):
 "}\n"
 "")
         self.check_pin.setText("")
-        icon34 = QtGui.QIcon()
-        icon34.addPixmap(QtGui.QPixmap("../../../../lab/ROBOT_NH_V3/images/charging_pin.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.check_pin.setIcon(icon34)
+        icon35 = QtGui.QIcon()
+        icon35.addPixmap(QtGui.QPixmap("../../../../lab/ROBOT_NH_V3/images/charging_pin.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.check_pin.setIcon(icon35)
         self.check_pin.setIconSize(QtCore.QSize(150, 60))
         self.check_pin.setObjectName("check_pin")
         self.label_icon_robot = QtWidgets.QLabel(self.centralwidget)
@@ -4192,7 +4157,7 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(17)
         self.tab_main.setCurrentIndex(1)
         self.tabWidget_dan_duong.setCurrentIndex(1)
         self.tab_danh_sach_2.setCurrentIndex(0)
@@ -4372,15 +4337,14 @@ class Ui_MainWindow(object):
         self.bt_tc_cap_nhat_4.setText(_translate("MainWindow", "Cập nhật"))
         self.bt_back_tc_nha_truong_4.setText(_translate("MainWindow", "Quay Lại"))
         self.checkBox_giong_noi_5.setText(_translate("MainWindow", "Giọng nói"))
+        self.bt_tc_ai.setText(_translate("MainWindow", "Al"))
         self.tab_danh_sach_2.setTabText(self.tab_danh_sach_2.indexOf(self.tab_nha_truong_2), _translate("MainWindow", "Nhà trường "))
-        self.bt_back_tc_ai_2.setText(_translate("MainWindow", "Quay Lại"))
-        self.label_cau_hoi_ai_2.setText(_translate("MainWindow", "TextLabel"))
-        self.btn_tich_hoi_ai_2.setText(_translate("MainWindow", "Xác nhận"))
-        self.label_tra_loi_ai_2.setText(_translate("MainWindow", "TextLabel"))
-        self.btn_huy_hoi_ai_2.setText(_translate("MainWindow", "Hủy"))
-        self.btn_bat_dau_ai_2.setText(_translate("MainWindow", "Bắt đầu"))
-        self.label_lang_nghe_2.setText(_translate("MainWindow", "text"))
-        self.tab_danh_sach_2.setTabText(self.tab_danh_sach_2.indexOf(self.tab_ai_2), _translate("MainWindow", "Al"))
+        self.cau_hoi_ai.setText(_translate("MainWindow", "TextLabel"))
+        self.tra_loi_ai.setText(_translate("MainWindow", "TextLabel"))
+        self.bt_kt_ai.setText(_translate("MainWindow", "Quay lại"))
+        self.label_19.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-weight:600;\">TRA CỨU AI </span></p></body></html>"))
+        self.label_gif.setText(_translate("MainWindow", "gif"))
+        self.label_wait.setText(_translate("MainWindow", "GIF"))
         self.bt_stop.setText(_translate("MainWindow", "STOP"))
         self.label_4.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:16pt; font-weight:600;\">SMART ROBOTIC CENTER </span></p><p><span style=\" font-size:16pt; font-weight:600;\">TRUNG TÂM ROBOT THÔNG MINH </span></p><p><br/></p></body></html>"))
         self.label_5.setText(_translate("MainWindow", "ROBOT TIẾP TÂN ASR"))
