@@ -87,6 +87,9 @@ from FILE_QT.from_xn_chuphinh import Ui_Form_xn_chupanh
 from FILE_QT.from_tinh_trang_pin import Ui_Form_status_pin
 from FILE_QT.from_trang_toa_do import Ui_Form_show_toado
 from FILE_QT.form_dv import Ui_Form_ui_dv
+
+from FILE_QT.page_waiting import Ui_UI_waiting
+
 # FILE CUSTOM
 from navigation_thread import NavigationThread
 from arduino_connection import ReadArduinoPin, arduino
@@ -109,6 +112,14 @@ from PyQt5.QtWidgets import QApplication,QMainWindow,QTableWidgetItem, QCheckBox
 
 from PyQt5.QtGui import *
 from PyQt5.QtGui import QMovie
+
+from PyQt5.QtMultimedia import QAbstractVideoBuffer, QVideoFrame
+from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
+from PyQt5.QtMultimedia import QAbstractVideoSurface, QVideoSurfaceFormat
+from PyQt5.QtCore import QUrl, QRect
+from PyQt5.QtGui import QPainter
+
+import vlc
 # build QT - pyuic5 QT_main.ui -o QT_main.py
 # fix duong dan - ../ROBOT_HD/
 def xuly_cham_ngoai(): # ham xu ly khi cham ra ngoai ban phim se tat
@@ -388,34 +399,20 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.client = None
         self.btn_bat_ketnoi_mobile.clicked.connect(self.start_mobile)
         self.btn_tat_ketnoi_mobile.clicked.connect(self.stop_mobile)
+        self.btn_wait.clicked.connect(self.show_page_waiting)
 
-        self.gif_wait = QMovie("../ROBOT_HD/Gif/Blink.gif")
-        self.label_wait.setMovie(self.gif_wait)
-        self.gif_wait.start()
-        self.waiting_ui = self.findChild(QWidget, "page_wait")
-        self.inactivity_timer = QTimer(self)
-        self.inactivity_timer.timeout.connect(self.go_to_waiting_ui)
-        self.inactivity_timeout = 2000  # Thời gian không hoạt động (milliseconds) - ví dụ 5 giây
-        self.reset_inactivity_timer()
+        self.instance = None
+        self.player = None
+        self.page_waiting = None
+        self.initVLC()  # Initialize VLC instance
+        self.inactivity_timer = QTimer()
+        self.inactivity_timer.setInterval(600000)  # 5 giây
+        self.inactivity_timer.setSingleShot(True)  # Bắn 1 lần rồi dừng
+        self.inactivity_timer.timeout.connect(self.show_page_waiting)
+        self.inactivity_timer.start()
 
+        # Gắn event filter toàn cục
         QApplication.instance().installEventFilter(self)
-        
-    def reset_inactivity_timer(self):
-        self.inactivity_timer.stop()
-        self.inactivity_timer.start(self.inactivity_timeout)
-
-    def go_to_waiting_ui(self):
-        self.stackedWidget.setCurrentWidget(self.page_wait)
-        print("Chuyển sang UI chờ do không có hoạt động.")
-
-    def eventFilter(self, watched, event):
-        event_type = event.type()
-        if event_type in [QEvent.MouseButtonPress, QEvent.MouseMove, QEvent.KeyPress, QEvent.TouchBegin, QEvent.TouchUpdate, QEvent.TabletPress, QEvent.TabletMove]:
-            self.reset_inactivity_timer()
-            if self.stackedWidget.currentWidget() == self.waiting_ui:
-                self.stackedWidget.setCurrentWidget(self.page_main)
-                print("Quay lại UI chính do có hoạt động.")
-        return super().eventFilter(watched, event)
     def show_main(self):
         self.show() # Hàm này được gọi từ LoadingScreen sau khi đóng
  
@@ -637,8 +634,101 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.tc_nha_truong_2.itemClicked.connect(self.on_question_clicked)
         self.bt_tc_cap_nhat_4.clicked.connect(self.load_excel)
      
+    ### Page waiting
+
+
     
-    # Funtion Page
+    def initVLC(self):
+        """Initialize the VLC instance."""
+        if self.instance is None:
+            try:
+                self.instance = vlc.Instance("--no-xlib")  #if this causes error, remove it
+            except Exception as e:
+                print(f"Error initializing VLC: {e}")
+                self.instance = vlc.Instance() #use this instead
+
+    def UI_page_waiting(self):
+        self.page_waiting = QMainWindow()
+        self.ui_waiting = Ui_UI_waiting()
+        self.ui_waiting.setupUi(self.page_waiting)
+
+        video_container = self.ui_waiting.videoContainer
+        if not video_container:
+            print("Error: videoContainer widget not found in UI.")
+            return
+
+        self.win_id = video_container.winId() #store win_id
+
+        video_path = "video/Robot.mp4"
+        if not os.path.exists(video_path):
+            print(f"Error: Video file not found at {video_path}")
+            return
+
+        # Create VLC instance if needed
+        if self.instance is None:
+            self.instance = vlc.Instance()
+
+        # Use MediaListPlayer for looping
+        self.media_list_player = self.instance.media_list_player_new()
+        self.media_player = self.instance.media_player_new()
+        self.media_list_player.set_media_player(self.media_player)
+
+        # Set output window
+        if sys.platform.startswith('linux'):
+            self.media_player.set_xwindow(int(self.win_id))
+        elif sys.platform == 'win32':
+            self.media_player.set_hwnd(int(self.win_id))
+        elif sys.platform == 'darwin':
+            self.media_player.set_nsobject(int(self.win_id))
+
+        # Set media list with loop
+        media_list = self.instance.media_list_new([video_path])
+        self.media_list_player.set_media_list(media_list)
+        self.media_list_player.set_playback_mode(vlc.PlaybackMode.loop)
+
+        # Connect events to close window.  Use the video container.
+        video_container.installEventFilter(self) # Install event filter
+        self.media_list_player.play()
+        self.page_waiting.showFullScreen()
+
+    def show_page_waiting(self):
+        if (self.stackedWidget.currentWidget() == self.page_ai) or self.stackedWidget.currentWidget() == self.page_robot_dichuyen:
+            print("Đang ở trang excution không vào trang chờ.")
+            return
+        self.UI_page_waiting()
+
+    def close_page_waiting(self):
+        if self.page_waiting:
+            self.page_waiting.close()
+            self.page_waiting = None # prevent error
+            if self.media_player:
+                self.media_player.stop() #stop the player
+                self.media_player.release()
+                self.media_player = None
+            if self.media_list_player:
+                self.media_list_player.release()
+                self.media_list_player = None
+
+    def close_page_waiting_event(self, event): # Removed event argument.  Not used
+        self.close_page_waiting()
+
+    def eventFilter(self, obj, event):
+        if event.type() in [
+            QEvent.MouseButtonPress, QEvent.MouseMove, QEvent.KeyPress,
+            QEvent.TouchBegin, QEvent.TouchUpdate, QEvent.TabletPress, QEvent.TabletMove
+        ]:
+            # Nếu trang chờ đang mở → đóng và chặn sự kiện (không cho lan tiếp)
+            if self.page_waiting is not None:
+                self.close_page_waiting()
+                self.inactivity_timer.start()
+                return True
+
+            # Trang chờ chưa mở → reset timer nhưng cho sự kiện lan tiếp (để nút nhận được)
+            self.inactivity_timer.start()
+            return False
+
+        return super().eventFilter(obj, event)
+
 ################### Page Setup ##################
 
     def back_setup(self):

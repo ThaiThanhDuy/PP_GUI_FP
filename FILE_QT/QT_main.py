@@ -4013,7 +4013,7 @@ class Ui_MainWindow(object):
 "border-radius: 10px;")
         self.label_19.setObjectName("label_19")
         self.label_gif = QtWidgets.QLabel(self.frame_16)
-        self.label_gif.setGeometry(QtCore.QRect(830, 260, 231, 121))
+        self.label_gif.setGeometry(QtCore.QRect(1640, 80, 231, 121))
         self.label_gif.setObjectName("label_gif")
         self.stackedWidget.addWidget(self.page_ai)
         self.page_wait = QtWidgets.QWidget()
@@ -4053,7 +4053,7 @@ class Ui_MainWindow(object):
         self.bt_thu_nho.setIcon(icon34)
         self.bt_thu_nho.setObjectName("bt_thu_nho")
         self.check_pin = QtWidgets.QPushButton(self.centralwidget)
-        self.check_pin.setGeometry(QtCore.QRect(1490, 10, 150, 40))
+        self.check_pin.setGeometry(QtCore.QRect(1390, 10, 150, 40))
         self.check_pin.setMinimumSize(QtCore.QSize(150, 40))
         self.check_pin.setMaximumSize(QtCore.QSize(150, 40))
         font = QtGui.QFont()
@@ -4101,7 +4101,7 @@ class Ui_MainWindow(object):
         self.label_icon_robot.setScaledContents(True)
         self.label_icon_robot.setObjectName("label_icon_robot")
         self.bt_stop = QtWidgets.QPushButton(self.centralwidget)
-        self.bt_stop.setGeometry(QtCore.QRect(1300, 10, 150, 40))
+        self.bt_stop.setGeometry(QtCore.QRect(1210, 10, 150, 40))
         self.bt_stop.setMinimumSize(QtCore.QSize(150, 40))
         self.bt_stop.setStyleSheet("QPushButton#bt_stop{\n"
 "       border-radius: 15px;\n"
@@ -4147,6 +4147,35 @@ class Ui_MainWindow(object):
         self.label_16.setText("")
         self.label_16.setPixmap(QtGui.QPixmap("../images/SRC - LOGO.svg"))
         self.label_16.setObjectName("label_16")
+        self.btn_wait = QtWidgets.QPushButton(self.centralwidget)
+        self.btn_wait.setGeometry(QtCore.QRect(1560, 10, 151, 41))
+        self.btn_wait.setStyleSheet("QPushButton#btn_wait{\n"
+"       border-radius: 15px;\n"
+"    font: 75 17pt \"MS Shell Dlg 2\";\n"
+"    \n"
+"    /*border: 3px solid rgb(230, 230, 230);*/\n"
+"    color: rgb(0, 0, 0);\n"
+"\n"
+"    \n"
+"    \n"
+"    \n"
+"    background-color: rgb(153, 255, 187);\n"
+"}\n"
+"QPushButton#btn_wait:pressed{\n"
+"       border-radius: 15px;\n"
+"    font: 75 17pt \"MS Shell Dlg 2\";\n"
+"    \n"
+"    /*border: 3px solid rgb(230, 230, 230);*/\n"
+"    \n"
+"\n"
+"    \n"
+"    background-color: #3498db;\n"
+"  color: white;           \n"
+"   padding-left: 2px;       \n"
+"  padding-top: 2px;\n"
+"    \n"
+"}")
+        self.btn_wait.setObjectName("btn_wait")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1906, 22))
@@ -4157,7 +4186,7 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(17)
+        self.stackedWidget.setCurrentIndex(0)
         self.tab_main.setCurrentIndex(1)
         self.tabWidget_dan_duong.setCurrentIndex(1)
         self.tab_danh_sach_2.setCurrentIndex(0)
@@ -4348,3 +4377,4 @@ class Ui_MainWindow(object):
         self.bt_stop.setText(_translate("MainWindow", "STOP"))
         self.label_4.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:16pt; font-weight:600;\">SMART ROBOTIC CENTER </span></p><p><span style=\" font-size:16pt; font-weight:600;\">TRUNG TÂM ROBOT THÔNG MINH </span></p><p><br/></p></body></html>"))
         self.label_5.setText(_translate("MainWindow", "ROBOT TIẾP TÂN ASR"))
+        self.btn_wait.setText(_translate("MainWindow", "Wait"))

@@ -30,7 +30,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>17</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="page_main">
      <property name="styleSheet">
@@ -497,7 +497,7 @@
        <string notr="true"/>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <property name="iconSize">
        <size>
@@ -2179,8 +2179,8 @@ padding-top :2px;
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>911</width>
-            <height>781</height>
+            <width>909</width>
+            <height>779</height>
            </rect>
           </property>
           <widget class="QPushButton" name="btn_phong3">
@@ -8485,8 +8485,8 @@ border-radius: 10px;</string>
       <widget class="QLabel" name="label_gif">
        <property name="geometry">
         <rect>
-         <x>830</x>
-         <y>260</y>
+         <x>1640</x>
+         <y>80</y>
          <width>231</width>
          <height>121</height>
         </rect>
@@ -8593,7 +8593,7 @@ border-radius: 10px;</string>
    <widget class="QPushButton" name="check_pin">
     <property name="geometry">
      <rect>
-      <x>1490</x>
+      <x>1390</x>
       <y>10</y>
       <width>150</width>
       <height>40</height>
@@ -8700,7 +8700,7 @@ padding-top :6px;
    <widget class="QPushButton" name="bt_stop">
     <property name="geometry">
      <rect>
-      <x>1300</x>
+      <x>1210</x>
       <y>10</y>
       <width>150</width>
       <height>40</height>
@@ -8794,6 +8794,47 @@ QPushButton#bt_stop:pressed{
     </property>
     <property name="pixmap">
      <pixmap>../images/SRC - LOGO.svg</pixmap>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_wait">
+    <property name="geometry">
+     <rect>
+      <x>1560</x>
+      <y>10</y>
+      <width>151</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton#btn_wait{
+   	border-radius: 15px;
+	font: 75 17pt &quot;MS Shell Dlg 2&quot;;
+	
+	/*border: 3px solid rgb(230, 230, 230);*/
+	color: rgb(0, 0, 0);
+
+	
+	
+	
+	background-color: rgb(153, 255, 187);
+}
+QPushButton#btn_wait:pressed{
+   	border-radius: 15px;
+	font: 75 17pt &quot;MS Shell Dlg 2&quot;;
+	
+	/*border: 3px solid rgb(230, 230, 230);*/
+	
+
+	
+	background-color: #3498db;
+  color: white;           
+   padding-left: 2px;       
+  padding-top: 2px;
+	
+}</string>
+    </property>
+    <property name="text">
+     <string>Wait</string>
     </property>
    </widget>
   </widget>
