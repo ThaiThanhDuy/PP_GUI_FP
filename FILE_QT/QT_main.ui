@@ -497,7 +497,7 @@
        <string notr="true"/>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <property name="iconSize">
        <size>
@@ -2179,8 +2179,8 @@ padding-top :2px;
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>909</width>
-            <height>779</height>
+            <width>911</width>
+            <height>781</height>
            </rect>
           </property>
           <widget class="QPushButton" name="btn_phong3">
@@ -5742,6 +5742,56 @@ font: 75 17pt &quot;MS Shell Dlg 2&quot;;
         <string>Bắt đầu kết nối mobile</string>
        </property>
       </widget>
+      <widget class="QPushButton" name="btn_toggle_camera_mobile">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>700</y>
+         <width>201</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton#btn_toggle_camera_mobile{
+ 
+	border-radius: 15px;
+	background-color: rgb(255, 255, 128);
+	font: 75 17pt &quot;MS Shell Dlg 2&quot;;
+	
+}
+
+QPushButton#btn_toggle_camera_mobile:pressed{
+padding-left :3px;
+padding-top :3px;
+border-radius: 15px;
+font: 75 17pt &quot;MS Shell Dlg 2&quot;;
+
+	background-color: rgb(0, 255, 0);
+}
+</string>
+       </property>
+       <property name="text">
+        <string>Camera mobile</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_status_camera">
+       <property name="geometry">
+        <rect>
+         <x>340</x>
+         <y>710</y>
+         <width>291</width>
+         <height>51</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>20</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Camera off</string>
+       </property>
+      </widget>
      </widget>
     </widget>
     <widget class="QWidget" name="page_setup_cam">
@@ -8495,6 +8545,53 @@ border-radius: 10px;</string>
         <string>gif</string>
        </property>
       </widget>
+      <widget class="QPushButton" name="bt_stop_ai">
+       <property name="geometry">
+        <rect>
+         <x>1490</x>
+         <y>40</y>
+         <width>150</width>
+         <height>40</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>150</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton#bt_stop_ai{
+   	border-radius: 15px;
+	font: 75 17pt &quot;MS Shell Dlg 2&quot;;
+	
+	/*border: 3px solid rgb(230, 230, 230);*/
+	color: rgb(0, 0, 0);
+
+	
+	
+	
+	background-color: rgb(247, 70, 100);
+}
+QPushButton#bt_stop_ai:pressed{
+   	border-radius: 15px;
+	font: 75 17pt &quot;MS Shell Dlg 2&quot;;
+	
+	/*border: 3px solid rgb(230, 230, 230);*/
+	
+
+	
+	background-color: #3498db;
+  color: white;           
+   padding-left: 2px;       
+  padding-top: 2px;
+	
+}</string>
+       </property>
+       <property name="text">
+        <string>STOP AI</string>
+       </property>
+      </widget>
      </widget>
     </widget>
     <widget class="QWidget" name="page_wait">
@@ -8593,7 +8690,7 @@ border-radius: 10px;</string>
    <widget class="QPushButton" name="check_pin">
     <property name="geometry">
      <rect>
-      <x>1390</x>
+      <x>1380</x>
       <y>10</y>
       <width>150</width>
       <height>40</height>
@@ -8622,29 +8719,34 @@ border-radius: 10px;</string>
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton#check_pin{
-   	border-radius :20px;
+   	border-radius: 15px;
 	font: 75 17pt &quot;MS Shell Dlg 2&quot;;
 	
 	/*border: 3px solid rgb(230, 230, 230);*/
 	color: rgb(0, 0, 0);
-	padding-left :5px;
-	padding-top :5px;
+
 	
-	background-color: rgb(220, 220, 220);
-	background-color: rgb(255, 255, 255);
-
+	
+	
+	background-color: rgb(255, 255, 128);
 }
-
 QPushButton#check_pin:pressed{
-padding-left :6px;
-padding-top :6px;
+   	border-radius: 15px;
+	font: 75 17pt &quot;MS Shell Dlg 2&quot;;
+	
+	/*border: 3px solid rgb(230, 230, 230);*/
+	
 
-	background-color: rgb(50, 192, 240);
-}
-</string>
+	
+	background-color: #3498db;
+  color: white;           
+   padding-left: 2px;       
+  padding-top: 2px;
+	
+}</string>
     </property>
     <property name="text">
-     <string/>
+     <string>Battery</string>
     </property>
     <property name="icon">
      <iconset>
@@ -8799,7 +8901,7 @@ QPushButton#bt_stop:pressed{
    <widget class="QPushButton" name="btn_wait">
     <property name="geometry">
      <rect>
-      <x>1560</x>
+      <x>1550</x>
       <y>10</y>
       <width>151</width>
       <height>41</height>

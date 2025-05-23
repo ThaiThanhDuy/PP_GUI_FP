@@ -121,7 +121,7 @@ from PyQt5.QtGui import QPainter
 
 import vlc
 # build QT - pyuic5 QT_main.ui -o QT_main.py
-# fix duong dan - ../ROBOT_HD/
+# fix duong dan - ../ROBOT_HD/ 
 def xuly_cham_ngoai(): # ham xu ly khi cham ra ngoai ban phim se tat
     try:
         if not hasattr(keyyyyy.Registe, "virtual_keyboard") or not keyyyyy.Registe.virtual_keyboard.isVisible():
@@ -406,7 +406,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.page_waiting = None
         self.initVLC()  # Initialize VLC instance
         self.inactivity_timer = QTimer()
-        self.inactivity_timer.setInterval(600000)  # 5 giây
+        self.inactivity_timer.setInterval(24000000)  # 5 giây
         self.inactivity_timer.setSingleShot(True)  # Bắn 1 lần rồi dừng
         self.inactivity_timer.timeout.connect(self.show_page_waiting)
         self.inactivity_timer.start()
@@ -637,7 +637,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
     ### Page waiting
 
 
-    
+        
     def initVLC(self):
         """Initialize the VLC instance."""
         if self.instance is None:
@@ -692,7 +692,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.page_waiting.showFullScreen()
 
     def show_page_waiting(self):
-        if (self.stackedWidget.currentWidget() == self.page_ai) or self.stackedWidget.currentWidget() == self.page_robot_dichuyen:
+        if (self.stackedWidget.currentWidget() == self.page_ai) or (self.stackedWidget.currentWidget() == self.page_robot_dichuyen) or (self.stackedWidget.currentWidget() == self.page_check_list):
             print("Đang ở trang excution không vào trang chờ.")
             return
         self.UI_page_waiting()
@@ -1456,7 +1456,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
             # Bắt đầu camera stream trong một thread riêng sau khi kết nối thành công
             camera_thread = threading.Thread(target=self.start_camera_stream)
             camera_thread.daemon = True  # Cho phép thread thoát khi chương trình chính thoát
-            camera_thread.start()
+         #   camera_thread.start()
         else:
             print(f"Kết nối thất bại với mã lỗi {rc}")
             if self.label_status_3:
@@ -2308,23 +2308,13 @@ class MainApp(QMainWindow,Ui_MainWindow):
 ################## GIAO DIEN  CHAY DANH SACH ##################
     # SET CHIEU CAO CUA HANG
     def set_column_widths_0(self):
-        self.tableWidget_4.setColumnWidth(0, 85)    # Cột checkbox
+        self.tableWidget_4.setColumnWidth(0, 100)    # Cột checkbox
         self.tableWidget_4.setColumnWidth(1, 220)   # Cột ID
         self.tableWidget_4.setColumnWidth(2, 320)   # Cột NAME
         self.tableWidget_4.setColumnWidth(3, 200)   # Cột ROOM
     def set_row_heights_0(self):
         for row in range(self.tableWidget_4.rowCount()):
             self.tableWidget_4.setRowHeight(row, 50)    # Chiều cao mỗi hàng là 50 pixel
-
-    # HAM LOAD DATA LEN BANG
-    def set_column_widths_0(self):
-        self.tableWidget_4.setColumnWidth(0, 85)     # Cột checkbox
-        self.tableWidget_4.setColumnWidth(1, 220)    # Cột ID
-        self.tableWidget_4.setColumnWidth(2, 320)    # Cột NAME
-        self.tableWidget_4.setColumnWidth(3, 200)    # Cột ROOM
-    def set_row_heights_0(self):
-        for row in range(self.tableWidget_4.rowCount()):
-            self.tableWidget_4.setRowHeight(row, 50)     # Chiều cao mỗi hàng là 50 pixel
 
  # HAM LOAD DATA LEN BANG
     def fcn_load_list_0(self):
@@ -3835,6 +3825,16 @@ class MainApp(QMainWindow,Ui_MainWindow):
             os.remove(filename)
         except Exception as e:
             print(e)
+    def speak_vietnamese_gg_ai(self,text): 
+        
+        try:
+            tts = gTTS(text=text, lang='vi')
+            filename = "temp_speech_ai.mp3"
+            tts.save(filename)
+            playsound(filename)
+            os.remove(filename)
+        except Exception as e:
+            print(e)
 
     def load_excel(self):
         
@@ -3882,14 +3882,15 @@ class MainApp(QMainWindow,Ui_MainWindow):
 
             with mic as source:
                 r.adjust_for_ambient_noise(source)
+                self.speak_vietnamese_gg_ai("Bạn hãy nói 'Chào Robot' để bắt đầu")
                 self.tra_loi_ai.setText(" Bạn hãy nói 'Chào Robot' để bắt đầu...")
-            
+                
             while (self.tt_ai == True) :
                 print("loop1")
                 with mic as source:
                    
                     try:
-                        r.pause_threshold = 1.0
+                        r.pause_threshold = 1.5
                         print("Đang đợi câu 'Chào Robot'...")
                         audio = r.listen(source)
                         text = r.recognize_google(audio, language="vi-VN").lower()
@@ -3934,7 +3935,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
                         self.tra_loi_ai.setText(" Cảm ơn bạn đã sử dụng.")
                         QApplication.processEvents()
                         #self.phat_am("Cảm ơn bạn đã sử dụng.")
-                        self.speak_vietnamese_gg("Cảm ơn bạn đã sử dụng.")
+                        self.speak_vietnamese_gg_ai("Cảm ơn bạn đã sử dụng.")
                         self.tt_ai = False 
                         self.cau_hoi_ai.clear()
                         self.tra_loi_ai.clear()
@@ -3947,12 +3948,12 @@ class MainApp(QMainWindow,Ui_MainWindow):
                         self.xu_ly_cau_hoi(text)
 
                 except sr.WaitTimeoutError:
-                    self.speak_vietnamese_gg(" Tôi không nghe thấy gì, bạn vui lòng nói xong và đợi 1 giây để có câu trả lời nhé ")
+                    self.speak_vietnamese_gg_ai(" Tôi không nghe thấy gì, bạn vui lòng nói xong và đợi 1 giây để có câu trả lời nhé")
                     print(" Không nghe thấy gì, tiếp tục...")
                     continue
                 except sr.UnknownValueError:
                     print(" Không hiểu, xin nói lại...")
-                    self.speak_vietnamese_gg("Tôi nghe không rõ,xin nói lại ")
+                    self.speak_vietnamese_gg_ai("Tôi nghe không rõ,xin nói lại ")
                     continue
                 except Exception as e:
                     print(f" Lỗi: {e}")
@@ -3971,19 +3972,24 @@ class MainApp(QMainWindow,Ui_MainWindow):
         print("Đang xử lý câu hỏi")
         self.tra_loi_ai.setText(" Đang xử lý câu hỏi...")
         QApplication.processEvents()
-       
+
         try:
             response = self.model.generate_content(cau_hoi_text)
             if hasattr(response, "text") and response.text:
                 tra_loi = response.text.strip()
+
+                # Loại bỏ dấu **
+                tra_loi = tra_loi.replace("**", "")
+                # Loại bỏ dấu * đơn lẻ
+                tra_loi = tra_loi.replace("*", "")
+
                 self.tra_loi_ai.setText(f" {tra_loi}")
                 self.tra_loi_ai.setWordWrap(True)  # Tự động ngắt dòng
                 self.tra_loi_ai.setAlignment(Qt.AlignCenter)
                 QApplication.processEvents()
                 #self.phat_am(tra_loi)
-                self.speak_vietnamese_gg(tra_loi)
+                self.speak_vietnamese_gg_ai(tra_loi)
 
-           
             else:
                 self.tra_loi_ai.setText(" Không nhận được phản hồi.")
                 QApplication.processEvents()
@@ -3991,6 +3997,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
         except Exception as e:
             self.tra_loi_ai.setText(f" Lỗi: {str(e)}")
             QApplication.processEvents()
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
   # window = MainApp()

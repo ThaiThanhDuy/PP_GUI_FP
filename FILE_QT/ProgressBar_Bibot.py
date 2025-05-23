@@ -110,6 +110,6 @@ class Ui_MainWindow_bar(object):
     def retranslateUi(self, MainWindow_bar):
         _translate = QtCore.QCoreApplication.translate
         MainWindow_bar.setWindowTitle(_translate("MainWindow_bar", "MainWindow"))
-        self.label.setText(_translate("MainWindow_bar", "<html><head/><body><p>Optima Robotics and Smart Robotic Center</p></body></html>"))
+        self.label.setText(_translate("MainWindow_bar", "<html><head/><body><p> Smart Robotic Center</p></body></html>"))
         self.label_2.setText(_translate("MainWindow_bar", "<html><head/><body><p><span style=\" font-weight:600;\">ASR01 </span>USER INTERFACE</p></body></html>"))
         self.label_3.setText(_translate("MainWindow_bar", "Loading..."))

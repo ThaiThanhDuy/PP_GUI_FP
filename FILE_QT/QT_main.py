@@ -2726,6 +2726,32 @@ class Ui_MainWindow(object):
 "}\n"
 "")
         self.btn_bat_ketnoi_mobile.setObjectName("btn_bat_ketnoi_mobile")
+        self.btn_toggle_camera_mobile = QtWidgets.QPushButton(self.frame_15)
+        self.btn_toggle_camera_mobile.setGeometry(QtCore.QRect(80, 700, 201, 71))
+        self.btn_toggle_camera_mobile.setStyleSheet("QPushButton#btn_toggle_camera_mobile{\n"
+" \n"
+"    border-radius: 15px;\n"
+"    background-color: rgb(255, 255, 128);\n"
+"    font: 75 17pt \"MS Shell Dlg 2\";\n"
+"    \n"
+"}\n"
+"\n"
+"QPushButton#btn_toggle_camera_mobile:pressed{\n"
+"padding-left :3px;\n"
+"padding-top :3px;\n"
+"border-radius: 15px;\n"
+"font: 75 17pt \"MS Shell Dlg 2\";\n"
+"\n"
+"    background-color: rgb(0, 255, 0);\n"
+"}\n"
+"")
+        self.btn_toggle_camera_mobile.setObjectName("btn_toggle_camera_mobile")
+        self.label_status_camera = QtWidgets.QLabel(self.frame_15)
+        self.label_status_camera.setGeometry(QtCore.QRect(340, 710, 291, 51))
+        font = QtGui.QFont()
+        font.setPointSize(20)
+        self.label_status_camera.setFont(font)
+        self.label_status_camera.setObjectName("label_status_camera")
         self.stackedWidget.addWidget(self.page_mobile)
         self.page_setup_cam = QtWidgets.QWidget()
         self.page_setup_cam.setObjectName("page_setup_cam")
@@ -4015,6 +4041,36 @@ class Ui_MainWindow(object):
         self.label_gif = QtWidgets.QLabel(self.frame_16)
         self.label_gif.setGeometry(QtCore.QRect(1640, 80, 231, 121))
         self.label_gif.setObjectName("label_gif")
+        self.bt_stop_ai = QtWidgets.QPushButton(self.frame_16)
+        self.bt_stop_ai.setGeometry(QtCore.QRect(1490, 40, 150, 40))
+        self.bt_stop_ai.setMinimumSize(QtCore.QSize(150, 40))
+        self.bt_stop_ai.setStyleSheet("QPushButton#bt_stop_ai{\n"
+"       border-radius: 15px;\n"
+"    font: 75 17pt \"MS Shell Dlg 2\";\n"
+"    \n"
+"    /*border: 3px solid rgb(230, 230, 230);*/\n"
+"    color: rgb(0, 0, 0);\n"
+"\n"
+"    \n"
+"    \n"
+"    \n"
+"    background-color: rgb(247, 70, 100);\n"
+"}\n"
+"QPushButton#bt_stop_ai:pressed{\n"
+"       border-radius: 15px;\n"
+"    font: 75 17pt \"MS Shell Dlg 2\";\n"
+"    \n"
+"    /*border: 3px solid rgb(230, 230, 230);*/\n"
+"    \n"
+"\n"
+"    \n"
+"    background-color: #3498db;\n"
+"  color: white;           \n"
+"   padding-left: 2px;       \n"
+"  padding-top: 2px;\n"
+"    \n"
+"}")
+        self.bt_stop_ai.setObjectName("bt_stop_ai")
         self.stackedWidget.addWidget(self.page_ai)
         self.page_wait = QtWidgets.QWidget()
         self.page_wait.setObjectName("page_wait")
@@ -4053,7 +4109,7 @@ class Ui_MainWindow(object):
         self.bt_thu_nho.setIcon(icon34)
         self.bt_thu_nho.setObjectName("bt_thu_nho")
         self.check_pin = QtWidgets.QPushButton(self.centralwidget)
-        self.check_pin.setGeometry(QtCore.QRect(1390, 10, 150, 40))
+        self.check_pin.setGeometry(QtCore.QRect(1380, 10, 150, 40))
         self.check_pin.setMinimumSize(QtCore.QSize(150, 40))
         self.check_pin.setMaximumSize(QtCore.QSize(150, 40))
         font = QtGui.QFont()
@@ -4064,27 +4120,31 @@ class Ui_MainWindow(object):
         font.setWeight(9)
         self.check_pin.setFont(font)
         self.check_pin.setStyleSheet("QPushButton#check_pin{\n"
-"       border-radius :20px;\n"
+"       border-radius: 15px;\n"
 "    font: 75 17pt \"MS Shell Dlg 2\";\n"
 "    \n"
 "    /*border: 3px solid rgb(230, 230, 230);*/\n"
 "    color: rgb(0, 0, 0);\n"
-"    padding-left :5px;\n"
-"    padding-top :5px;\n"
+"\n"
 "    \n"
-"    background-color: rgb(220, 220, 220);\n"
-"    background-color: rgb(255, 255, 255);\n"
-"\n"
+"    \n"
+"    \n"
+"    background-color: rgb(255, 255, 128);\n"
 "}\n"
-"\n"
 "QPushButton#check_pin:pressed{\n"
-"padding-left :6px;\n"
-"padding-top :6px;\n"
+"       border-radius: 15px;\n"
+"    font: 75 17pt \"MS Shell Dlg 2\";\n"
+"    \n"
+"    /*border: 3px solid rgb(230, 230, 230);*/\n"
+"    \n"
 "\n"
-"    background-color: rgb(50, 192, 240);\n"
-"}\n"
-"")
-        self.check_pin.setText("")
+"    \n"
+"    background-color: #3498db;\n"
+"  color: white;           \n"
+"   padding-left: 2px;       \n"
+"  padding-top: 2px;\n"
+"    \n"
+"}")
         icon35 = QtGui.QIcon()
         icon35.addPixmap(QtGui.QPixmap("../../../../lab/ROBOT_NH_V3/images/charging_pin.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.check_pin.setIcon(icon35)
@@ -4148,7 +4208,7 @@ class Ui_MainWindow(object):
         self.label_16.setPixmap(QtGui.QPixmap("../images/SRC - LOGO.svg"))
         self.label_16.setObjectName("label_16")
         self.btn_wait = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_wait.setGeometry(QtCore.QRect(1560, 10, 151, 41))
+        self.btn_wait.setGeometry(QtCore.QRect(1550, 10, 151, 41))
         self.btn_wait.setStyleSheet("QPushButton#btn_wait{\n"
 "       border-radius: 15px;\n"
 "    font: 75 17pt \"MS Shell Dlg 2\";\n"
@@ -4310,6 +4370,8 @@ class Ui_MainWindow(object):
         self.bt_back_mobile.setText(_translate("MainWindow", "Quay Lại"))
         self.label_nhan_lenh.setText(_translate("MainWindow", "Đang chờ lệnh"))
         self.btn_bat_ketnoi_mobile.setText(_translate("MainWindow", "Bắt đầu kết nối mobile"))
+        self.btn_toggle_camera_mobile.setText(_translate("MainWindow", "Camera mobile"))
+        self.label_status_camera.setText(_translate("MainWindow", "Camera off"))
         self.label_caidat_cam.setText(_translate("MainWindow", "CÀI ĐẶT CAMERA"))
         self.lable_id_0.setText(_translate("MainWindow", "ID: "))
         self.lable_id_2.setText(_translate("MainWindow", "ID: "))
@@ -4373,7 +4435,9 @@ class Ui_MainWindow(object):
         self.bt_kt_ai.setText(_translate("MainWindow", "Quay lại"))
         self.label_19.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-weight:600;\">TRA CỨU AI </span></p></body></html>"))
         self.label_gif.setText(_translate("MainWindow", "gif"))
+        self.bt_stop_ai.setText(_translate("MainWindow", "STOP AI"))
         self.label_wait.setText(_translate("MainWindow", "GIF"))
+        self.check_pin.setText(_translate("MainWindow", "Battery"))
         self.bt_stop.setText(_translate("MainWindow", "STOP"))
         self.label_4.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:16pt; font-weight:600;\">SMART ROBOTIC CENTER </span></p><p><span style=\" font-size:16pt; font-weight:600;\">TRUNG TÂM ROBOT THÔNG MINH </span></p><p><br/></p></body></html>"))
         self.label_5.setText(_translate("MainWindow", "ROBOT TIẾP TÂN ASR"))

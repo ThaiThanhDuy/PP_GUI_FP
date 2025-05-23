@@ -254,7 +254,7 @@ background-color: rgb(58, 192, 255);
     </property>
     <property name="icon">
      <iconset>
-      <normaloff>khuvuccho.png</normaloff>khuvuccho.png</iconset>
+      <normaloff>../images/clock1.jpg</normaloff>../images/clock1.jpg</iconset>
     </property>
     <property name="iconSize">
      <size>

@@ -141,7 +141,7 @@ class Ui_Form_nhaptenban(object):
 "")
         self.Button_kvchow.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(Uti.image_path("khuvuccho.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap("../ROBOT_HD/images/home22.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.Button_kvchow.setIcon(icon1)
         self.Button_kvchow.setIconSize(QtCore.QSize(50, 50))
         self.Button_kvchow.setObjectName("Button_kvchow")
