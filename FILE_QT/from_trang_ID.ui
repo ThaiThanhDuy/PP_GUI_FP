@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form_show_ID</class>
+ <widget class="QWidget" name="Form_show_ID">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1072</width>
+    <height>541</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
+  <widget class="QPushButton" name="btn_close_ID">
+   <property name="geometry">
+    <rect>
+     <x>910</x>
+     <y>470</y>
+     <width>151</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton#btn_close_ID{
+   	border-radius: 15px;
+	font: 75 17pt &quot;MS Shell Dlg 2&quot;;
+	
+	/*border: 3px solid rgb(230, 230, 230);*/
+	color: rgb(0, 0, 0);
+
+	
+
+	background-color: rgb(220, 220, 220);
+}
+QPushButton#btn_close_ID:pressed{
+   	border-radius: 15px;
+	font: 75 17pt &quot;MS Shell Dlg 2&quot;;
+	
+	/*border: 3px solid rgb(230, 230, 230);*/
+	
+	font: 75 20pt &quot;Ubuntu Condensed&quot;;
+	
+	background-color: #3498db;
+  color: white;           
+   padding-left: 2px;       
+  padding-top: 2px;
+	
+}</string>
+   </property>
+   <property name="text">
+    <string>Close</string>
+   </property>
+  </widget>
+  <widget class="QTableWidget" name="tableWidget_ID">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>20</y>
+     <width>1051</width>
+     <height>430</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: white</string>
+   </property>
+  </widget>
+  <widget class="QPlainTextEdit" name="terminal_ID">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>460</y>
+     <width>891</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>20</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: white;
+boder-radius:15p;</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

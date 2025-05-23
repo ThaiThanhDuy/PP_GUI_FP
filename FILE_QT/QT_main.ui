@@ -1110,7 +1110,7 @@ border-radius:20px;
 	
 	font: 75 35pt &quot;MS Shell Dlg 2&quot;;
 }
-QPushButton#bt_dan_duong:hover{
+QPushButton#bt_dan_duong:pressed{
 	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 255, 255, 255), stop:1 rgba(58, 192, 255, 255));
 
 }
@@ -1155,7 +1155,7 @@ border-radius:20px;
 	
 	font: 75 35pt &quot;MS Shell Dlg 2&quot;;
 }
-QPushButton#bt_diem_danh:hover{
+QPushButton#bt_diem_danh:pressed{
 	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 255, 255, 255), stop:1 rgba(58, 192, 255, 255));
 
 }
@@ -1200,7 +1200,7 @@ border-radius:20px;
 	
 	font: 75 35pt &quot;MS Shell Dlg 2&quot;;
 }
-QPushButton#bt_tra_cuu:hover{
+QPushButton#bt_tra_cuu:pressed{
 	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 255, 255, 255), stop:1 rgba(58, 192, 255, 255));
 
 }
@@ -1339,7 +1339,7 @@ border-radius:20px;
 	
 	font: 75 30pt &quot;MS Shell Dlg 2&quot;;
 }
-QPushButton#bt_them:hover{
+QPushButton#bt_them:pressed{
 	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 255, 255, 255), stop:1 rgba(58, 192, 255, 255));
 
 }
@@ -1384,7 +1384,7 @@ border-radius:20px;
 	
 	font: 75 30pt &quot;MS Shell Dlg 2&quot;;
 }
-QPushButton#bt_wifi:hover{
+QPushButton#bt_wifi:pressed{
 	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 255, 255, 255), stop:1 rgba(58, 192, 255, 255));
 
 }
@@ -1429,7 +1429,7 @@ border-radius:20px;
 	
 	font: 75 30pt &quot;MS Shell Dlg 2&quot;;
 }
-QPushButton#bt_setup_cam:hover{
+QPushButton#bt_setup_cam:pressed{
 	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 255, 255, 255), stop:1 rgba(58, 192, 255, 255));
 
 }
@@ -1474,7 +1474,7 @@ border-radius:20px;
 	
 	font: 75 30pt &quot;MS Shell Dlg 2&quot;;
 }
-QPushButton#bt_check_cam:hover{
+QPushButton#bt_check_cam:pressed{
 	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 255, 255, 255), stop:1 rgba(58, 192, 255, 255));
 
 }
@@ -1545,7 +1545,7 @@ border-radius:20px;
 	
 	font: 75 30pt &quot;MS Shell Dlg 2&quot;;
 }
-QPushButton#btn_dinh_vi:hover{
+QPushButton#btn_dinh_vi:pressed{
 	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 255, 255, 255), stop:1 rgba(58, 192, 255, 255));
 
 }
@@ -1591,7 +1591,7 @@ border-radius:20px;
 	
 	font: 75 30pt &quot;MS Shell Dlg 2&quot;;
 }
-QPushButton#bt_set_home:hover{
+QPushButton#bt_set_home:pressed{
 	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 255, 255, 255), stop:1 rgba(58, 192, 255, 255));
 
 }
@@ -1637,7 +1637,7 @@ border-radius:20px;
 	
 	font: 75 30pt &quot;MS Shell Dlg 2&quot;;
 }
-QPushButton#bt_danhsach:hover{
+QPushButton#bt_danhsach:pressed{
 	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 255, 255, 255), stop:1 rgba(58, 192, 255, 255));
 
 }
@@ -1684,7 +1684,7 @@ border-radius:20px;
 	
 	font: 75 30pt &quot;MS Shell Dlg 2&quot;;
 }
-QPushButton#bt_setup:hover{
+QPushButton#bt_setup:pressed{
 	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 255, 255, 255), stop:1 rgba(58, 192, 255, 255));
 
 }
@@ -5536,6 +5536,41 @@ QPushButton#bt_mode_auto:pressed{
        <string>Điều khiển từ xa</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="setName_button">
+      <property name="geometry">
+       <rect>
+        <x>1400</x>
+        <y>0</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton#setName_button{
+	background-color: rgb(255, 255, 255);
+
+color:rgba(0, 0, 0, 255);
+border-radius:10px;
+	
+	font: 75 20pt &quot;MS Shell Dlg 2&quot;;
+}
+QPushButton#setName_button:hover{
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 255, 255, 255), stop:1 rgba(58, 192, 255, 255));
+
+}
+QPushButton#setName_button:pressed{
+
+ padding-left:5px;
+ padding-top:5px;
+ background-color:rgba(58, 192, 200, 255);
+
+
+}</string>
+      </property>
+      <property name="text">
+       <string>Đặt tên</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="page_mobile">
      <widget class="QFrame" name="frame_15">
@@ -5779,7 +5814,7 @@ font: 75 17pt &quot;MS Shell Dlg 2&quot;;
         <rect>
          <x>340</x>
          <y>710</y>
-         <width>291</width>
+         <width>641</width>
          <height>51</height>
         </rect>
        </property>

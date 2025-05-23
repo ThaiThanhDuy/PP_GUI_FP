@@ -266,7 +266,7 @@ class Ui_Form_nhaptenban(object):
     def retranslateUi(self, Form_nhaptenban):
         _translate = QtCore.QCoreApplication.translate
         Form_nhaptenban.setWindowTitle(_translate("Form_nhaptenban", "Form"))
-        self.lineEdit_nhaptenban.setPlaceholderText(_translate("Form_nhaptenban", "   Nhập số phòng 1,2,3..."))
+        self.lineEdit_nhaptenban.setPlaceholderText(_translate("Form_nhaptenban", "   Nhập Điểm 1,2,3..."))
         self.Button_xacnhan_capnhat.setText(_translate("Form_nhaptenban", "CẬP NHẬT"))
         self.Button_huy_capnhat.setText(_translate("Form_nhaptenban", "HỦY"))
         self.label.setText(_translate("Form_nhaptenban", "Chọn các chế độ trước khi cập nhật"))

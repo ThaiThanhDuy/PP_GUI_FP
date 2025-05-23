@@ -69,9 +69,9 @@ from status_popup import StatusPopup, NamedMap
 from FILE_QT.from_nhapphong import Ui_Form_nhaptenban
 from FILE_QT.form_themvao import Ui_Form_them
 from FILE_QT.form_map import Ui_Form_map
+from FILE_QT.QT_nhapten_ID import Ui_Form_nhaptenID
 
 from FILE_QT.from_finish_setup_cam import Ui_Form_finish_setup_cam
-
 from FILE_QT.from_dang_nd_cam import Ui_Form_dangnhap_cam
 from FILE_QT.from_error_cam import Ui_Form_error_cam
 from FILE_QT.from_finish_cam import Ui_Form_finish_cam
@@ -86,6 +86,8 @@ from FILE_QT.from_finish_dinhvi import Ui_Form_finish_dinhvi
 from FILE_QT.from_xn_chuphinh import Ui_Form_xn_chupanh
 from FILE_QT.from_tinh_trang_pin import Ui_Form_status_pin
 from FILE_QT.from_trang_toa_do import Ui_Form_show_toado
+
+from FILE_QT.from_trang_ID import Ui_Form_show_ID
 from FILE_QT.form_dv import Ui_Form_ui_dv
 
 from FILE_QT.page_waiting import Ui_UI_waiting
@@ -400,7 +402,11 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.btn_bat_ketnoi_mobile.clicked.connect(self.start_mobile)
         self.btn_tat_ketnoi_mobile.clicked.connect(self.stop_mobile)
         self.btn_wait.clicked.connect(self.show_page_waiting)
+        self.btn_toggle_camera_mobile.clicked.connect(self.toggle_camera_mobile)
+        self.btn_toggle_camera_mobile.setEnabled(False)
 
+
+        # Waiting screen 
         self.instance = None
         self.player = None
         self.page_waiting = None
@@ -413,9 +419,14 @@ class MainApp(QMainWindow,Ui_MainWindow):
 
         # Gắn event filter toàn cục
         QApplication.instance().installEventFilter(self)
+
+
+       
+        
+ 
     def show_main(self):
         self.show() # Hàm này được gọi từ LoadingScreen sau khi đóng
- 
+        
     def manhinh_chogiaylat(self):
         self.form_chogiaylat = QMainWindow()
         self.form_chogiaylat.showFullScreen()
@@ -531,6 +542,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.btn_xac_nhan.clicked.connect(self.man_hinh_dan_duong)
         #ROBOT RUN MANUAL
         self.listWidget_dsban.itemClicked.connect(self.item_xoa_clicked)
+     
        
 
         #Slice 
@@ -556,6 +568,8 @@ class MainApp(QMainWindow,Ui_MainWindow):
     
         self.Button_toado.clicked.connect(self.show_toado)
         self.mobile_button.clicked.connect(self.show_mobile)
+
+        self.setName_button.clicked.connect(self.manhinh_nhap_ID)
     def control_auto(self):
         self.btn_phong1.clicked.connect(lambda: self.toggle_item(1))
         self.btn_phong2.clicked.connect(lambda: self.toggle_item(2))
@@ -755,6 +769,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
     def show_dan_duong(self):
         self.stackedWidget.setCurrentWidget(self.page_dan_duong)
         Uti.RobotSpeakWithPath('voice_hmi_new/new_vi_tri_di_chuyen.wav')
+        self.cap_nhat_ten_nut_theo_db()
         self.fcn_load_list_0()
     
     def show_page_setup(self):
@@ -1447,6 +1462,10 @@ class MainApp(QMainWindow,Ui_MainWindow):
 
         # Lưu ý: Không gọi start_camera_stream trực tiếp ở đây nữa
 
+        self.btn_toggle_camera_mobile.setEnabled(False)
+
+        self.isPressCameraON = False
+
     def on_connect(self, client, userdata, flags, rc):
         if rc == 0:
             print("Đã kết nối thành công đến MQTT broker!")
@@ -1456,11 +1475,29 @@ class MainApp(QMainWindow,Ui_MainWindow):
             # Bắt đầu camera stream trong một thread riêng sau khi kết nối thành công
             camera_thread = threading.Thread(target=self.start_camera_stream)
             camera_thread.daemon = True  # Cho phép thread thoát khi chương trình chính thoát
+            self.btn_toggle_camera_mobile.setEnabled(True)
          #   camera_thread.start()
         else:
             print(f"Kết nối thất bại với mã lỗi {rc}")
+            self.btn_toggle_camera_mobile.setEnabled(False)
             if self.label_status_3:
                 self.label_status_3.setText(f"Kết nối thất bại với mã lỗi {rc}")
+    def toggle_camera_mobile(self):
+        if(self.isPressCameraON==True):
+            self.Stop_send_data_camera()
+            self.isPressCameraON = False
+            self.label_status_camera.setText(f"Sending data camera OFF")
+        else:
+            self.Send_data_camera()
+            self.isPressCameraON = True
+            self.label_status_camera.setText(f"Sending data camera ON")
+
+    def Send_data_camera(self):
+        camera_thread = threading.Thread(target=self.start_camera_stream)
+        camera_thread.daemon = True 
+        camera_thread.start()
+    def Stop_send_data_camera(self):
+        self.stop_camera()
 
     # Hàm callback khi nhận được tin nhắn
     def on_message(self, client, userdata, msg):
@@ -1580,6 +1617,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
             self.client.loop_stop()  # Dừng vòng lặp MQTT thread
             self.client.disconnect()
             print("Đã ngắt kết nối MQTT.")
+        self.btn_toggle_camera_mobile.setEnabled(False)
         self.stop_camera() # Đảm bảo camera cũng được dừng
 
 ################## MANUAL ##################
@@ -1778,7 +1816,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
                 # gọi hàm cập nhật tọa độ và truyền số nhập được vào hàm
                 self.capnhattoado(text_nhap)
                 # print("nhập số bàn thành công")
-                self.listWidget_dsban.addItem("Phòng {0}".format(text_nhap))
+                self.listWidget_dsban.addItem("Điểm {0}".format(text_nhap))
                 # truyền dữ liệu vào text và hiển thị nút Button_1_2 đến Button_10_2
                 #button_name = f"Button_{int(text_nhap)}_2"
                 #button = getattr(self, button_name)
@@ -1808,6 +1846,203 @@ class MainApp(QMainWindow,Ui_MainWindow):
             self.capnhattoado(123)  # CAP NHAT VI TRI TRUOC DOCK SAC
             self.from_nhap.close()
 
+
+     
+    def xu_ly_ID(self, event):
+        print("ID")
+        try:
+            if not hasattr(keyyyyy.Registe, "virtual_keyboard") or not keyyyyy.Registe.virtual_keyboard.isVisible():
+                keyyyyy.Registe.virtual_keyboard = keyyyyy.VKBD(self.uic50.lineEdit_nhapID)
+                keyyyyy.Registe.virtual_keyboard.show()
+            else:
+                # keyyyyy.Registe.virtual_keyboard.activateWindow()
+                keyyyyy.Registe.virtual_keyboard.hide()
+        except Exception as e:
+            print(f"failed to open virtual keyboard ,already exist or error: {e}")
+    def xu_ly_name(self, event):
+        print("Name")
+        try:
+            if not hasattr(keyyyyy.Registe, "virtual_keyboard") or not keyyyyy.Registe.virtual_keyboard.isVisible():
+                keyyyyy.Registe.virtual_keyboard = keyyyyy.VKBD(self.uic50.lineEdit_nhapten)
+                keyyyyy.Registe.virtual_keyboard.show()
+            else:
+                # keyyyyy.Registe.virtual_keyboard.activateWindow()
+                keyyyyy.Registe.virtual_keyboard.hide()
+        except Exception as e:
+            print(f"failed to open virtual keyboard ,already exist or error: {e}")
+
+    def manhinh_nhap_ID(self):  # dùng cho nút cập nhật số bàn
+        self.from_nhap_ID = QMainWindow()
+        self.uic50 = Ui_Form_nhaptenID()
+        self.uic50.setupUi(self.from_nhap_ID)
+
+        self.from_nhap_ID.show()
+     
+        self.uic50.Button_huy_capnhat_name.clicked.connect(self.tatmanhinh_capnhat_ID)
+
+        self.uic50.lineEdit_nhapID.mousePressEvent = self.xu_ly_ID
+        self.uic50.lineEdit_nhapten.mousePressEvent = self.xu_ly_name
+      
+        # sau khi nhấn enter hoặc nút xác nhận
+        self.uic50.lineEdit_nhapID.returnPressed.connect(self.kiem_tra_nhap_name)
+        self.uic50.lineEdit_nhapten.returnPressed.connect(self.kiem_tra_nhap_name)
+        self.uic50.Button_capnhat_name.clicked.connect(self.kiem_tra_nhap_name)
+   
+        self.uic50.Button_xoa_capnhat_name.clicked.connect(self.xoa_dulieu_name)
+        self.uic50.Button_xem_capnhat_name.clicked.connect(self.show_ID)
+     # Hàm kiem_tra_nhap_name đã được chỉnh sửa
+    def xoa_dulieu_name(self):
+        """
+        Hiển thị QMessageBox cảnh báo và xóa toàn bộ dữ liệu trong bảng 'nameLocation'
+        nếu người dùng xác nhận.
+        """
+        reply = QMessageBox.warning(
+            self,
+            "Xác nhận xóa dữ liệu",
+            "Bạn có chắc chắn muốn xóa TOÀN BỘ DỮ LIỆU trong bảng 'nameLocation' không? "
+            "Thao tác này KHÔNG THỂ HOÀN TÁC!",
+            QMessageBox.Yes | QMessageBox.No, # Các nút Yes và No
+            QMessageBox.No # Nút mặc định được chọn là No
+        )
+
+        if reply == QMessageBox.Yes:
+            print("Người dùng đã xác nhận xóa dữ liệu.")
+            success = sql.clear_name_location_table() # Gọi hàm xóa dữ liệu
+
+            if success:
+                QMessageBox.information(self, "Xóa thành công", "Đã xóa toàn bộ dữ liệu trong bảng 'nameLocation'.")
+                # Sau khi xóa DB, cần cập nhật lại giao diện (ví dụ: các nút, list widget)
+                self.cap_nhat_ten_nut_theo_db()
+                self.hien_thi_nut_theo_id()
+                # Có thể xóa trắng các lineEdit_nhapID và lineEdit_nhapten nếu muốn
+                self.uic50.lineEdit_nhapID.clear()
+                self.uic50.lineEdit_nhapten.clear()
+              
+            
+            else:
+                # Thông báo lỗi đã được hiển thị trong clear_name_location_table
+                pass
+        else:
+            print("Người dùng đã hủy thao tác xóa dữ liệu.")
+            QMessageBox.information(self, "Hủy bỏ", "Thao tác xóa dữ liệu đã bị hủy bỏ.")
+    def kiem_tra_nhap_name(self):
+        xuly_cham_ngoai() # Gọi hàm xuly_cham_ngoai()
+
+        is_id_valid = False
+        is_name_not_empty = False
+        error_message = ""
+        input_id = None # Khởi tạo để tránh lỗi nếu int() thất bại
+
+        # 1. Kiểm tra self.uic50.lineEdit_nhapID
+        id_text = self.uic50.lineEdit_nhapID.text().strip()
+        try:
+            input_id = int(id_text)
+            if 1 <= input_id <= 10:
+                is_id_valid = True
+            else:
+                error_message = f"Lỗi ID: ID '{id_text}' không nằm trong khoảng 1-10."
+        except ValueError:
+            error_message = f"Lỗi ID: ID '{id_text}' không phải là số nguyên hợp lệ."
+        except Exception as e:
+            error_message = f"Lỗi không xác định khi kiểm tra ID: {e}"
+
+        # 2. Kiểm tra self.uic50.lineEdit_nhapten
+        name_text = self.uic50.lineEdit_nhapten.text().strip() # Sử dụng .lineEdit_nhapten
+        if name_text:
+            is_name_not_empty = True
+        else:
+            if not error_message: # Chỉ gán lỗi tên nếu chưa có lỗi ID
+                error_message = "Lỗi Tên: Tên không được để trống."
+
+        # 3. Xử lý dựa trên điều kiện hợp lệ
+        if is_id_valid and is_name_not_empty:
+            # Nếu tất cả hợp lệ, gọi hàm cập nhật/chèn database
+            print("Các điều kiện nhập liệu hợp lệ. Đang tiến hành cập nhật/chèn vào DB...")
+            # Gọi hàm update_or_insert_location_name
+            db_success = sql.update_or_insert_location_name(input_id, name_text)
+
+            if db_success:
+                QMessageBox.information(self, "Thành công", f"Dữ liệu cho ID {input_id} ('{name_text}') đã được cập nhật/thêm thành công vào database.")
+                # Cập nhật lại các nút nếu cần sau khi DB thay đổi
+                self.cap_nhat_ten_nut_theo_db()
+                self.hien_thi_nut_theo_id()
+                self.from_nhap_ID.close() # Đóng form nếu thành công
+            else:
+                # Lỗi DB đã được xử lý bằng QMessageBox trong update_or_insert_location_name
+                # Nên không cần show thêm MessageBox ở đây.
+                print("Lỗi DB đã xảy ra, không thể hoàn thành thao tác.")
+                # Tùy chọn: Không đóng form nếu thao tác DB thất bại để người dùng sửa.
+                # self.from_nhap_ID.close() # Bạn có thể chọn đóng hoặc không tùy ý.
+
+        else:
+            # Nếu có lỗi, hiện MessageBox và đóng form_nhap_ID
+            if error_message:
+                QMessageBox.warning(self, "Lỗi Nhập Liệu", error_message)
+            print("Điều kiện không đủ. Dữ liệu không hợp lệ. Đóng form.")
+            self.from_nhap_ID.close() # Đóng form khi có lỗi nhập liệu
+
+    
+    def tatmanhinh_capnhat_ID(self):
+        self.from_nhap_ID.close()
+      
+
+    def show_ID(self):
+        self.UI_page_ID()
+    def UI_page_ID(self):
+        self.load_ID = QMainWindow()
+        self.ui29 = Ui_Form_show_ID()
+        self.ui29.setupUi(self.load_ID)
+        self.ui29.btn_close_ID.clicked.connect(self.close_ui_ID)
+        self.load_ID.show()
+        self.load_ID_sql()
+
+    def close_ui_ID(self):
+        self.load_ID.close()
+
+    def load_ID_sql(self):
+        self.fcn_load_ID()
+
+    # HAM DUNG DE SET CHIEU RONG CUA COT
+   # SET CHIEU RONG CUA COT
+    def set_column_widths_4(self):
+        self.ui29.tableWidget_ID.setColumnWidth(0, 200)  # Cột toadoX
+        self.ui29.tableWidget_ID.setColumnWidth(1, 200)  # Cột toadoY
+    # SET CHIEU CAO CUA HANG
+    def set_row_heights_4(self):
+        for row in range(self.ui29.tableWidget_ID.rowCount()):
+            self.ui29.tableWidget_ID.setRowHeight(row, 30)  # Chiều cao mỗi hàng là 30 pixel
+
+    # HAM LOAD DATA LEN BANG
+    def fcn_load_ID(self):
+        data = sql.doc_du_lieu_ID('readall')
+
+        if data is not None:
+            num_rows = len(data)
+            num_columns = 2  # 5 cột dữ liệu
+
+            self.ui29.tableWidget_ID.clear()  # Xóa dữ liệu cũ trước khi tải lại
+            self.ui29.tableWidget_ID.setRowCount(num_rows)
+            self.ui29.tableWidget_ID.setColumnCount(num_columns)
+            self.ui29.tableWidget_ID.setHorizontalHeaderLabels(['ID', 'NAME'])
+
+            if num_rows > 0:
+                for row_idx, row_data in enumerate(data):
+                    # Thêm dữ liệu vào các cột và căn giữa
+                    for col_idx, item in enumerate(row_data):
+                        item_widget = QTableWidgetItem(str(item))
+                        item_widget.setTextAlignment(Qt.AlignCenter)
+                        self.ui29.tableWidget_ID.setItem(row_idx, col_idx, item_widget)
+
+                self.set_column_widths_4()
+                self.set_row_heights_4()
+
+            self.ui29.terminal_ID.setPlainText("Data loaded successfully")
+        else:
+            self.ui29.tableWidget_ID.clear()
+            self.ui29.tableWidget_ID.setRowCount(0)
+            self.ui29.tableWidget_ID.setColumnCount(2)  # Cập nhật số cột header
+            self.ui29.tableWidget_ID.setHorizontalHeaderLabels(['ID', 'NAME'])
+            self.ui29.terminal_ID.setPlainText("Failed to load data.")
     # ============ sắp xếp thứ tự bàn hien thi tren list ==============#
     def sap_xep_stt_ban(self):
         items = [self.listWidget_dsban.item(index).text() for index in
@@ -1816,8 +2051,8 @@ class MainApp(QMainWindow,Ui_MainWindow):
         def custom_sort_key(item):
             if item == "Trạm sạc" or item == "Khu vực chờ":
                 return (1, item)
-            elif item.startswith("Phòng "):
-                return (2, int(item.split("Phòng ")[-1]))
+            elif item.startswith("Điểm "):
+                return (2, int(item.split("Điểm ")[-1]))
             else:
                 return (3, item)
 
@@ -1933,8 +2168,8 @@ class MainApp(QMainWindow,Ui_MainWindow):
     def custom_sort_key(item):
             if item == "Trạm sạc" or item == "Khu vực chờ":
                 return (1, item)
-            elif item.startswith("Phòng "):
-                return (2, int(item.split("Phòng ")[-1]))
+            elif item.startswith("Điểm "):
+                return (2, int(item.split("Điểm ")[-1]))
             else:
                 return (3, item)
 
@@ -2003,7 +2238,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
                 ban = hang_delete_uic4
                 #ban_int = int(ban)+310
                 #ban_str = str(ban_int)
-                self.listWidget_dsban.addItem(f"Phòng {ban}")
+                self.listWidget_dsban.addItem(f"Điểm {ban}")
            #     button_name = f"Button_{ban}_2"
            #     button = getattr(self.sub_win1.uic, button_name)
             #    button.show()
@@ -2100,7 +2335,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
                 elif ban != "200" and ban != "100":
                     #ban_int = int(ban) + 310
                    # ban_str = str(ban_int)
-                    self.uic4.listWidget_themvao.addItem(f"Phòng {ban}")
+                    self.uic4.listWidget_themvao.addItem(f"Điểm {ban}")
             self.sap_xep_stt_ban_uic4()
     def extract_number(self, text):
         # Trích xuất số từ văn bản và trả về số dưới dạng chuỗi
@@ -2230,6 +2465,40 @@ class MainApp(QMainWindow,Ui_MainWindow):
     # HAM CHON CHECKBOX
     
 ################## GIAO DIEN THEM PHONG DE CHAY ##################
+
+    def cap_nhat_ten_nut_theo_db(self):
+        """
+        Cập nhật text của các nút button dựa trên dữ liệu 'Name' từ bảng 'nameLocation'.
+        Nếu ID không có trong DB, sử dụng tên mặc định (ví dụ: 'Điểm X').
+        """
+        button_map = {
+            1: self.btn_phong1,
+            2: self.btn_phong2,
+            3: self.btn_phong3,
+            4: self.btn_phong4,
+            5: self.btn_phong5,
+            6: self.btn_phong6,
+            7: self.btn_phong7,
+            8: self.btn_phong8,
+            9: self.btn_phong9,
+            10: self.btn_phong10,
+            100: self.btn_tram_sac, # Thêm trạm sạc nếu bạn muốn tên nó cũng từ DB
+            200: self.btn_khu_vuc_cho # Thêm khu vực chờ nếu bạn muốn tên nó cũng từ DB
+        }
+
+        for btn_id, button_obj in button_map.items():
+            db_name = sql.get_location_name_from_db(btn_id)
+            if db_name:
+                button_obj.setText(db_name)
+            else:
+                # Nếu không có trong DB, đặt tên mặc định
+                if btn_id == 100:
+                    button_obj.setText("Trạm sạc")
+                elif btn_id == 200:
+                    button_obj.setText("Khu vực chờ")
+                else:
+                    button_obj.setText(f"Điểm {btn_id}")
+
     def hien_thi_nut_theo_id(self):
         nut_dict = {
             100: self.btn_tram_sac,
@@ -2253,49 +2522,82 @@ class MainApp(QMainWindow,Ui_MainWindow):
                 nut.show()
             else:
                 nut.hide()
+
+    def kiem_tra_trung_ten_trong_listWidget_ds(self, item_text):
+        """
+        Kiểm tra xem một tên đã tồn tại trong listWidget_ds hay chưa.
+        Trả về True nếu trùng lặp, False nếu không.
+        """
+        for i in range(self.listWidget_ds.count()):
+            if self.listWidget_ds.item(i).text() == item_text:
+                return True
+        return False
+
     def toggle_item(self, id):
-        
-        # kiem tra nut nhan 
-        if(id==100):
-            item_text = f"Trạm sạc" 
-        elif(id==200):
-            item_text = f"Khu vực chờ"
-        else:
-            item_text = f"Phòng {id}"
-            
+        # Dùng hàm get_location_name_from_db để lấy tên
+        item_text = sql.get_location_name_from_db(id)
+
+        if item_text is None:
+            # Nếu không tìm thấy trong DB, mặc định là "Phòng X"
+            if id == 100:
+                item_text = "Trạm sạc"
+            elif id == 200:
+                item_text = "Khu vực chờ"
+            else:
+                item_text = f"Điểm {id}"
+
+        if id not in self.item_states:
+            self.item_states[id] = False # Đảm bảo ID được khởi tạo trạng thái
+
         if not self.item_states[id]:
-            self.listWidget_ds.addItem(item_text)
-            self.item_states[id] = True
+            # Chỉ thêm nếu không trùng tên
+            if not self.kiem_tra_trung_ten_trong_listWidget_ds(item_text):
+                self.listWidget_ds.addItem(item_text)
+                self.item_states[id] = True
+            else:
+                # Xử lý trường hợp trùng tên (ví dụ: thông báo cho người dùng)
+                print(f"Mục '{item_text}' đã tồn tại trong danh sách.")
         else:
             for i in range(self.listWidget_ds.count()):
                 if self.listWidget_ds.item(i).text() == item_text:
                     self.listWidget_ds.takeItem(i)
                     self.item_states[id] = False
                     break
-        self.kiem_tra_du_dieu_khien_chay()
-        self.sort_items() # Add this line to sort items after each toggle
-        
+        self.kiem_tra_du_dieu_khien_chay() # Giả định hàm này tồn tại
+        self.sort_items()
 
     def sort_items(self):
-        # Sap sep trinh tu di tram sac, 
         items = []
         for i in range(self.listWidget_ds.count()):
             items.append(self.listWidget_ds.item(i).text())
-        
 
-        def sort_key(item):
-            if item == "Trạm sạc":
-                return 0  # Đặt "Trạm sạc" lên đầu
-            elif item == "Khu vực chờ":
-                return 1  # Đặt "Khu vực chờ" lên sau "Trạm sạc"
+        def sort_key(item_name):
+            if item_name == "Trạm sạc":
+                return 0
+            elif item_name == "Khu vực chờ":
+                return 1
             else:
-                try:
-                    return int(item.split()[1]) # Sắp xếp phòng theo số thứ tự
-                except (ValueError, IndexError):
-                    return float('inf')  # Đặt các mục không phù hợp xuống cuối
+                # Cố gắng phân tích ID từ tên để sắp xếp
+                # Đầu tiên, thử tìm ID trong DB
+                db_id = None
+                # Đây là một cách không hiệu quả, tốt hơn nên lưu ID cùng với tên trong ListWidget
+                # Để đơn giản hóa ví dụ, tôi sẽ cố gắng lấy ID từ tên phòng nếu không có trong DB
+                for potential_id in range(1, 11): # Kiểm tra các ID phòng thông thường
+                    db_name = sql.get_location_name_from_db(potential_id)
+                    if db_name == item_name:
+                        db_id = potential_id
+                        break
+                if db_id is not None:
+                    return db_id
+                else:
+                    # Nếu không tìm thấy trong DB, cố gắng phân tích "Phòng X"
+                    try:
+                        return int(item_name.split()[1])
+                    except (ValueError, IndexError):
+                        return float('inf')
 
         items.sort(key=sort_key)
-        
+
         self.listWidget_ds.clear()
         for item in items:
             self.listWidget_ds.addItem(item)
@@ -2303,7 +2605,6 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.listWidget_ds.clear()
         for key in self.item_states:
             self.item_states[key] = False
-
 
 ################## GIAO DIEN  CHAY DANH SACH ##################
     # SET CHIEU CAO CUA HANG
@@ -2365,21 +2666,24 @@ class MainApp(QMainWindow,Ui_MainWindow):
     def handle_checkbox_change_0(self, state, row):
         # Lấy dữ liệu của hàng được chọn
         room_number = self.tableWidget_4.item(row, 3).text() # Cột 'Room' có index là 3
-
+        id = room_number
+        ID_location = sql.doc_name_theo_id(id)
         if state == Qt.Checked:
             # Nếu checkbox được chọn, kiểm tra trùng lặp trước khi thêm
             found = False
             for i in range(self.listWidget_ds.count()):
-                if self.listWidget_ds.item(i).text() == room_number:
+                if self.listWidget_ds.item(i).text() == ID_location[0]:
                     found = True
                     break
             if not found:
-                self.listWidget_ds.addItem(room_number)
-                print(f"Đã chọn hàng {row + 1}, thêm phòng: {room_number}")
+                self.listWidget_ds.addItem(ID_location[0])
+                print(f"Đã chọn hàng {row + 1}, thêm Điểm: {room_number}")
+                print(f"ID name: {id}")
+                print(f"ID name: {ID_location[0]}")
                 self.kiem_tra_du_dieu_khien_chay()
                 self.sort_items() # Add this line to sort items after each toggle
             else:
-                print(f"Phòng {room_number} đã tồn tại trong danh sách.")
+                print(f"Điểm {room_number} đã tồn tại trong danh sách.")
                 # Nếu đã tồn tại, có thể bỏ chọn lại checkbox (tùy vào logic bạn muốn)
                 checkbox_widget = self.tableWidget_4.cellWidget(row, 0)
                 if checkbox_widget and isinstance(checkbox_widget, QWidget):
@@ -2389,10 +2693,11 @@ class MainApp(QMainWindow,Ui_MainWindow):
 
         else:
             # Nếu checkbox bị bỏ chọn, tìm và xóa số phòng khỏi listWidget_ds
+
             for i in range(self.listWidget_ds.count()):
-                if self.listWidget_ds.item(i).text() == room_number:
+                if self.listWidget_ds.item(i).text() == ID_location[0]:
                     self.listWidget_ds.takeItem(i)
-                    print(f"Đã bỏ chọn hàng {row + 1}, xóa phòng: {room_number}")
+                    print(f"Đã bỏ chọn hàng {row + 1}, xóa Điểm: {room_number}")
                     break
 
     def get_selected_rows_0(self):
@@ -3145,7 +3450,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
            if(self.id_voice==200):
             self.stackedWidget.setCurrentWidget(self.page_main)
             self.dinh_vi_fcn_1()
-           elif( self.id_voice==123):
+           elif( self.id_voice==100):
             self.stackedWidget.setCurrentWidget(self.page_main)
            else:
             pass
@@ -3169,108 +3474,118 @@ class MainApp(QMainWindow,Ui_MainWindow):
                # self.man_hinh_dan_duong()
   
     def ve_home_trong_chu_trinh(self):
-        # B1 chay ve home
+        # Lấy tọa độ từ database (vẫn dùng hàm cũ nếu logic tọa độ nằm riêng)
+        # Giả định sql.doc_du_lieu_toado_robot trả về x,y,z,w,idout
+        # Nếu hàm này vẫn dùng toado table, thì giữ nguyên
         x_goal, y_goal, z_goal, w_goal, idout = sql.doc_du_lieu_toado_robot(200)
 
         time.sleep(1)
         print('Go HOME')
         Uti.RobotSpeakWithPath('voice_hmi_new/ve_home.wav')
-        self.navigation_thread.clear_done_navigation_status() #reset bien done_navigation
-
-        self.navigation_thread.id =  idout#300
-
+        self.navigation_thread.clear_done_navigation_status()
+        self.navigation_thread.id = idout
         self.navigation_thread.quatrinh_move = True
-
         self.ros2_handle.goal_publisher.send_goal(x_goal, y_goal, z_goal, w_goal)
-        # B2 dinh vi 
 
         self.listWidget_ds.clear()
-         # Đặt lại tất cả các trạng thái item về False
         for id_item in self.item_states:
             self.item_states[id_item] = False
-            
         self.checkBox_kvc.setCheckState(Qt.Unchecked)
+
     def ve_home_khan_cap(self):
-        x_goal, y_goal, z_goal, w_goal, idout = sql.doc_du_lieu_toado_robot(200) 
+        x_goal, y_goal, z_goal, w_goal, idout = sql.doc_du_lieu_toado_robot(200)
         self.ros2_handle.goal_publisher.send_goal(x_goal, y_goal, z_goal, w_goal)
+
     def ve_dock_sac(self):
-
-        x_goal, y_goal, z_goal, w_goal, idout = sql.doc_du_lieu_toado_robot(123)
-
+        x_goal, y_goal, z_goal, w_goal, idout = sql.doc_du_lieu_toado_robot(100)
         time.sleep(1)
         print('Go DOCK')
         Uti.RobotSpeakWithPath('voice_hmi_new/batdau_quatrinh_sac.wav')
-        self.navigation_thread.clear_done_navigation_status() #reset bien done_navigation
-
-        self.navigation_thread.id =  idout#300
-
+        self.navigation_thread.clear_done_navigation_status()
+        self.navigation_thread.id = idout
         self.navigation_thread.quatrinh_move = True
-
         self.ros2_handle.goal_publisher.send_goal(x_goal, y_goal, z_goal, w_goal)
         Uti.RobotSpeakWithPath('voice_hmi_new/toidangdisac.wav')
         self.listWidget_ds.clear()
-         # Đặt lại tất cả các trạng thái item về False
         for id_item in self.item_states:
             self.item_states[id_item] = False
 
     def auto_clear(self,id):
-            x_goal, y_goal, z_goal, w_goal, idout = sql.doc_du_lieu_toado_robot(id)
+        x_goal, y_goal, z_goal, w_goal, idout = sql.doc_du_lieu_toado_robot(id)
+        time.sleep(1)
+        self.navigation_thread.clear_done_navigation_status()
+        self.navigation_thread.id = idout
+        self.navigation_thread.quatrinh_move = True
+        self.ros2_handle.goal_publisher.send_goal(x_goal, y_goal, z_goal, w_goal)
 
-            time.sleep(1)
-           
-            self.navigation_thread.clear_done_navigation_status() #reset bien done_navigation
-
-            self.navigation_thread.id =  idout#300
-
-            self.navigation_thread.quatrinh_move = True
-
-            self.ros2_handle.goal_publisher.send_goal(x_goal, y_goal, z_goal, w_goal)
-
-            # B4 Xoa phan tu dau tien 
-                     
     def man_hinh_dan_duong(self):
-           
-      #  if not self.arduino.batdau_sac:
+        self.btn_xac_nhan.setEnabled(False)
+        goals_text = [self.listWidget_ds.item(index).text() for index in range(self.listWidget_ds.count())]
+        print('Goals (text): ', goals_text)
 
-            self.btn_xac_nhan.setEnabled(False)
-            goals = [self.listWidget_ds.item(index).text() for index in range(self.listWidget_ds.count())]
-            print('Goals: ', goals)
-            self.goal_ids = []
-            for goal in goals:
-                if 'Phòng' in goal:
-                    self.goal_ids.append(int(goal.split()[-1]))
-                elif 'Khu vực chờ' in goal:
-                    self.goal_ids.append(RobConf.HOME_ID)
-                elif 'Trạm sạc' in goal:
-                    self.goal_ids.append(RobConf.TruocDockSacID)
-            print('Goal ids: ', self.goal_ids)
-            if goals:  # kiểm tra danh sách có phần tử nào ko
-                first_item = goals[0]
-                self.label_tt.setText(first_item)  # label có ô vuông
-            if not self.goal_ids:
-                if(self.sac_pin_tu_dong==True):
-                    self.label_tt.setText("Trạm sạc")
-                    self.id_voice = 123
-                    self.ve_dock_sac()
-
+        self.goal_ids = []
+        for goal_text in goals_text:
+            # Lấy ID từ tên hiển thị bằng cách đảo ngược quá trình
+            # Cách này hơi phức tạp vì bạn cần dò lại trong DB hoặc trong logic chuyển đổi
+            # Một cách tốt hơn là lưu ID cùng với tên trong ListWidget (ví dụ, dùng QListWidgetItem.setData)
+            # Tạm thời, chúng ta sẽ cố gắng suy luận ID từ tên
+            
+            # Ưu tiên các ID đặc biệt
+            if goal_text == "Trạm sạc":
+                self.goal_ids.append(100)
+            elif goal_text == "Khu vực chờ":
+                self.goal_ids.append(RobConf.HOME_ID) # 200
+            else:
+                # Cố gắng tìm ID trong DB dựa trên tên
+                found_id = None
+                for i in range(1, 11): # Giả định các ID phòng từ 1 đến 10
+                    db_name = sql.get_location_name_from_db(i)
+                    if db_name == goal_text:
+                        found_id = i
+                        break
+                if found_id is not None:
+                    self.goal_ids.append(found_id)
                 else:
-                    self.label_tt.setText("Khu vực chờ")
-                    self.id_voice = 200
-                    self.ve_home_trong_chu_trinh()  
+                    # Nếu không tìm thấy trong DB, giả định là "Phòng X"
+                    try:
+                        # Lấy số X từ "Phòng X"
+                        phong_id = int(goal_text.split()[-1])
+                        self.goal_ids.append(phong_id)
+                    except (ValueError, IndexError):
+                        print(f"Cảnh báo: Không thể phân tích ID từ '{goal_text}'. Bỏ qua.")
+                        # Hoặc bạn có thể gán một ID mặc định/lỗi
+                        pass # Bỏ qua mục này nếu không thể phân tích
 
-            else:    
-                Uti.RobotSpeakWithPath('voice_hmi_new/new_nhuong_duong.wav')
-                
-                if (self.goal_ids[0]==200):
-                    self.id_voiced = 200
-                    self.ve_home_trong_chu_trinh()
-           
-                elif(self.goal_ids[0]==123):
-                    self.id_voiced = 123
-                    self.ve_dock_sac()
-                else:
-                    self.id_voice = 0
-                    self.auto_clear(self.goal_ids[0])
+        print('Goal ids: ', self.goal_ids)
+
+        if goals_text:
+            first_item_text = goals_text[0]
+            self.label_tt.setText(first_item_text)
+
+        if not self.goal_ids:
+            if(self.sac_pin_tu_dong==True):
+                self.label_tt.setText("Trạm sạc")
+                self.id_voice = 100
+                self.ve_dock_sac()
+            else:
+                self.label_tt.setText("Khu vực chờ")
+                self.id_voice = 200
+                self.ve_home_trong_chu_trinh()
+        else:
+            Uti.RobotSpeakWithPath('voice_hmi_new/new_nhuong_duong.wav')
+            
+            # Sử dụng self.goal_ids[0] để xác định đích đến
+            current_goal_id = self.goal_ids[0]
+
+            if (current_goal_id == RobConf.HOME_ID): # ID 200
+                self.id_voice = 200
+                self.ve_home_trong_chu_trinh()
+            elif(current_goal_id == 100):
+                self.id_voice = 100
+                self.ve_dock_sac()
+            else:
+                self.id_voice = current_goal_id # Giữ nguyên ID phòng
+                self.auto_clear(current_goal_id)
           
       #  else:
           #  Uti.RobotSpeakWithPath('voice_hmi_new/toidangdisac.wav')
@@ -3560,8 +3875,8 @@ class MainApp(QMainWindow,Ui_MainWindow):
             if "ID" in qr_data_dict:
                 display_lines.append(f"ID :{qr_data_dict['ID']}")
                 self.current_id = qr_data_dict["ID"]
-            if "Phòng" in qr_data_dict:
-                display_lines.append(f"Phòng :{qr_data_dict['Phòng']}")
+            if "Điểm" in qr_data_dict:
+                display_lines.append(f"Điểm :{qr_data_dict['Điểm']}")
 
             result_text = "\n".join(display_lines)
 
@@ -3685,7 +4000,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
             return
 
         try:
-            if "ID" in qr_data and "Tên" in qr_data and "Phòng" in qr_data:
+            if "ID" in qr_data and "Tên" in qr_data and "Điểm" in qr_data:
                 id_to_check = qr_data["ID"]
                 image_checkin_path = qr_data.get("Image_Checkin")
                 image_checkout_path = qr_data.get("Image_Checkout")
@@ -3730,7 +4045,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
                             print(f"Đã cập nhật check-out cho ID: {id_to_check} với ảnh (nếu có).")
                 else:
                     insert_fields = ["ID", "Name", "Room"]
-                    insert_values = [qr_data["ID"], qr_data["Tên"], qr_data["Phòng"]]
+                    insert_values = [qr_data["ID"], qr_data["Tên"], qr_data["Điểm"]]
                     if checkin and image_checkin_path:
                         insert_fields.append("DateTime_Checkin")
                         insert_values.append(datetime.now())
@@ -3754,7 +4069,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
                     print(f"Đã thêm dữ liệu ID: {qr_data['ID']} với thông tin check-in/check-out và ảnh (nếu có).")
 
             else:
-                print("Lỗi: Dữ liệu QR không đầy đủ các trường cần thiết (ID, Tên, Phòng).")
+                print("Lỗi: Dữ liệu QR không đầy đủ các trường cần thiết (ID, Tên, Điểm).")
         except mysql.connector.Error as err:
             mydb.rollback()
             print(f"Lỗi thực thi SQL: {err}")

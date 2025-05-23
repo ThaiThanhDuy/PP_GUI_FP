@@ -452,3 +452,206 @@ def doc_du_lieu_toado(input_key):
 
     return None  # Trả về None nếu input không hợp lệ hoặc không tìm thấy dữ liệu
 
+def doc_name_theo_id(id: int):
+    """
+    Đọc dữ liệu 'Name' từ bảng 'nameLocation' dựa trên 'ID'.
+
+    Args:
+        id (int): ID của bản ghi cần đọc.
+
+    Returns:
+        tuple: (Name, ID) nếu tìm thấy, ngược lại là None.
+    """
+    try:
+        mydb = mysql.connector.connect(
+            user="robot",
+            password="12345678",
+            host="127.0.0.1",
+            database="sql_rsr"
+        )
+        mycursor = mydb.cursor()
+    except mysql.connector.Error as err:
+        print(f"Lỗi kết nối cơ sở dữ liệu: {err}")
+        return None
+
+    select_query = 'SELECT Name, ID FROM nameLocation WHERE ID = %s LIMIT 1'
+    mycursor.execute(select_query, (id,))
+    result = mycursor.fetchone()
+
+    mycursor.close()
+    mydb.close()
+
+    if result:
+        name_out = result[0]
+        id_out = result[1]
+        # Bỏ dòng print này nếu bạn chỉ muốn hàm trả về giá trị
+        # print(f"Dữ liệu từ nameLocation (ID={id_out}):")
+        # print(f"Name: {name_out}")
+        return (name_out, id_out)
+    else:
+        # Bỏ dòng print này nếu bạn chỉ muốn hàm trả về None
+        # print(f"Không tìm thấy dữ liệu cho ID = {id}")
+        return None
+
+def get_location_name_from_db(id: int):
+    """
+    Đọc dữ liệu 'Name' từ bảng 'nameLocation' dựa trên 'ID'.
+    Trả về Name nếu tìm thấy, ngược lại là None.
+    """
+    try:
+        mydb = mysql.connector.connect(
+            user="robot",
+            password="12345678",
+            host="127.0.0.1",
+            database="sql_rsr"
+        )
+        mycursor = mydb.cursor()
+    except mysql.connector.Error as err:
+        print(f"Lỗi kết nối cơ sở dữ liệu: {err}")
+        return None
+
+    select_query = 'SELECT Name FROM nameLocation WHERE ID = %s LIMIT 1'
+    mycursor.execute(select_query, (id,))
+    result = mycursor.fetchone()
+
+    mycursor.close()
+    mydb.close()
+
+    if result:
+        return result[0]  # Chỉ trả về Name
+    else:
+        return None
+
+
+def update_or_insert_location_name(id: int, name: str):
+    """
+    Cập nhật dữ liệu 'Name' cho một 'ID' cụ thể trong bảng 'nameLocation'.
+    Nếu 'ID' đã tồn tại, nó sẽ cập nhật 'Name'.
+    Nếu 'ID' chưa tồn tại, nó sẽ chèn một hàng mới.
+    **Lưu ý: Cách này kém hiệu quả hơn và có thể gặp lỗi trong môi trường đa luồng
+    nếu cột ID không phải là PRIMARY KEY/UNIQUE KEY.**
+    """
+    mydb = None
+    mycursor = None
+    try:
+        mydb = mysql.connector.connect(
+            user="robot",
+            password="12345678",
+            host="127.0.0.1",
+            database="sql_rsr"
+        )
+        mycursor = mydb.cursor()
+
+        # Bước 1: Kiểm tra xem ID đã tồn tại chưa
+        # Lưu ý: Chúng ta không thể dùng get_location_name_from_db ở đây vì nó sẽ đóng kết nối.
+        # Chúng ta cần giữ kết nối mở cho thao tác tiếp theo.
+        check_query = 'SELECT COUNT(*) FROM nameLocation WHERE ID = %s'
+        mycursor.execute(check_query, (id,))
+        exists = mycursor.fetchone()[0] > 0
+
+        if exists:
+            # Nếu ID tồn tại, thực hiện UPDATE
+            sql_query = 'UPDATE nameLocation SET Name = %s WHERE ID = %s'
+            data = (name, id)
+            action = "cập nhật"
+        else:
+            # Nếu ID không tồn tại, thực hiện INSERT
+            sql_query = 'INSERT INTO nameLocation (ID, Name) VALUES (%s, %s)'
+            data = (id, name)
+            action = "thêm mới"
+
+        mycursor.execute(sql_query, data)
+        mydb.commit() # Xác nhận các thay đổi vào cơ sở dữ liệu
+
+        if mycursor.rowcount > 0:
+            print(f"ID {id}: Dữ liệu đã được {action} thành công. Số hàng ảnh hưởng: {mycursor.rowcount}")
+        else:
+            print(f"ID {id}: Không có sự thay đổi nào được thực hiện (có thể Name đã giống hoặc không tìm thấy ID để cập nhật).")
+
+    except mysql.connector.Error as err:
+        print(f"Lỗi khi {action} dữ liệu vào cơ sở dữ liệu: {err}")
+        return False
+    finally:
+        if mycursor:
+            mycursor.close()
+        if mydb:
+            mydb.close()
+    return True
+def clear_name_location_table():
+    """
+    Xóa toàn bộ dữ liệu (các hàng) khỏi bảng 'nameLocation' mà không xóa bảng đó.
+    Sử dụng TRUNCATE TABLE để xóa nhanh và hiệu quả.
+    """
+    mydb = None
+    mycursor = None
+    try:
+        mydb = mysql.connector.connect(
+            user="robot",
+            password="12345678",
+            host="127.0.0.1",
+            database="sql_rsr"
+        )
+        mycursor = mydb.cursor()
+
+        # Câu lệnh TRUNCATE TABLE sẽ xóa tất cả các hàng nhưng giữ lại cấu trúc bảng.
+        # Nó cũng sẽ reset các AUTO_INCREMENT counter về 0.
+        sql_query = "TRUNCATE TABLE nameLocation"
+        mycursor.execute(sql_query)
+        mydb.commit() # Xác nhận thay đổi vào database
+
+        print("Đã xóa toàn bộ dữ liệu (các hàng) khỏi bảng 'nameLocation' thành công. Bảng vẫn còn tồn tại.")
+ 
+        return True
+
+    except mysql.connector.Error as err:
+        error_message = f"Lỗi khi xóa dữ liệu bảng 'nameLocation': {err}"
+        print(error_message)
+
+        return False
+    finally:
+        if mycursor:
+            mycursor.close()
+        if mydb:
+            mydb.close()
+def doc_du_lieu_ID(input_key):
+    """Đọc dữ liệu từ bảng toado và trả về giá trị hoặc danh sách các bản ghi."""
+
+    try:
+        mydb = mysql.connector.connect(
+            user="robot",
+            password="12345678",
+            host="127.0.0.1",
+            database="sql_rsr"
+        )
+        mycursor = mydb.cursor()
+    except mysql.connector.Error as err:
+        print(f"Lỗi kết nối cơ sở dữ liệu: {err}")
+        return None
+
+    # Truy vấn để lấy dữ liệu từ bảng toado
+    select_query = "SELECT ID, Name FROM nameLocation;"
+    mycursor.execute(select_query)
+
+    # Lấy tất cả các bản ghi
+    results = mycursor.fetchall()
+
+    # Mapping input keys to corresponding row indices and data types for toado table
+    input_mapping = {
+        'ID': (0, int),
+        'Name': (1, str),
+        'readall': (None, None)  # Special case for readall
+    }
+
+    if input_key in input_mapping:
+        index, data_type = input_mapping[input_key]
+        if index is not None:
+            # Duyệt qua các hàng và trả về giá trị đầu tiên tìm thấy
+            for row in results:
+                return data_type(row[index])
+        elif input_key == 'readall':
+            return [
+                (int(row[0]), str(row[1]))
+                for row in results
+            ]
+
+    return None  # Trả về None nếu input không hợp lệ hoặc không tìm thấy dữ liệu
