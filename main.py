@@ -132,7 +132,41 @@ def xuly_cham_ngoai(): # ham xu ly khi cham ra ngoai ban phim se tat
             keyyyyy.Registe.virtual_keyboard.close()
     except:
         print("failed to open virtual keyboard ,already exist ")
+def phat_tieng_viet(text, out_file="out_file.mp3"):
+        try:
+            text = text.strip() # Ensures 'text' is a string and cleans whitespace
+            
+        #    print(f"du lieu:{text}")
+          #  print(f"kieu:{type(text)}")
+            if not text:
+                print("Không có nội dung để phát.")
+                return
 
+            if pygame.mixer.get_init():
+                if pygame.mixer.music.get_busy():
+                    pygame.mixer.music.stop()
+                pygame.mixer.quit()
+
+            if os.path.exists(out_file):
+                os.remove(out_file)
+
+            # The core gTTS call for Vietnamese
+            tts = gTTS(text=text, lang='vi')
+            tts.save(out_file)
+            print(f"Đã lưu file mp3: {out_file}")
+
+            pygame.mixer.init()
+            pygame.mixer.music.load(out_file)
+            pygame.mixer.music.play()
+
+            while pygame.mixer.music.get_busy():
+                pygame.time.Clock().tick(10)
+
+            pygame.mixer.quit()
+            os.remove(out_file)
+
+        except Exception as e:
+            print(f"Lỗi phát âm: {e}")
 class LoginScreen(QMainWindow):
     def __init__(self, loading_screen):
         super().__init__()
@@ -376,6 +410,8 @@ class MainApp(QMainWindow,Ui_MainWindow):
         self.bt_kt_ai.clicked.connect(self.home_nha_truong)
         self.cau_hoi_ai.clear()
         self.tra_loi_ai.clear()
+        self.bt_stop_ai.clicked.connect(self.reload_ai)
+        self.bt_stop_ai.setEnabled(False)   
         self.tra_loi_ai.setWordWrap(True)  # Tự động ngắt dòng
         self.tra_loi_ai.setAlignment(Qt.AlignCenter)
         self.tt_ai = True
@@ -422,8 +458,6 @@ class MainApp(QMainWindow,Ui_MainWindow):
 
 
        
-        
- 
     def show_main(self):
         self.show() # Hàm này được gọi từ LoadingScreen sau khi đóng
         
@@ -4167,6 +4201,7 @@ class MainApp(QMainWindow,Ui_MainWindow):
                 self.tc_nha_truong_2.addItem(item)
         except Exception as e:
             QMessageBox.critical(self, "Lỗi", f"Không đọc được file Excel: {str(e)}")
+
     def on_question_clicked(self):
         item = self.tc_nha_truong_2.currentItem()
         if item:
@@ -4178,18 +4213,84 @@ class MainApp(QMainWindow,Ui_MainWindow):
             if self.checkBox_giong_noi_5.isChecked():
                 self.tra_loi_tc_nha_truong_4.setText(answer)
                 self.speak_vietnamese_gg(answer)
+
     def home_nha_truong(self):
-        self.stackedWidget.setCurrentWidget(self.page_tra_cuu)
+
         self.tt_ai = False 
+        self.cau_hoi_ai.clear()
+        self.tra_loi_ai.clear()
         self.tra_loi_ai.setText(" Cảm ơn bạn đã sử dụng.")
-        self.speak_vietnamese_gg("Cảm ơn bạn đã sử dụng.")
+     
+        phat_tieng_viet("Cảm ơn bạn đã sử dụng.")        
+                        
+        self.bt_stop_ai.setEnabled(False)
+        pygame.mixer.init()
+        pygame.mixer.music.stop()
+        print(" Đã dừng phát âm thanh!")
+        self.stackedWidget.setCurrentWidget(self.page_tra_cuu)
+  
+
+    def reload_ai(self):
+        # Dừng phát âm thanh nếu đang chạy
+        pygame.mixer.init()
+        pygame.mixer.music.stop()
+        print(" Đã dừng phát âm thanh!")
+
+        # Xóa file âm thanh tạm (nếu tồn tại)
+        if hasattr(self, "out_file") and os.path.exists(self.out_file):
+            os.remove(self.out_file)
+            print(f" Đã xóa file tạm: {self.out_file}")
+
+        # Reset nội dung câu hỏi trên giao diện
+        self.cau_hoi_ai.clear()
+        self.tra_loi_ai.clear()
+        print("Đã reset, sẵn sàng nhập câu hỏi mới!")
+
+        thread_stop = threading.Thread(target=self.lang_nghe_reload, daemon=True)
+        thread_stop.start()
         
-    def tra_cuu_ai(self):
+    def tra_cuu_ai (self):
         self.stackedWidget.setCurrentWidget(self.page_ai)
         self.tt_ai = True
         self.nghe_lenh_kich_hoat()
         self.cau_hoi_ai.clear()
         self.tra_loi_ai.clear()
+
+    def lang_nghe_reload(self):
+        r = sr.Recognizer()
+        mic = sr.Microphone()
+
+        with mic as source:
+            r.adjust_for_ambient_noise(source)
+
+        while self.tt_ai:  # Đang hoạt động
+            with mic as source:
+                try:
+                    print("Đang chờ lệnh 'reload'...")
+                    audio = r.listen(source, timeout=5)
+                    text = r.recognize_google(audio, language="vi-VN").lower()
+                    #print("Luồng kết thúc nhận :", text)
+
+                    if "dừng lại" in text:
+                        # Dừng phát âm thanh nếu đang chạy
+                        pygame.mixer.init()
+                        pygame.mixer.music.stop()
+                        print(" Đã dừng phát âm thanh!")
+
+                        # Xóa file âm thanh tạm (nếu tồn tại)
+                        if hasattr(self, "out_file") and os.path.exists(self.out_file):
+                            os.remove(self.out_file)
+                            print(f" Đã xóa file tạm: {self.out_file}")
+
+                        # Reset nội dung câu hỏi trên giao diện
+                        self.cau_hoi_ai.clear()
+                        self.tra_loi_ai.clear()
+                        print("Đã reset, sẵn sàng nhập câu hỏi mới!")
+                        
+                        break
+                except:
+                    continue
+
     def nghe_lenh_kich_hoat(self):
         def run():
             r = sr.Recognizer()
@@ -4197,27 +4298,29 @@ class MainApp(QMainWindow,Ui_MainWindow):
 
             with mic as source:
                 r.adjust_for_ambient_noise(source)
-                self.speak_vietnamese_gg_ai("Bạn hãy nói 'Chào Robot' để bắt đầu")
                 self.tra_loi_ai.setText(" Bạn hãy nói 'Chào Robot' để bắt đầu...")
+                phat_tieng_viet("Bạn hãy nói 'Chào Robot' để bắt đầu..")
                 
+            
             while (self.tt_ai == True) :
                 print("loop1")
                 with mic as source:
-                   
                     try:
                         r.pause_threshold = 1.5
                         print("Đang đợi câu 'Chào Robot'...")
                         audio = r.listen(source)
                         text = r.recognize_google(audio, language="vi-VN").lower()
                         print("Bạn nói:", text)
-                        
+
                         if "chào robot" in text:
-                            self.tra_loi_ai.setText("Xin Chào ! Tôi là Robot tiếp tân, bạn hãy đặt câu hỏi hoặc nói kết thúc để dừng ")
-                            self.speak_vietnamese_gg("Xin Chào ! Tôi là Robot tiếp tân, bạn hãy đặt câu hỏi hoặc nói kết thúc để dừng ")
-                         #   self.nghe_nhieu_cau_hoi()
-                          
-                            threading.Thread(target=self.nghe_nhieu_cau_hoi, daemon=True).start()
-                        
+                            self.tra_loi_ai.setText("   Xin Chào ! Tôi là Robot lễ tân,bạn hãy đặt câu hỏi hoặc nói,bấm kết thúc để dừng ")
+                            #speak_vietnamese_gg("  Xin Chào ! Tôi là Robot lễ tân,bạn hãy đặt câu hỏi hoặc nói , bấm kết thúc để dừng ")
+                            phat_tieng_viet("  Xin Chào ! Tôi là Robot lễ tân,bạn hãy đặt câu hỏi hoặc nói, bấm kết thúc để dừng ")
+                            self.bt_stop_ai.setEnabled(True)
+                            QApplication.processEvents()
+                            # Bắt đầu thread nghe lệnh "kết thúc"
+                           # threading.Thread(target=self.nghe_nhieu_cau_hoi, daemon=True).start()
+                            self.nghe_nhieu_cau_hoi()
 
                     except sr.WaitTimeoutError:
                         continue
@@ -4225,89 +4328,86 @@ class MainApp(QMainWindow,Ui_MainWindow):
                         continue
                     except Exception as e:
                         print(f"Lỗi: {e}")
-                
+
         threading.Thread(target=run, daemon=True).start()
     
     def nghe_nhieu_cau_hoi(self):
         r = sr.Recognizer()
         mic = sr.Microphone()
 
+        thread_stop = threading.Thread(target=self.lang_nghe_reload, daemon=True)
+        thread_stop.start()
         with mic as source:
             r.adjust_for_ambient_noise(source)
-        
+
         while (self.tt_ai == True) :
-             print("loop2")
-             with mic as source:
+            print("loop2")
+            with mic as source:
                 try:
                     self.tra_loi_ai.setText(" Tôi đang nghe câu hỏi...")
                     QApplication.processEvents()
 
                     audio = r.listen(source, timeout=7)
                     text = r.recognize_google(audio, language="vi-VN").lower()
-                    print("Người dùng:", text)
-
+                    print("Bạn nói :", text)
+                
                     if ("kết thúc" in text):  
                         self.tra_loi_ai.setText(" Cảm ơn bạn đã sử dụng.")
-                        QApplication.processEvents()
-                        #self.phat_am("Cảm ơn bạn đã sử dụng.")
-                        self.speak_vietnamese_gg_ai("Cảm ơn bạn đã sử dụng.")
+                    
+                        phat_tieng_viet("Cảm ơn bạn đã sử dụng.")
+                        #speak_vietnamese_gg(" Cảm ơn bạn đã sử dụng.")
                         self.tt_ai = False 
                         self.cau_hoi_ai.clear()
                         self.tra_loi_ai.clear()
                         self.stackedWidget.setCurrentWidget(self.page_tra_cuu)
+                        self.bt_stop_ai.setEnabled(False)
                         break
 
                     else:
-                        self.cau_hoi_ai.setText(f" Người dùng : {text}")
+                        self.cau_hoi_ai.setText(f" Bạn hỏi : {text}")
+                        print("dang xu li AI")
+                        self.xu_ly_cau_hoi(text) 
                         QApplication.processEvents()
-                        self.xu_ly_cau_hoi(text)
-
+                      
+                     
+                               
                 except sr.WaitTimeoutError:
-                    self.speak_vietnamese_gg_ai(" Tôi không nghe thấy gì, bạn vui lòng nói xong và đợi 1 giây để có câu trả lời nhé")
+                    #speak_vietnamese_gg(" Tôi không nghe thấy gì, bạn vui lòng nói xong và đợi 1 giây để có câu trả lời nhé ")
+                    phat_tieng_viet(" Tôi không nghe thấy gì, bạn vui lòng nói xong và đợi 1 giây để có câu trả lời nhé ")
                     print(" Không nghe thấy gì, tiếp tục...")
                     continue
                 except sr.UnknownValueError:
                     print(" Không hiểu, xin nói lại...")
-                    self.speak_vietnamese_gg_ai("Tôi nghe không rõ,xin nói lại ")
+                    #speak_vietnamese_gg("Tôi nghe không rõ,xin nói lại ")
+                    phat_tieng_viet("Tôi nghe không rõ,xin nói lại ")
                     continue
                 except Exception as e:
                     print(f" Lỗi: {e}")
-             if self.bt_kt_ai.isDown():
-                 print("An nut ket thuc")
-                 self.tra_loi_ai.setText(" Cảm ơn bạn đã sử dụng.")
-                 QApplication.processEvents()
-                #self.phat_am("Cảm ơn bạn đã sử dụng.")
-                 self.speak_vietnamese_gg(" Cảm ơn bạn đã sử dụng.")
-                 self.tt_ai = False 
-                 self.cau_hoi_ai.clear()
-                 self.tra_loi_ai.clear()
-                 #self.stackedWidget.setCurrentWidget(self.ui.pape_tra_cuu)
-                 break      
-    def xu_ly_cau_hoi(self, cau_hoi_text):
-        print("Đang xử lý câu hỏi")
-        self.tra_loi_ai.setText(" Đang xử lý câu hỏi...")
-        QApplication.processEvents()
 
+    def xu_ly_cau_hoi(self, cau_hoi_text):
+        self.tra_loi_ai.setText(" Đang xử lý câu hỏi...")
+      
+        QApplication.processEvents()
         try:
             response = self.model.generate_content(cau_hoi_text)
             if hasattr(response, "text") and response.text:
+
                 tra_loi = response.text.strip()
 
                 # Loại bỏ dấu **
                 tra_loi = tra_loi.replace("**", "")
                 # Loại bỏ dấu * đơn lẻ
                 tra_loi = tra_loi.replace("*", "")
-
                 self.tra_loi_ai.setText(f" {tra_loi}")
                 self.tra_loi_ai.setWordWrap(True)  # Tự động ngắt dòng
                 self.tra_loi_ai.setAlignment(Qt.AlignCenter)
                 QApplication.processEvents()
-                #self.phat_am(tra_loi)
-                self.speak_vietnamese_gg_ai(tra_loi)
-
+                phat_tieng_viet(tra_loi)
+                #speak_vietnamese_gg(tra_loi)
             else:
                 self.tra_loi_ai.setText(" Không nhận được phản hồi.")
                 QApplication.processEvents()
+             
 
         except Exception as e:
             self.tra_loi_ai.setText(f" Lỗi: {str(e)}")
